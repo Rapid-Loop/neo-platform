@@ -24,38 +24,40 @@ using System.Numerics;
 
 namespace Neo.VM.Types
 {
-    public class VMBoolean(bool value) : VMObject(new byte[] { value ? (byte)1 : (byte)0 })
+    public class VMBoolean : VMObject
     {
-        public new VMObjectType Type => VMObjectType.Boolean;
+        public override VMObjectType Type => VMObjectType.Boolean;
+
+        private readonly bool _value = false;
+
+        public VMBoolean(bool value)
+        {
+            _value = value;
+            _memory = new byte[1] { Convert.ToByte(_value) };
+        }
 
         public override string ToString()
         {
-            return value.ToString();
+            return _value.ToString();
         }
 
-        public static implicit operator ReadOnlyMemory<byte>(VMBoolean value)
+        public override VMObject Clone()
         {
-            return value.ValueMemory;
+            var clone = new VMBoolean(_value);
+
+            clone.AddReference();
+
+            return clone;
         }
 
-        public static implicit operator ReadOnlySpan<byte>(VMBoolean value)
+        public override bool GetBoolean()
         {
-            return value.ValueMemory.Span;
+            return _value;
         }
 
-        public static implicit operator bool(VMBoolean value)
+        public override BigInteger GetInteger()
         {
-            return value.ValueMemory.Span[0] == 1 ? true : false;
-        }
-
-        public static implicit operator VMBoolean(bool value)
-        {
-            return value ? new(true) : new(false);
-        }
-
-        public static implicit operator BigInteger(VMBoolean value)
-        {
-            return value.ValueMemory.Span[0] == 1 ? BigInteger.One : BigInteger.Zero;
+            return _value ? BigInteger.One : BigInteger.Zero;
         }
     }
 }

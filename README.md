@@ -1,2 +1,2 @@
-# Rocksdb
-csharp library of rocksdb
+# NEO
+csharp library of NEO

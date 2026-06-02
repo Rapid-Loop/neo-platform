@@ -20,67 +20,64 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Neo.VM.Types
 {
-    public class VMNull : VMObject
+    public class VMPointer : VMObject
     {
-        public override VMObjectType Type => VMObjectType.Any;
+        public override VMObjectType Type => VMObjectType.Pointer;
 
-        public static VMNull Instance => _instance;
+        public int Length => _memory.Length;
 
+        public int Position => _ip;
 
-        private static readonly VMNull _instance = new();
+        private readonly ReadOnlyMemory<byte> _memory;
+        private readonly int _ip = 0;
 
-        protected override void Dispose(bool disposing)
+        public VMPointer(byte[] script, int ip)
         {
-            // Never dispose the singleton instance
-            base.Dispose(disposing);
+            _memory = script.Clone() as byte[] ?? [];
+            _ip = ip;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(VMObject? other)
         {
-            return obj is VMNull;
+            if (other is VMPointer p)
+                return _ip == p._ip && base.Equals(other);
+
+            return base.Equals(other);
         }
 
         public override int GetHashCode()
         {
-            return 0;
+            return HashCode.Combine(base.GetHashCode(), _ip);
         }
 
         public override VMObject Clone()
         {
-            AddReference();
+            var clone = new VMPointer(_memory.ToArray(), _ip);
 
-            return this;
+            clone.AddReference();
+
+            return clone;
         }
 
         public override bool GetBoolean()
         {
-            return false;
+            return true;
         }
 
+        [DoesNotReturn]
         public override BigInteger GetInteger()
         {
-            return BigInteger.Zero;
+            throw new InvalidOperationException($"Cannot convert {Type} to integer");
         }
 
         public override ReadOnlySpan<byte> GetReadOnlySpan()
         {
-            return [];
+            return _memory.ToArray();
         }
-
-        public override string ToString()
-        {
-            return "\0";
-        }
-
-        public static bool operator ==(VMNull left, VMNull right) =>
-            true;
-
-        public static bool operator !=(VMNull left, VMNull right) =>
-            false;
-
     }
 }

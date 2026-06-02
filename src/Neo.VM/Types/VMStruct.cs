@@ -32,14 +32,28 @@ namespace Neo.VM.Types
         {
             var clone = new VMStruct();
 
+            // Important: Use a mapping to handle cycles during cloning
+            var objectMap = new Dictionary<VMObject, VMObject>();
+
             _array.ForEach(i =>
             {
                 if (i is null || i is VMNull)
-                    clone._array.Add(new VMNull());
+                {
+                    clone._array.Add(VMNull.Instance);
+                    return;
+                }
+
+                if (objectMap.TryGetValue(i, out var alreadyCloned))
+                {
+                    // Cycle detected during cloning - reuse the cloned object
+                    alreadyCloned.AddReference();
+                    clone._array.Add(alreadyCloned);
+                }
                 else
                 {
-                    var cloneItem = i.Clone();
-                    clone._array.Add(cloneItem);
+                    var clonedItem = i.Clone();
+                    objectMap[i] = clonedItem;
+                    clone._array.Add(clonedItem);
                 }
             });
 

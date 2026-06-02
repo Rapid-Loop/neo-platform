@@ -28,6 +28,8 @@ namespace Neo.VM.Types
     {
         public override VMObjectType Type => VMObjectType.Buffer;
 
+        private Memory<byte> _memory;
+
         public VMBuffer(int size)
         {
             ArgumentOutOfRangeException.ThrowIfNegative(size);
@@ -78,6 +80,11 @@ namespace Neo.VM.Types
         public override BigInteger GetInteger()
         {
             return new(_memory.Span[..VMInteger.MaxSize]);
+        }
+
+        public override ReadOnlySpan<byte> GetReadOnlySpan()
+        {
+            return _memory.ToArray();
         }
 
         public byte this[int index]

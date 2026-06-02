@@ -46,14 +46,13 @@ namespace Neo.VM.Types
 
         public VMArray(IEnumerable<VMObject> items, bool isReadonly)
         {
-            _array.ForEach(item
-                =>
-                {
-                    item.AddReference();
-                    _array.Add(item);
-                });
+            foreach (var item in items)
+            {
+                item.AddReference();
+                _array.Add(item);
+            }
+
             _isReadOnly = isReadonly;
-            _memory = GetReadOnlySpan().ToArray();
         }
 
         public VMObject this[int index]
@@ -76,6 +75,12 @@ namespace Neo.VM.Types
                 Clear(); // Release all items
             }
             base.Dispose(disposing);
+        }
+
+        public override int GetHashCode()
+        {
+            return GetReadOnlySpan().ToArray()
+                .Aggregate(0, (hash, b) => (hash * 31) ^ b);
         }
 
         #region IEnumerable
@@ -113,6 +118,9 @@ namespace Neo.VM.Types
 
         public void CopyTo(VMObject[] array, int arrayIndex)
         {
+            ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex, nameof(arrayIndex));
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(arrayIndex, array.Length - Count, nameof(arrayIndex));
+
             _array.CopyTo(array, arrayIndex);
         }
 
@@ -151,6 +159,9 @@ namespace Neo.VM.Types
 
         #endregion
 
+        protected override IEnumerable<VMObject> GetChildren() =>
+            _array;
+
         public void Reverse()
         {
             if (_isReadOnly) throw new InvalidOperationException();
@@ -165,14 +176,28 @@ namespace Neo.VM.Types
         {
             var clone = new VMArray();
 
+            // Important: Use a mapping to handle cycles during cloning
+            var objectMap = new Dictionary<VMObject, VMObject>();
+
             _array.ForEach(i =>
             {
                 if (i is null || i is VMNull)
-                    clone._array.Add(new VMNull());
+                {
+                    clone._array.Add(VMNull.Instance);
+                    return;
+                }
+
+                if (objectMap.TryGetValue(i, out var alreadyCloned))
+                {
+                    // Cycle detected during cloning - reuse the cloned object
+                    alreadyCloned.AddReference();
+                    clone._array.Add(alreadyCloned);
+                }
                 else
                 {
-                    var cloneItem = i.Clone();
-                    clone._array.Add(cloneItem);
+                    var clonedItem = i.Clone();
+                    objectMap[i] = clonedItem;
+                    clone._array.Add(clonedItem);
                 }
             });
 

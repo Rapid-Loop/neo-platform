@@ -30,6 +30,8 @@ namespace Neo.VM.Types
 
         public int Length => _memory.Length;
 
+        private Memory<byte> _memory;
+
         public VMByteArray(byte[] data)
         {
             _memory = data?.Clone() as byte[] ?? [];
@@ -81,6 +83,11 @@ namespace Neo.VM.Types
         public override BigInteger GetInteger()
         {
             return new(_memory.Span[..VMInteger.MaxSize]);
+        }
+
+        public override ReadOnlySpan<byte> GetReadOnlySpan()
+        {
+            return _memory.ToArray();
         }
 
         /// <summary>

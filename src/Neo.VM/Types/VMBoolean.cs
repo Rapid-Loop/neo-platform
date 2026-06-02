@@ -33,7 +33,6 @@ namespace Neo.VM.Types
         public VMBoolean(bool value)
         {
             _value = value;
-            _memory = new byte[1] { Convert.ToByte(_value) };
         }
 
         public override string ToString()
@@ -58,6 +57,11 @@ namespace Neo.VM.Types
         public override BigInteger GetInteger()
         {
             return _value ? BigInteger.One : BigInteger.Zero;
+        }
+
+        public override ReadOnlySpan<byte> GetReadOnlySpan()
+        {
+            return _value ? [1] : [0];
         }
     }
 }

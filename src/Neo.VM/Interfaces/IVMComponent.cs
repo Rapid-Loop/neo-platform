@@ -22,13 +22,9 @@
 
 namespace Neo.VM.Interfaces
 {
-    public interface IVMComponent : IDisposable
+    internal interface IVMComponent : IDisposable
     {
         public int Size { get; }
         public int RefCount { get; }
-
-        public void AddReference();
-        public void Release();
-
     }
 }

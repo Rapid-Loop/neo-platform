@@ -21,22 +21,20 @@
 // SERVICES
 
 using Neo.VM.Interfaces;
-using System.IO.Hashing;
 using System.Numerics;
 
 namespace Neo.VM.Types
 {
     public abstract class VMObject : IVMComponent, IEquatable<VMObject>
     {
-        public abstract VMObjectType Type { get; }
+        public virtual VMObjectType Type => VMObjectType.Any;
 
-        public int Size => _memory.Length;
+        public int Size => GetReadOnlySpan().Length;
+
         public int RefCount => _refCount;
 
         private bool _disposed = false;
         private int _refCount = 1;
-
-        protected ReadOnlyMemory<byte> _memory;
 
         #region IEquatable
 
@@ -46,16 +44,17 @@ namespace Neo.VM.Types
             return Equals(obj as VMObject);
         }
 
-        public bool Equals(VMObject? other)
+        public virtual bool Equals(VMObject? other)
         {
             if (other is null) return false;
             if (Type != other.Type) return false;
-            return _memory.Span.SequenceEqual(other._memory.Span);
+            if (_disposed != other._disposed) return false;
+            return _refCount == other._refCount;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Type, Crc32.HashToUInt32(_memory.Span), RefCount);
+            return HashCode.Combine(Type, RefCount);
         }
 
         #endregion
@@ -89,24 +88,33 @@ namespace Neo.VM.Types
 
         #region References
 
-        public void AddReference()
+        internal void AddReference()
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
             Interlocked.Increment(ref _refCount);
         }
 
-        public void Release()
+        internal void Release()
         {
             if (_disposed) return;
 
             var newCount = Interlocked.Decrement(ref _refCount);
+
             if (newCount <= 0)
-            {
                 Dispose(true);
-            }
+
         }
 
         #endregion
+
+        public bool HasCircularReference()
+        {
+            var visited = new HashSet<VMObject>();
+            return DetectCycle(this, visited);
+        }
+
+        protected virtual IEnumerable<VMObject> GetChildren() =>
+            [];
 
         /// <summary>
         /// Returns a deep clone of this object
@@ -116,10 +124,7 @@ namespace Neo.VM.Types
         /// <summary>
         /// Converts this object to a <see cref="ReadOnlySpan{T}"/> (for serialization/storage)
         /// </summary>
-        public virtual ReadOnlySpan<byte> GetReadOnlySpan()
-        {
-            return _memory.ToArray();
-        }
+        public abstract ReadOnlySpan<byte> GetReadOnlySpan();
 
         /// <summary>
         /// Converts this object to a signed integer (if possible)
@@ -137,5 +142,67 @@ namespace Neo.VM.Types
             return true; // NeoVM treats most non-null objects as true
         }
 
+        private static bool DetectCycle(VMObject current, HashSet<VMObject> visited)
+        {
+            if (current == null)
+                return false;
+
+            if (visited.Contains(current))
+                return true; // Cycle found!
+
+            visited.Add(current);
+
+            // Check all child objects
+            foreach (var child in current.GetChildren())
+            {
+                if (DetectCycle(child, visited))
+                    return true;
+            }
+
+            visited.Remove(current);
+            return false;
+        }
+
+        public static implicit operator VMObject(byte value) =>
+            new VMInteger(value);
+
+        public static implicit operator VMObject(sbyte value) =>
+            new VMInteger(value);
+
+        public static implicit operator VMObject(short value) =>
+            new VMInteger(value);
+
+        public static implicit operator VMObject(ushort value) =>
+            new VMInteger(value);
+
+        public static implicit operator VMObject(int value) =>
+            new VMInteger(value);
+
+        public static implicit operator VMObject(uint value) =>
+            new VMInteger(value);
+
+        public static implicit operator VMObject(long value) =>
+            new VMInteger(value);
+
+        public static implicit operator VMObject(ulong value) =>
+            new VMInteger(value);
+
+        public static implicit operator VMObject(Int128 value) =>
+            new VMInteger(value);
+
+        public static implicit operator VMObject(UInt128 value) =>
+            new VMInteger(value);
+
+        public static implicit operator VMObject(BigInteger value) =>
+            new VMInteger(value);
+
+        public static implicit operator VMObject(bool value) =>
+            new VMBoolean(value);
+
+        public static implicit operator VMObject(byte[] value) =>
+            new VMByteArray(value);
+
+        public static implicit operator VMObject(string value) =>
+            new VMByteArray(VMUility.StrictUtf8Encoding.GetBytes(value));
     }
 }

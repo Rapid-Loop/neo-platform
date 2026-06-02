@@ -37,7 +37,6 @@ namespace Neo.VM.Types
             if (value.GetByteCount() > MaxSize)
                 throw new ArgumentException($"Integer size bytes exceeds maximum allowed size of {MaxSize} bytes.", nameof(value));
             _value = value;
-            _memory = _value.ToByteArray();
         }
 
         protected override void Dispose(bool disposing)
@@ -73,6 +72,11 @@ namespace Neo.VM.Types
         public override BigInteger GetInteger()
         {
             return _value;
+        }
+
+        public override ReadOnlySpan<byte> GetReadOnlySpan()
+        {
+            return _value.ToByteArray();
         }
 
         public static VMInteger operator +(VMInteger a, VMInteger b)
@@ -168,39 +172,6 @@ namespace Neo.VM.Types
 
         public static bool operator <=(VMInteger a, VMInteger b) =>
             a._value <= b._value;
-
-        public static implicit operator VMInteger(byte value) =>
-            new(value);
-
-        public static implicit operator VMInteger(sbyte value) =>
-            new(value);
-
-        public static implicit operator VMInteger(short value) =>
-            new(value);
-
-        public static implicit operator VMInteger(ushort value) =>
-            new(value);
-
-        public static implicit operator VMInteger(int value) =>
-            new(value);
-
-        public static implicit operator VMInteger(uint value) =>
-            new(value);
-
-        public static implicit operator VMInteger(long value) =>
-            new(value);
-
-        public static implicit operator VMInteger(ulong value) =>
-            new(value);
-
-        public static implicit operator VMInteger(Int128 value) =>
-            new(value);
-
-        public static implicit operator VMInteger(UInt128 value) =>
-            new(value);
-
-        public static implicit operator VMInteger(BigInteger value) =>
-            new(value);
 
         public static implicit operator BigInteger(VMInteger value)
         {

@@ -68,7 +68,6 @@ namespace Neo.VM.Types
                 Add(kvp);
 
             _isReadOnly = isReadOnly;
-            _memory = GetReadOnlySpan().ToArray();
         }
 
         protected override void Dispose(bool disposing)
@@ -78,6 +77,12 @@ namespace Neo.VM.Types
                 Clear(); // Release all keys and values
             }
             base.Dispose(disposing);
+        }
+
+        public override int GetHashCode()
+        {
+            return GetReadOnlySpan().ToArray()
+                .Aggregate(0, (hash, b) => (hash * 31) ^ b);
         }
 
         public void Add(VMObject key, VMObject value)
@@ -157,6 +162,9 @@ namespace Neo.VM.Types
 
         public void CopyTo(KeyValuePair<VMObject, VMObject>[] array, int arrayIndex)
         {
+            ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex, nameof(arrayIndex));
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(arrayIndex, array.Length - Count, nameof(arrayIndex));
+
             _map.ToArray().CopyTo(array, arrayIndex);
         }
 
@@ -166,6 +174,15 @@ namespace Neo.VM.Types
                 throw new ArgumentException($"Key size {item.Key.Size} bytes exceeds maximum allowed size of {MaxKeySize} bytes.", nameof(item.Key));
 
             return Remove(item.Key);
+        }
+
+        protected override IEnumerable<VMObject> GetChildren()
+        {
+            foreach (var kvp in _map)
+            {
+                yield return kvp.Key;
+                yield return kvp.Value;
+            }
         }
 
         public IEnumerator<KeyValuePair<VMObject, VMObject>> GetEnumerator() =>
@@ -181,10 +198,37 @@ namespace Neo.VM.Types
         {
             var clone = new VMMap();
 
+            // Important: Use a mapping to handle cycles during cloning
+            var objectMap = new Dictionary<VMObject, VMObject>();
+
             foreach (var kvp in _map)
             {
-                var clonedKey = kvp.Key.Clone();
-                var clonedValue = kvp.Value.Clone();
+                if (kvp.Key is null || kvp.Key is VMNull)
+                    continue;
+
+                VMObject clonedKey;
+                VMObject clonedValue;
+
+                // Clone key
+                if (objectMap.TryGetValue(kvp.Key, out var existingKeyClone))
+                    clonedKey = existingKeyClone;
+                else
+                {
+                    clonedKey = kvp.Key.Clone();
+                    objectMap[kvp.Key] = clonedKey;
+                }
+
+                // Clone value
+                if (kvp.Value is null || kvp.Value is VMNull)
+                    clonedValue = VMNull.Instance;
+                else if (objectMap.TryGetValue(kvp.Value, out var existingValueClone))
+                    clonedValue = existingValueClone;
+                else
+                {
+                    clonedValue = kvp.Value.Clone();
+                    objectMap[kvp.Value] = clonedValue;
+                }
+
                 clone._map[clonedKey] = clonedValue;
             }
 

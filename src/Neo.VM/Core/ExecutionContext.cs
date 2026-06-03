@@ -81,7 +81,7 @@ namespace Neo.VM.Core
 
         private readonly ReadOnlyMemory<byte> _script;
 
-        public ExecutionContext(byte[] script, int initialGas = 1000000, int depth = 0, ExecutionContext? parent = null)
+        public ExecutionContext(byte[] script, long initialGas = 1_000000L, int depth = 0, ExecutionContext? parent = null)
         {
             _script = script.Clone() as byte[] ?? throw new ArgumentNullException(nameof(script));
             Gas = initialGas;

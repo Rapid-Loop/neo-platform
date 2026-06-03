@@ -285,7 +285,7 @@ namespace Neo.VM.Tests.Types
         }
 
         [TestMethod]
-        public void TestDeepCopy()
+        public void TestClone()
         {
             var a = new VMArray()
             {

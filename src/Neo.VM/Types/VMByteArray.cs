@@ -36,16 +36,17 @@ namespace Neo.VM.Types
 
         public VMByteArray(byte[] data)
         {
-            data.CopyTo(_memory);
+            _memory = data;
         }
 
         public VMByteArray(Memory<byte> data)
         {
-            data.TryCopyTo(_memory);
+            _memory = data;
         }
 
         public VMByteArray(Span<byte> data)
         {
+            _memory = GC.AllocateUninitializedArray<byte>(data.Length, false);
             data.TryCopyTo(_memory.Span);
         }
 

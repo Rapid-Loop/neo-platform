@@ -131,6 +131,53 @@ namespace Neo.VM.Core
         }
 
         /// <summary>
+        /// Peek value from current frame's evaluation stack without removing
+        /// </summary>
+        public VMObject Peek()
+        {
+            return Frame.Peek();
+        }
+
+        /// <summary>
+        /// Peek value from current frame's evaluation stack without removing by an index
+        /// </summary>
+        public VMObject Peek(int index)
+        {
+            return Frame.Peek(index);
+        }
+
+        public void Insert(int index, VMObject item)
+        {
+            Frame.Insert(index, item);
+        }
+
+        public void Swap(int fromIndex, int toIndex)
+        {
+            Frame.Swap(fromIndex, toIndex);
+        }
+
+        public void Reverse(int n)
+        {
+            Frame.Reverse(n);
+        }
+
+        /// <summary>
+        /// Pop value from current frame's evaluation stack at an index
+        /// </summary>
+        public VMObject RemoveAt(int index)
+        {
+            return Frame.RemoveAt(index);
+        }
+
+        /// <summary>
+        /// Safely clear current frame's evaluation stack and release all references
+        /// </summary>
+        public void Clear()
+        {
+            Frame.Clear();
+        }
+
+        /// <summary>
         /// Clean up this execution context
         /// </summary>
         public void Cleanup()

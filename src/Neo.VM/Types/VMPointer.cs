@@ -45,6 +45,12 @@ namespace Neo.VM.Types
             _ip = ip;
         }
 
+        public VMPointer(ReadOnlyMemory<byte> script, int ip)
+        {
+            _memory = script;
+            _ip = ip;
+        }
+
         public override bool Equals(VMObject? other)
         {
             if (other is VMPointer p)

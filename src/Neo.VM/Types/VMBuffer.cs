@@ -30,6 +30,8 @@ namespace Neo.VM.Types
     {
         public override VMObjectType Type => VMObjectType.Buffer;
 
+        public int Length => _memory.Length;
+
         private Memory<byte> _memory;
 
         public VMBuffer(int size)
@@ -46,6 +48,11 @@ namespace Neo.VM.Types
         public VMBuffer(VMByteArray source)
         {
             _memory = source?.GetReadOnlySpan().ToArray() ?? [];
+        }
+
+        public VMBuffer(Memory<byte> source)
+        {
+            _memory = source;
         }
 
         protected override void Dispose(bool disposing)
@@ -69,6 +76,16 @@ namespace Neo.VM.Types
             }
 
             return VMUility.StrictUtf8Encoding.GetString(_memory.Span);
+        }
+
+        public void CopyTo(VMBuffer dstBuffer, int startIndex, int dstIndex, int count)
+        {
+            _memory.Slice(startIndex, count).CopyTo(dstBuffer._memory[dstIndex..]);
+        }
+
+        public void Reverse()
+        {
+            _memory.Span.Reverse();
         }
 
         public override VMObject Clone()
@@ -98,6 +115,7 @@ namespace Neo.VM.Types
         public byte this[int index]
         {
             get => _memory.Span[index];
+            set => _memory.Span[index] = value;
         }
 
         public static implicit operator BigInteger(VMBuffer value)

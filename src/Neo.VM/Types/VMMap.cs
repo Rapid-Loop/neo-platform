@@ -63,12 +63,23 @@ namespace Neo.VM.Types
 
         public VMMap() { }
 
-        public VMMap(bool isReadOnly) : this([], isReadOnly) { }
+        public VMMap(bool isReadOnly)
+        {
+            _isReadOnly = isReadOnly;
+        }
 
-        public VMMap(IEnumerable<KeyValuePair<VMObject, VMObject>> items, bool isReadOnly) : this()
+        public VMMap(IEnumerable<KeyValuePair<VMObject, VMObject>> items, bool isReadOnly = false)
         {
             foreach (var kvp in items)
                 Add(kvp);
+
+            _isReadOnly = isReadOnly;
+        }
+
+        public VMMap(IList<VMObject> items, bool isReadOnly = false)
+        {
+            for (var i = 0; i < items.Count / 2; i += 2)
+                Add(new(items[i], items[i + 1]));
 
             _isReadOnly = isReadOnly;
         }

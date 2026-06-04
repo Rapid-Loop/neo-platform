@@ -73,7 +73,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 1, Push 0</remarks>
         public virtual void JmpIf(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            if (engine.CurrentContext!.Frame.Pop().GetBoolean())
+            if (engine.CurrentContext!.Pop().GetBoolean())
                 ExecuteJumpOffset(engine, instruction.AsToken<sbyte>());
         }
 
@@ -88,7 +88,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 1, Push 0</remarks>
         public virtual void JmpIf_L(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            if (engine.CurrentContext!.Frame.Pop().GetBoolean())
+            if (engine.CurrentContext!.Pop().GetBoolean())
                 ExecuteJumpOffset(engine, instruction.AsToken<int>());
         }
 
@@ -103,7 +103,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 1, Push 0</remarks>
         public virtual void JmpIfNot(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            if (!engine.CurrentContext!.Frame.Pop().GetBoolean())
+            if (!engine.CurrentContext!.Pop().GetBoolean())
                 ExecuteJumpOffset(engine, instruction.AsToken<sbyte>());
         }
 
@@ -118,7 +118,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 1, Push 0</remarks>
         public virtual void JmpIfNot_L(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            if (!engine.CurrentContext!.Frame.Pop().GetBoolean())
+            if (!engine.CurrentContext!.Pop().GetBoolean())
                 ExecuteJumpOffset(engine, instruction.AsToken<int>());
         }
 
@@ -133,8 +133,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpEq(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 == x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<sbyte>());
@@ -151,8 +151,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpEq_L(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 == x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<int>());
@@ -169,8 +169,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpNe(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 != x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<sbyte>());
@@ -187,8 +187,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpNe_L(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 != x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<int>());
@@ -205,8 +205,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpGt(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 > x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<sbyte>());
@@ -223,8 +223,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpGt_L(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 > x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<int>());
@@ -241,8 +241,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpGe(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 >= x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<sbyte>());
@@ -259,8 +259,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpGe_L(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 >= x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<int>());
@@ -277,8 +277,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpLt(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 < x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<sbyte>());
@@ -295,8 +295,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpLt_L(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 < x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<int>());
@@ -313,8 +313,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpLe(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 <= x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<sbyte>());
@@ -331,8 +331,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void JmpLe_L(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x2 = engine.CurrentContext!.Frame.Pop().GetInteger();
-            var x1 = engine.CurrentContext!.Frame.Pop().GetInteger();
+            var x2 = engine.CurrentContext!.Pop().GetInteger();
+            var x1 = engine.CurrentContext!.Pop().GetInteger();
 
             if (x1 <= x2)
                 ExecuteJumpOffset(engine, instruction.AsToken<int>());
@@ -372,7 +372,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 1, Push 0</remarks>
         public virtual void CallA(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x = (VMPointer)engine.CurrentContext!.Frame.Pop();
+            var x = (VMPointer)engine.CurrentContext!.Pop();
 
             if (x.Script.Span.SequenceEqual(engine.CurrentContext!.Script.Span))
                 throw new InvalidOperationException("Pointers can't be shared between scripts");
@@ -411,7 +411,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 1, Push 0</remarks>
         public virtual void Assert(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var x = engine.CurrentContext!.Frame.Pop().GetBoolean();
+            var x = engine.CurrentContext!.Pop().GetBoolean();
             if (!x)
                 throw new Exception($"{OpCode.ASSERT} is executed with false result.");
         }
@@ -425,7 +425,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 1, Push 0</remarks>
         public virtual void Throw(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            ExecuteThrow(engine, engine.CurrentContext!.Frame.Pop());
+            ExecuteThrow(engine, engine.CurrentContext!.Pop());
         }
 
         /// <summary>

@@ -36,7 +36,17 @@ namespace Neo.VM.Types
 
         public VMByteArray(byte[] data)
         {
-            _memory = data?.Clone() as byte[] ?? [];
+            data.CopyTo(_memory);
+        }
+
+        public VMByteArray(Memory<byte> data)
+        {
+            data.TryCopyTo(_memory);
+        }
+
+        public VMByteArray(Span<byte> data)
+        {
+            data.TryCopyTo(_memory.Span);
         }
 
         public override bool Equals(object? obj)
@@ -91,7 +101,7 @@ namespace Neo.VM.Types
 
         public override ReadOnlySpan<byte> GetReadOnlySpan()
         {
-            return _memory.ToArray();
+            return _memory.Span;
         }
 
         /// <summary>

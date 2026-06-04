@@ -38,6 +38,13 @@ namespace Neo.VM.Core
         /// </summary>
         public List<VMObject> Locals { get; } = [];
 
+        public List<VMObject> StaticFields { get; } = [];
+
+        /// <summary>
+        /// The list used to store the arguments of the current method.
+        /// </summary>
+        public List<VMObject> Arguments { get; } = [];
+
         /// <summary>
         /// Alternative stack (used by some NeoVM instructions)
         /// </summary>
@@ -101,6 +108,90 @@ namespace Neo.VM.Core
         }
 
         /// <summary>
+        /// Peek from top of evaluation stack without removing by an index
+        /// </summary>
+        public VMObject Peek(int index)
+        {
+            var list = new List<VMObject>(EvaluationStack); // Copy to list (top is at the end)
+            return list[index];
+        }
+
+        public void Insert(int index, VMObject item)
+        {
+            var list = new List<VMObject>(EvaluationStack); // Copy to list (top is at the end)
+
+            list.Insert(index, item);
+
+            EvaluationStack.Clear();
+
+            list.ForEach(i =>
+                EvaluationStack.Push(i));
+
+            item.AddReference();
+        }
+
+        public void Swap(int fromIndex, int toIndex)
+        {
+            if (fromIndex == toIndex) return;
+
+            var actualFromIndex = EvaluationStack.Count - fromIndex - 1;
+            var actualToIndex = EvaluationStack.Count - toIndex - 1;
+
+            var list = new List<VMObject>(EvaluationStack); // Copy to list (top is at the end)
+            (list[actualFromIndex], list[actualToIndex]) = (list[actualToIndex], list[actualFromIndex]);
+
+            EvaluationStack.Clear();
+
+            list.ForEach(i =>
+                EvaluationStack.Push(i));
+        }
+
+        public void Reverse(int n)
+        {
+            var list = new List<VMObject>(EvaluationStack); // Copy to list (top is at the end)
+
+            if (n < 0 || n > list.Count)
+                throw new ArgumentOutOfRangeException(nameof(n), $"Out of stack bounds: {n}/{list.Count}");
+
+            if (n <= 1) return;
+
+            list.Reverse(list.Count - n, n);
+
+            EvaluationStack.Clear();
+
+            list.ForEach(i =>
+                EvaluationStack.Push(i));
+        }
+
+
+        public VMObject RemoveAt(int index)
+        {
+            var list = new List<VMObject>(EvaluationStack); // Copy to list (top is at the end)
+            var removed = list[index];
+
+            list.RemoveAt(index);
+            EvaluationStack.Clear();
+
+            list.ForEach(i =>
+                EvaluationStack.Push(i));
+
+            removed.Release();
+            return removed;
+        }
+
+        /// <summary>
+        /// Safely clear a evaluation stack and release all references
+        /// </summary>
+        public void Clear()
+        {
+            while (EvaluationStack.Count > 0)
+            {
+                var item = EvaluationStack.Pop();
+                item?.Release();
+            }
+        }
+
+        /// <summary>
         /// Set local variable at index (with proper ref counting)
         /// </summary>
         public void SetLocal(int index, VMObject value)
@@ -117,6 +208,30 @@ namespace Neo.VM.Core
             Locals[index] = value;
         }
 
+        public void SetStaticField(int index, VMObject value)
+        {
+            while (StaticFields.Count <= index)
+                StaticFields.Add(VMNull.Instance);
+
+            StaticFields[index]?.Release();
+
+            // Add new value
+            value.AddReference();
+            StaticFields[index] = value;
+        }
+
+        public void SetArguments(int index, VMObject value)
+        {
+            while (Arguments.Count <= index)
+                Arguments.Add(VMNull.Instance);
+
+            Arguments[index]?.Release();
+
+            // Add new value
+            value.AddReference();
+            Arguments[index] = value;
+        }
+
         /// <summary>
         /// Get local variable at index
         /// </summary>
@@ -125,12 +240,22 @@ namespace Neo.VM.Core
             return (index >= 0 && index < Locals.Count) ? Locals[index] : VMNull.Instance;
         }
 
+        public VMObject GetStaticFields(int index)
+        {
+            return (index >= 0 && index < StaticFields.Count) ? StaticFields[index] : VMNull.Instance;
+        }
+
+        public VMObject GetArguments(int index)
+        {
+            return (index >= 0 && index < Arguments.Count) ? Arguments[index] : VMNull.Instance;
+        }
+
         /// <summary>
         /// Checks if this stack frame contains any circular references
         /// </summary>
         public bool HasCircularReference()
         {
-            var visited = new HashSet<VMObject>();
+            var visited = new HashSet<VMObject>(ReferenceEqualityComparer.Instance);
             return DetectCycleInFrame(this, visited);
         }
 
@@ -140,11 +265,7 @@ namespace Neo.VM.Core
         public void Cleanup()
         {
             // Release evaluation stack
-            while (EvaluationStack.Count > 0)
-            {
-                var item = EvaluationStack.Pop();
-                item?.Release();
-            }
+            Clear();
 
             // Release alt stack
             while (AltStack.Count > 0)
@@ -158,6 +279,13 @@ namespace Neo.VM.Core
             {
                 Locals[i]?.Release();
                 Locals[i] = VMNull.Instance;
+            }
+
+            // Release Static Fields
+            for (var i = 0; i < StaticFields.Count; i++)
+            {
+                StaticFields[i]?.Release();
+                StaticFields[i] = VMNull.Instance;
             }
 
             IsActive = false;
@@ -183,6 +311,13 @@ namespace Neo.VM.Core
 
             // Check Locals
             foreach (var item in frame.Locals)
+            {
+                if (DetectCycle(item, visited))
+                    return true;
+            }
+
+            // Check Static Fields
+            foreach (var item in frame.StaticFields)
             {
                 if (DetectCycle(item, visited))
                     return true;

@@ -20,13 +20,27 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using System;
+using System.IO;
 
-namespace Neo.VM.Interfaces
+namespace Neo.VM.IO
 {
-    internal interface IVMComponent : IDisposable
+    public interface INeoSerializable
     {
+        /// <summary>
+        /// The size of the object in bytes after serialization.
+        /// </summary>
         int Size { get; }
-        int RefCount { get; }
+
+        /// <summary>
+        /// Serializes the object using the specified <see cref="BinaryWriter"/>.
+        /// </summary>
+        /// <param name="writer">The <see cref="BinaryWriter"/> for writing data.</param>
+        void Serialize(BinaryWriter writer);
+
+        /// <summary>
+        /// Deserializes the object using the specified <see cref="BinaryReader"/>.
+        /// </summary>
+        /// <param name="reader">The <see cref="BinaryReader"/> for reading data.</param>
+        void Deserialize(BinaryReader reader);
     }
 }

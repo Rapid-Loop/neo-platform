@@ -39,10 +39,9 @@ namespace Neo.VM.Extensions
             where T : class?, INeoSerializable?
         {
             using var ms = new MemoryStream(array[startIndex..], false);
-            using var reader = new BinaryReader(ms, VMUility.StrictUtf8Encoding, false);
 
             var newObject = RuntimeHelpers.GetUninitializedObject(typeof(T)) as T;
-            newObject?.Deserialize(reader);
+            newObject?.Deserialize(ms);
 
             return newObject;
         }

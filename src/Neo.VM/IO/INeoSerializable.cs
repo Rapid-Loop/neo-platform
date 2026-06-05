@@ -32,15 +32,15 @@ namespace Neo.VM.IO
         int Size { get; }
 
         /// <summary>
-        /// Serializes the object using the specified <see cref="BinaryWriter"/>.
+        /// Serializes the object using the specified <see cref="Stream"/>.
         /// </summary>
-        /// <param name="writer">The <see cref="BinaryWriter"/> for writing data.</param>
-        void Serialize(BinaryWriter writer);
+        /// <param name="writer">The <see cref="Stream"/> for writing data.</param>
+        void Serialize(Stream writer);
 
         /// <summary>
-        /// Deserializes the object using the specified <see cref="BinaryReader"/>.
+        /// Deserializes the object using the specified <see cref="Stream"/>.
         /// </summary>
-        /// <param name="reader">The <see cref="BinaryReader"/> for reading data.</param>
-        void Deserialize(BinaryReader reader);
+        /// <param name="reader">The <see cref="Stream"/> for reading data.</param>
+        void Deserialize(Stream reader);
     }
 }

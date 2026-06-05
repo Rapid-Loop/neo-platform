@@ -20,24 +20,25 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.VM.IO;
-using System.IO;
+using System;
 
 namespace Neo.VM.Extensions
 {
-    public static class INeoSerializableExtensions
+    public static class StringExtensions
     {
         /// <summary>
-        /// Converts an <see cref="INeoSerializable"/> object to a byte array.
+        /// Trims the specified prefix from the start of the <see cref="string"/>, ignoring case.
         /// </summary>
-        /// <param name="obj">The <see cref="INeoSerializable"/> object to be converted.</param>
-        /// <returns>The converted byte array.</returns>
-        public static byte[] ToArray(this INeoSerializable obj)
+        /// <param name="value">The <see cref="string"/> to trim.</param>
+        /// <param name="prefix">The prefix to trim.</param>
+        /// <returns>
+        /// The trimmed ReadOnlySpan without prefix. If no prefix is found, the input is returned unmodified.
+        /// </returns>
+        public static ReadOnlySpan<char> TrimStartIgnoreCase(this ReadOnlySpan<char> value, ReadOnlySpan<char> prefix)
         {
-            using var ms = new MemoryStream();
-
-            obj.Serialize(ms);
-            return ms.ToArray();
+            if (value.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase))
+                return value[prefix.Length..];
+            return value;
         }
     }
 }

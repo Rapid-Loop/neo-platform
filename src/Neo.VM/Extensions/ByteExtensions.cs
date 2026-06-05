@@ -38,7 +38,8 @@ namespace Neo.VM.Extensions
         public static T? AsSerializable<T>(this byte[] array, int startIndex = 0)
             where T : class?, INeoSerializable?
         {
-            using var ms = new MemoryStream(array[startIndex..], false);
+            using var ms = new MemoryStream(array, false);
+            ms.Seek(startIndex, SeekOrigin.Begin);
 
             var newObject = RuntimeHelpers.GetUninitializedObject(typeof(T)) as T;
             newObject?.Deserialize(ms);

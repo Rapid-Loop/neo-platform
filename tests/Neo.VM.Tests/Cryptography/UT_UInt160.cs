@@ -141,7 +141,7 @@ namespace Neo.VM.Tests.Cryptography
         public void TestOperatorSmallerAndEqual()
         {
             Assert.IsTrue(UInt160.Zero <= UInt160.Zero);
-            Assert.IsTrue(UInt160.Zero >= "0x0000000000000000000000000000000000000000");
+            Assert.IsTrue(UInt160.Zero <= "0x0000000000000000000000000000000000000000");
         }
     }
 }

@@ -14,11 +14,6 @@
     <WarningLevel>4</WarningLevel>
     <AnalysisLevel>latest</AnalysisLevel>
     <OutputPath>../../bin/tests/$(MSBuildProjectName)</OutputPath>
-    <EnableMSTestRunner>false</EnableMSTestRunner>
-    <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
-    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
-    <MSTestVersion>4.0.2</MSTestVersion>
-    <MSTestAnalysisMode>Recommended</MSTestAnalysisMode>
   </PropertyGroup>
 
   <ItemGroup>

@@ -72,7 +72,7 @@ namespace Neo.VM.Helpers
                 throw new FormatException("Invalid compressed key format.");
 
             using var ecdsa = ECDsa.Create(curve);
-            var explicitParameters = ecdsa.ExportExplicitParameters(false);
+            var explicitParameters = ecdsa.ExportExplicitParameters(true);
 
             var xBytes = compressedPublicKeyBytes[1..33];
 

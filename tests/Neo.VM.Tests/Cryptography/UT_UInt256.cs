@@ -26,6 +26,7 @@ using Neo.VM.IO;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Neo.VM.Tests.Cryptography

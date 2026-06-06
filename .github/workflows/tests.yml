@@ -1,0 +1,88 @@
+name: Test & Checks
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+env:
+  DOTNET_VERSION: 10.0.x
+
+jobs:
+  check-code:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout (github)
+      uses: actions/checkout@v6
+
+    - name: Setup .NET ${{ env.DOTNET_VERSION }}
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Verify Formatting
+      run: dotnet format --verify-no-changes --verbosity diagnostic
+
+  check-packages:
+    name: Scan for Vulnerable Packages
+    needs: [Format]
+
+    timeout-minutes: 5
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout (github)
+      uses: actions/checkout@v6
+
+    - name: Setup .NET ${{ env.DOTNET_VERSION }}
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore Solution
+      run: dotnet restore
+
+    - name: Check Solution Packages
+      run: dotnet list package --vulnerable --include-transitive
+
+  check-tests:
+    name: Run MSTest/VSTest for MacOS, Linux and Windows
+    needs: [Format]
+
+    timeout-minutes: 5
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout (github)
+      uses: actions/checkout@v6
+
+    - name: Setup .NET ${{ env.DOTNET_VERSION }}
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Test (macos)
+      if: matrix.os == 'macos-latest'
+      run: |
+        brew install rocksdb
+        dotnet build -p:GITHUB_ACTIONS=true
+        dotnet test --no-build -p:GITHUB_ACTIONS=true
+
+    - name: Test (windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        dotnet build -p:GITHUB_ACTIONS=true
+        dotnet test --no-build -p:GITHUB_ACTIONS=true
+
+    - name: Test (linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get --assume-yes install librocksdb-dev
+        dotnet build -p:GITHUB_ACTIONS=true
+        dotnet test --no-build -p:GITHUB_ACTIONS=true

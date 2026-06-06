@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.VM.Extensions;
+using System.IO;
 
 namespace Neo.VM.Tests.IO
 {

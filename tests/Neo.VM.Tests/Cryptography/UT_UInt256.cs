@@ -20,14 +20,12 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+#pragma warning disable CS1718 // Comparison made to same variable
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+
 using Neo.VM.Cryptography;
 using Neo.VM.Extensions;
-using Neo.VM.IO;
 using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Neo.VM.Tests.Cryptography
 {

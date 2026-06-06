@@ -81,7 +81,7 @@ namespace Neo.VM
         }
 
         /// <summary>
-        /// Emits an <see cref="Instruction"/> with the specified <see cref="OpCode"/> and operand.
+        /// Emits an <see cref="VMInstruction"/> with the specified <see cref="OpCode"/> and operand.
         /// </summary>
         /// <param name="opcode">The <see cref="OpCode"/> to be emitted.</param>
         /// <param name="operand">The operand to be emitted.</param>
@@ -94,7 +94,7 @@ namespace Neo.VM
         }
 
         /// <summary>
-        /// Emits a call <see cref="Instruction"/> with the specified offset.
+        /// Emits a call <see cref="VMInstruction"/> with the specified offset.
         /// </summary>
         /// <param name="offset">The offset to be called.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
@@ -107,7 +107,7 @@ namespace Neo.VM
         }
 
         /// <summary>
-        /// Emits a jump <see cref="Instruction"/> with the specified offset.
+        /// Emits a jump <see cref="VMInstruction"/> with the specified offset.
         /// </summary>
         /// <param name="opcode">The <see cref="OpCode"/> to be emitted. It must be a jump <see cref="OpCode"/></param>
         /// <param name="offset">The offset to jump.</param>
@@ -127,7 +127,7 @@ namespace Neo.VM
         }
 
         /// <summary>
-        /// Emits a push <see cref="Instruction"/> with the specified number.
+        /// Emits a push <see cref="VMInstruction"/> with the specified number.
         /// </summary>
         /// <param name="value">The number to be pushed.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
@@ -153,7 +153,7 @@ namespace Neo.VM
         }
 
         /// <summary>
-        /// Emits a push <see cref="Instruction"/> with the specified boolean value.
+        /// Emits a push <see cref="VMInstruction"/> with the specified boolean value.
         /// </summary>
         /// <param name="value">The value to be pushed.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
@@ -163,7 +163,7 @@ namespace Neo.VM
         }
 
         /// <summary>
-        /// Emits a push <see cref="Instruction"/> with the specified data.
+        /// Emits a push <see cref="VMInstruction"/> with the specified data.
         /// </summary>
         /// <param name="data">The data to be pushed.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
@@ -191,7 +191,7 @@ namespace Neo.VM
         }
 
         /// <summary>
-        /// Emits a push <see cref="Instruction"/> with the specified <see cref="string"/>.
+        /// Emits a push <see cref="VMInstruction"/> with the specified <see cref="string"/>.
         /// </summary>
         /// <param name="data">The <see cref="string"/> to be pushed.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
@@ -212,7 +212,7 @@ namespace Neo.VM
         }
 
         /// <summary>
-        /// Emits an <see cref="Instruction"/> with <see cref="OpCode.SYSCALL"/>.
+        /// Emits an <see cref="VMInstruction"/> with <see cref="OpCode.SYSCALL"/>.
         /// </summary>
         /// <param name="api">The operand of <see cref="OpCode.SYSCALL"/>.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
@@ -221,13 +221,6 @@ namespace Neo.VM
             return Emit(OpCode.SYSCALL, BitConverter.GetBytes(api));
         }
 
-        /// <summary>
-        /// Emits the opcodes for creating an array.
-        /// </summary>
-        /// <typeparam name="T">The type of the elements of the array.</typeparam>
-        /// <param name="builder">The <see cref="ScriptBuilder"/> to be used.</param>
-        /// <param name="list">The elements of the array.</param>
-        /// <returns>The same instance as <paramref name="builder"/>.</returns>
         public ScriptBuilder CreateArray<T>(IReadOnlyList<T>? list = null)
         {
             if (list is null || list.Count == 0)
@@ -241,14 +234,6 @@ namespace Neo.VM
             return Emit(OpCode.PACK);
         }
 
-        /// <summary>
-        /// Emits the opcodes for creating a map.
-        /// </summary>
-        /// <typeparam name="TKey">The type of the key of the map.</typeparam>
-        /// <typeparam name="TValue">The type of the value of the map.</typeparam>
-        /// <param name="builder">The <see cref="ScriptBuilder"/> to be used.</param>
-        /// <param name="map">The key/value pairs of the map.</param>
-        /// <returns>The same instance as <paramref name="builder"/>.</returns>
         public ScriptBuilder CreateMap<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> map)
             where TKey : notnull
             where TValue : notnull
@@ -269,14 +254,6 @@ namespace Neo.VM
             return Emit(OpCode.PACKMAP);
         }
 
-        /// <summary>
-        /// Emits the opcodes for creating a map.
-        /// </summary>
-        /// <typeparam name="TKey">The type of the key of the map.</typeparam>
-        /// <typeparam name="TValue">The type of the value of the map.</typeparam>
-        /// <param name="builder">The <see cref="ScriptBuilder"/> to be used.</param>
-        /// <param name="map">The key/value pairs of the map.</param>
-        /// <returns>The same instance as <paramref name="builder"/>.</returns>
         public ScriptBuilder CreateMap<TKey, TValue>(IReadOnlyDictionary<TKey, TValue> map)
             where TKey : notnull
             where TValue : notnull
@@ -295,13 +272,6 @@ namespace Neo.VM
             return Emit(OpCode.PACKMAP);
         }
 
-        /// <summary>
-        /// Emits the opcodes for creating a struct.
-        /// </summary>
-        /// <typeparam name="T">The type of the property.</typeparam>
-        /// <param name="builder">The <see cref="ScriptBuilder"/> to be used.</param>
-        /// <param name="array">The list of properties.</param>
-        /// <returns>The same instance as <paramref name="builder"/>.</returns>
         public ScriptBuilder CreateStruct<T>(IReadOnlyList<T> array)
             where T : notnull
         {
@@ -316,12 +286,6 @@ namespace Neo.VM
             return Emit(OpCode.PACKSTRUCT);
         }
 
-        /// <summary>
-        /// Emits the specified opcodes.
-        /// </summary>
-        /// <param name="builder">The <see cref="ScriptBuilder"/> to be used.</param>
-        /// <param name="ops">The opcodes to emit.</param>
-        /// <returns>The same instance as <paramref name="builder"/>.</returns>
         public ScriptBuilder Emit(params OpCode[] ops)
         {
             foreach (var op in ops)
@@ -330,114 +294,6 @@ namespace Neo.VM
             return this;
         }
 
-        /// <summary>
-        /// Emits the opcodes for calling a contract dynamically.
-        /// </summary>
-        /// <param name="builder">The <see cref="ScriptBuilder"/> to be used.</param>
-        /// <param name="scriptHash">The hash of the contract to be called.</param>
-        /// <param name="method">The method to be called in the contract.</param>
-        /// <param name="args">The arguments for calling the contract.</param>
-        /// <returns>The same instance as <paramref name="builder"/>.</returns>
-        //public ScriptBuilder EmitDynamicCall(UInt160 scriptHash, string method, params object?[] args)
-        //{
-        //    return EmitDynamicCall(scriptHash, method, CallFlags.All, args);
-        //}
-
-        /// <summary>
-        /// Emits the opcodes for calling a contract dynamically.
-        /// </summary>
-        /// <param name="builder">The <see cref="ScriptBuilder"/> to be used.</param>
-        /// <param name="scriptHash">The hash of the contract to be called.</param>
-        /// <param name="method">The method to be called in the contract.</param>
-        /// <param name="flags">The <see cref="CallFlags"/> for calling the contract.</param>
-        /// <param name="args">The arguments for calling the contract.</param>
-        /// <returns>The same instance as <paramref name="builder"/>.</returns>
-        //public ScriptBuilder EmitDynamicCall(UInt160 scriptHash, string method, CallFlags flags, params object?[] args)
-        //{
-        //    CreateArray(args);
-        //    EmitPush(flags);
-        //    EmitPush(method);
-        //    EmitPush(scriptHash);
-        //    EmitSysCall(ApplicationEngine.System_Contract_Call);
-        //    return this;
-        //}
-
-        /// <summary>
-        /// Emits the opcodes for pushing the specified data onto the stack.
-        /// </summary>
-        /// <param name="builder">The <see cref="ScriptBuilder"/> to be used.</param>
-        /// <param name="data">The data to be pushed.</param>
-        /// <returns>The same instance as <paramref name="builder"/>.</returns>
-        //public ScriptBuilder EmitPush(ISerializable data)
-        //{
-        //    return EmitPush(data.ToArray());
-        //}
-
-        /// <summary>
-        /// Emits the opcodes for pushing the specified data onto the stack.
-        /// </summary>
-        /// <param name="builder">The <see cref="ScriptBuilder"/> to be used.</param>
-        /// <param name="parameter">The data to be pushed.</param>
-        /// <returns>The same instance as <paramref name="builder"/>.</returns>
-        //public ScriptBuilder EmitPush(ContractParameter parameter)
-        //{
-        //    if (parameter.Value is null)
-        //        Emit(OpCode.PUSHNULL);
-        //    else
-        //        switch (parameter.Type)
-        //        {
-        //            case ContractParameterType.Signature:
-        //            case ContractParameterType.ByteArray:
-        //                EmitPush((byte[])parameter.Value);
-        //                break;
-        //            case ContractParameterType.Boolean:
-        //                EmitPush((bool)parameter.Value);
-        //                break;
-        //            case ContractParameterType.Integer:
-        //                if (parameter.Value is BigInteger bi)
-        //                    EmitPush(bi);
-        //                else
-        //                    EmitPush((BigInteger)typeof(BigInteger).GetConstructor([parameter.Value.GetType()])!.Invoke([parameter.Value]));
-        //                break;
-        //            case ContractParameterType.Hash160:
-        //                EmitPush((UInt160)parameter.Value);
-        //                break;
-        //            case ContractParameterType.Hash256:
-        //                EmitPush((UInt256)parameter.Value);
-        //                break;
-        //            case ContractParameterType.PublicKey:
-        //                EmitPush((ECPoint)parameter.Value);
-        //                break;
-        //            case ContractParameterType.String:
-        //                EmitPush((string)parameter.Value);
-        //                break;
-        //            case ContractParameterType.Array:
-        //                {
-        //                    var parameters = (IList<ContractParameter>)parameter.Value;
-        //                    for (var i = parameters.Count - 1; i >= 0; i--)
-        //                        EmitPush(parameters[i]);
-        //                    EmitPush(parameters.Count);
-        //                    Emit(OpCode.PACK);
-        //                }
-        //                break;
-        //            case ContractParameterType.Map:
-        //                {
-        //                    var pairs = (IList<KeyValuePair<ContractParameter, ContractParameter>>)parameter.Value;
-        //                    CreateMap(pairs);
-        //                }
-        //                break;
-        //            default:
-        //                throw new ArgumentException($"Unsupported parameter type: {parameter.Type}. This parameter type cannot be converted to a stack item for script execution.", nameof(parameter));
-        //        }
-        //    return this;
-        //}
-
-        /// <summary>
-        /// Emits the opcodes for pushing the specified data onto the stack.
-        /// </summary>
-        /// <param name="builder">The <see cref="ScriptBuilder"/> to be used.</param>
-        /// <param name="obj">The data to be pushed.</param>
-        /// <returns>The same instance as <paramref name="builder"/>.</returns>
         public ScriptBuilder EmitPush(object? obj)
         {
             switch (obj)
@@ -500,13 +356,6 @@ namespace Neo.VM
             return this;
         }
 
-        /// <summary>
-        /// Emits the opcodes for invoking an interoperable service.
-        /// </summary>
-        /// <param name="builder">The <see cref="ScriptBuilder"/> to be used.</param>
-        /// <param name="method">The hash of the interoperable service.</param>
-        /// <param name="args">The arguments for calling the interoperable service.</param>
-        /// <returns>The same instance as <paramref name="builder"/>.</returns>
         public ScriptBuilder EmitSysCall(uint method, params object[] args)
         {
             for (var i = args.Length - 1; i >= 0; i--)

@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.VM.Types;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -52,7 +53,7 @@ namespace Neo.VM
 
         /// <summary>
         /// The largest comparable size.
-        /// If a <see cref="Types.ByteString"/> or <see cref="Types.Struct"/> exceeds this size,
+        /// If a <see cref="VMByteArray"/> or <see cref="VMStruct"/> exceeds this size,
         /// comparison operations on it cannot be performed in the VM.
         /// </summary>
         public uint MaxComparableSize { get; init; } = 65536;

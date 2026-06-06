@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.VM.Helpers;
+using System;
 using static System.Security.Cryptography.ECCurve;
 
 namespace Neo.VM.Tests.Helpers

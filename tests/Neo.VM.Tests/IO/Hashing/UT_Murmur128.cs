@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.VM.IO.Hashing;
+using System;
 using System.Text;
 
 namespace Neo.VM.Tests.IO.Hashing

@@ -1,0 +1,36 @@
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Copyright>2026 Rapid Loop</Copyright>
+    <LangVersion>latest</LangVersion>
+    <Authors>Rapid Loop</Authors>
+    <RootNamespace>$(PackageId)</RootNamespace>
+    <IsPackable>true</IsPackable>
+    <PackageId>$(MSBuildProjectName)</PackageId>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageOutputPath>../../pkgs/</PackageOutputPath>
+    <PackageProjectUrl>https://github.com/Rapid-Loop/neo-platform</PackageProjectUrl>
+    <PackageLicenseExpression>BSD-2-Clause</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Rapid-Loop/neo-platform.git</RepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Company>Rapid Loop</Company>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <OutputPath>../../bin/$(PackageId)</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../.images/logo.png" Pack="true" Visible="false" PackagePath=""/>
+    <None Include="../../README.md" Pack="true" Visible="false" PackagePath=""/>
+  </ItemGroup>
+
+</Project>

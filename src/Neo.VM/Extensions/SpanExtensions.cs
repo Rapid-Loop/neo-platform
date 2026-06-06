@@ -32,6 +32,7 @@ namespace Neo.VM.Extensions
         /// </summary>
         /// <typeparam name="T">The type to convert to.</typeparam>
         /// <param name="span">The byte array to be converted.</param>
+        /// <param name="startIndex"></param>
         /// <returns>The converted <see cref="INeoSerializable"/> object.</returns>
         public static T? AsSerializable<T>(this ReadOnlySpan<byte> span, int startIndex = 0)
             where T : class?, INeoSerializable? =>

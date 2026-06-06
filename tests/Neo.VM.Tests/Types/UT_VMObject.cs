@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.VM.Types;
+using System;
 using System.Numerics;
 
 namespace Neo.VM.Tests.Types

@@ -23,20 +23,22 @@
 using System;
 using System.Numerics;
 using System.Security.Cryptography;
+using static System.Security.Cryptography.ECCurve;
 
 namespace Neo.VM.Helpers
 {
-    public static class ECDSAHelper
+    public static class Secp256r1Helper
     {
         private static readonly BigInteger s_p = BigInteger.Parse("115792089210356248762697446949407573530086143415290314195533631308867097853951");
+        private static readonly BigInteger s_b = BigInteger.Parse("41058363725152142129326129780047268409114441015993725554835256314039467401291");
 
-        public static byte[] GetPublicKey(byte[] privateKeyBytes, ECCurve curve, bool shouldCompress = false)
+        public static byte[] GetPublicKey(byte[] privateKeyBytes, bool shouldCompress = false)
         {
-            using var ecdsa = ECDsa.Create(curve);
+            using var ecdsa = ECDsa.Create();
 
             var ecPrivateKeyParameters = new ECParameters
             {
-                Curve = curve,
+                Curve = NamedCurves.nistP256,
                 D = privateKeyBytes,
             };
 
@@ -66,21 +68,16 @@ namespace Neo.VM.Helpers
             ];
         }
 
-        public static byte[] DecompressPublicKey(byte[] compressedPublicKeyBytes, ECCurve curve)
+        public static byte[] DecompressPublicKey(byte[] compressedPublicKeyBytes)
         {
             if (compressedPublicKeyBytes.Length != 33 || (compressedPublicKeyBytes[0] != 0x02 && compressedPublicKeyBytes[0] != 0x03))
                 throw new FormatException("Invalid compressed key format.");
 
-            using var ecdsa = ECDsa.Create(curve);
-            var explicitParameters = ecdsa.ExportExplicitParameters(true);
-
             var xBytes = compressedPublicKeyBytes[1..33];
 
             var x = new BigInteger(xBytes, isUnsigned: true, isBigEndian: true);
-            var b = new BigInteger(explicitParameters.Curve.B, true, true);
-
             var xCubed = BigInteger.ModPow(x, 3, s_p);
-            var z = (xCubed - (3 * x) + b) % s_p;
+            var z = (xCubed - (3 * x) + s_b) % s_p;
 
             if (z < 0) z += s_p;
 

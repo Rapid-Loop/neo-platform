@@ -49,7 +49,7 @@ jobs:
       run: dotnet list package --vulnerable --include-transitive
 
   verify-tests:
-    name: Verify Tests on MacOS, Linux and Windows
+    name: Verify Tests on ${{ matrix.os }}
     needs: [verify-code, verify-packages]
 
     timeout-minutes: 5

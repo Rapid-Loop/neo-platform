@@ -30,7 +30,7 @@ namespace Neo.VM.Helpers
     {
         private static readonly BigInteger s_p = BigInteger.Parse("115792089210356248762697446949407573530086143415290314195533631308867097853951");
 
-        public static byte[] GetPublicKey(byte[] privateKeyBytes, ECCurve curve)
+        public static byte[] GetPublicKey(byte[] privateKeyBytes, ECCurve curve, bool shouldCompress = false)
         {
             using var ecdsa = ECDsa.Create(curve);
 
@@ -44,21 +44,25 @@ namespace Neo.VM.Helpers
 
             var publicKeyParameters = ecdsa.ExportParameters(false);
 
-            return [
+            byte[] uncompressedPublicKeyBytes = [
                 0x04,
                 .. publicKeyParameters.Q.X.AsSpan(),
                 .. publicKeyParameters.Q.Y.AsSpan(),
             ];
+
+            return shouldCompress ?
+                CompressPublicKey(uncompressedPublicKeyBytes) :
+                uncompressedPublicKeyBytes;
         }
 
-        public static byte[] CompressPublicKey(byte[] uncompressedPublickKeyBytes)
+        public static byte[] CompressPublicKey(byte[] uncompressedPublicKeyBytes)
         {
-            var prefix = uncompressedPublickKeyBytes[^1] % 2 == 0 ?
+            var prefix = uncompressedPublicKeyBytes[^1] % 2 == 0 ?
                 (byte)0x02 : (byte)0x03;
 
             return [
                 prefix,
-                .. uncompressedPublickKeyBytes[1..33]
+                .. uncompressedPublicKeyBytes[1..33]
             ];
         }
 

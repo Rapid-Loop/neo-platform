@@ -63,8 +63,9 @@ namespace Neo.VM.Types
 
         public override int GetHashCode()
         {
-            return _memory.ToArray()
-                .Aggregate(0, (hash, b) => (hash * 31) ^ b);
+            return _memory.ToArray().Aggregate(RefCount,
+                (hash, b) =>
+                        (hash * 31) ^ b);
         }
 
         public override string ToString()

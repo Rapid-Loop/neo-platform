@@ -22,53 +22,55 @@
 
 using System;
 using System.Numerics;
-using System.Security.Cryptography;
-using static System.Security.Cryptography.ECCurve;
+using CECCurve = System.Security.Cryptography.ECCurve;
 
-namespace Neo.VM.Helpers
+namespace Neo.VM.Cryptography.ECC
 {
-    public static class Secp256r1Helper
+    public class ECCurve
     {
-        private static readonly BigInteger s_p = BigInteger.Parse("115792089210356248762697446949407573530086143415290314195533631308867097853951");
-        private static readonly BigInteger s_b = BigInteger.Parse("41058363725152142129326129780047268409114441015993725554835256314039467401291");
+        public static readonly ECCurve SecP256r1 = new(
+            BigInteger.Parse("115792089210356248762697446949407573530086143415290314195533631308867097853951"),
+            BigInteger.Parse("41058363725152142129326129780047268409114441015993725554835256314039467401291"),
+            ECCurveName.SecP256r1
+        );
 
-        public static byte[] GetPublicKey(byte[] privateKeyBytes, bool shouldCompress = false)
+        public ECCurveName Name => _curveName;
+
+        public CECCurve ECCurveType => _curve;
+
+        public BigInteger P => _p;
+
+        public BigInteger B => _b;
+
+        private readonly BigInteger _p;
+        private readonly BigInteger _b;
+        private readonly ECCurveName _curveName;
+        private readonly CECCurve _curve;
+
+        private ECCurve(BigInteger p, BigInteger b, ECCurveName curve)
         {
-            using var ecdsa = ECDsa.Create();
-
-            var ecPrivateKeyParameters = new ECParameters
+            _p = p;
+            _b = b;
+            _curveName = curve;
+            _curve = curve switch
             {
-                Curve = NamedCurves.nistP256,
-                D = privateKeyBytes,
+                ECCurveName.SecP256r1 => CECCurve.NamedCurves.nistP256,
+                _ => throw new NotSupportedException(nameof(curve)),
             };
-
-            ecdsa.ImportParameters(ecPrivateKeyParameters);
-
-            var publicKeyParameters = ecdsa.ExportParameters(false);
-
-            byte[] uncompressedPublicKeyBytes = [
-                0x04,
-                .. publicKeyParameters.Q.X.AsSpan(),
-                .. publicKeyParameters.Q.Y.AsSpan(),
-            ];
-
-            return shouldCompress ?
-                CompressPublicKey(uncompressedPublicKeyBytes) :
-                uncompressedPublicKeyBytes;
         }
 
-        public static byte[] CompressPublicKey(byte[] uncompressedPublicKeyBytes)
+        internal byte[] CompressPoint(ReadOnlySpan<byte> span)
         {
-            var prefix = uncompressedPublicKeyBytes[^1] % 2 == 0 ?
+            var prefix = span[^1] % 2 == 0 ?
                 (byte)0x02 : (byte)0x03;
 
             return [
                 prefix,
-                .. uncompressedPublicKeyBytes[1..33]
+                .. span[1..33]
             ];
         }
 
-        public static byte[] DecompressPublicKey(byte[] compressedPublicKeyBytes)
+        internal byte[] DecompressPoint(ReadOnlySpan<byte> compressedPublicKeyBytes)
         {
             if (compressedPublicKeyBytes.Length != 33 || (compressedPublicKeyBytes[0] != 0x02 && compressedPublicKeyBytes[0] != 0x03))
                 throw new FormatException("Invalid compressed key format.");
@@ -76,17 +78,17 @@ namespace Neo.VM.Helpers
             var xBytes = compressedPublicKeyBytes[1..33];
 
             var x = new BigInteger(xBytes, isUnsigned: true, isBigEndian: true);
-            var xCubed = BigInteger.ModPow(x, 3, s_p);
-            var z = (xCubed - (3 * x) + s_b) % s_p;
+            var xCubed = BigInteger.ModPow(x, 3, _p);
+            var z = (xCubed - (3 * x) + _b) % _p;
 
-            if (z < 0) z += s_p;
+            if (z < 0) z += _p;
 
-            var y = BigInteger.ModPow(z, (s_p + 1) / 4, s_p);
+            var y = BigInteger.ModPow(z, (_p + 1) / 4, _p);
 
             var isYEven = (y % 2 == 0);
             var shouldBeEven = compressedPublicKeyBytes[0] == 0x02;
 
-            if (isYEven != shouldBeEven) y = s_p - y;
+            if (isYEven != shouldBeEven) y = _p - y;
 
             var yBytes = y.ToByteArray(isUnsigned: true, isBigEndian: true);
 

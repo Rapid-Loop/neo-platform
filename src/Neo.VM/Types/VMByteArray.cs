@@ -60,8 +60,9 @@ namespace Neo.VM.Types
 
         public override int GetHashCode()
         {
-            return _memory.ToArray()
-                .Aggregate(0, (hash, b) => (hash * 31) ^ b);
+            return _memory.ToArray().Aggregate(17,
+                (hash, b) =>
+                    (hash * 31) ^ b);
         }
 
         protected override void Dispose(bool disposing)

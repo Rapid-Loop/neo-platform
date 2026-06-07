@@ -82,7 +82,9 @@ namespace Neo.VM.Types
 
         public override int GetHashCode()
         {
-            return _array.Aggregate(17, (hash, b) => (hash * 31) ^ b.GetHashCode());
+            return _array.Aggregate(17,
+                (hash, b) =>
+                    (hash * 31) ^ b.GetHashCode());
         }
 
         public override bool Equals(object? obj)

@@ -20,34 +20,16 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.VM.Helpers;
+using Neo.VM.Cryptography.ECC;
 using System;
 
-namespace Neo.VM.Tests.Helpers
+namespace Neo.VM.Tests.Cryptography.ECC
 {
     [TestClass]
-    public class UT_Secp256r1Helper
+    public class UT_ECCurve
     {
-        private const string PrivateKeyString = "0000000000000000000000000000000000000000000000000000000000000001";
-
-        private readonly static byte[] s_privateKeyBytes = Convert.FromHexString(PrivateKeyString);
-
         [TestMethod]
-        public void TestGeneratePublicKey()
-        {
-            var expectedUncompressedPublicKeyString =
-                "04"
-                + "6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296"
-                + "4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5";
-
-            var actualUncompressedPublicKeyBytes = Secp256r1Helper.GetPublicKey(s_privateKeyBytes);
-            var actualUncompressedPublicKeyString = Convert.ToHexStringLower(actualUncompressedPublicKeyBytes);
-
-            Assert.AreEqual(expectedUncompressedPublicKeyString, actualUncompressedPublicKeyString);
-        }
-
-        [TestMethod]
-        public void TestCompressionOfPublicKey()
+        public void TestSecP256r1CompressionPoint()
         {
             var expectedUncompressedPublicKeyString =
                 "04"
@@ -58,10 +40,10 @@ namespace Neo.VM.Tests.Helpers
             var expectedCompressedPublicKeyString = "036b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296";
             var expectedCompressedPublicKeyBytes = Convert.FromHexString(expectedCompressedPublicKeyString);
 
-            var actualCompressedPublicKeyBytes = Secp256r1Helper.CompressPublicKey(expectedUncompressedPublicKeyBytes);
+            var actualCompressedPublicKeyBytes = ECCurve.SecP256r1.CompressPoint(expectedUncompressedPublicKeyBytes);
             var actualCompressedPublicKeyString = Convert.ToHexStringLower(actualCompressedPublicKeyBytes);
 
-            var actualUncompressedPublicKeyBytes = Secp256r1Helper.DecompressPublicKey(expectedCompressedPublicKeyBytes);
+            var actualUncompressedPublicKeyBytes = ECCurve.SecP256r1.DecompressPoint(expectedCompressedPublicKeyBytes);
             var actualUncompressedPublicKeyString = Convert.ToHexStringLower(actualUncompressedPublicKeyBytes);
 
             Assert.AreEqual(expectedCompressedPublicKeyString, actualCompressedPublicKeyString);

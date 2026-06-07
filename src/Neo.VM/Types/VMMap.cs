@@ -114,8 +114,9 @@ namespace Neo.VM.Types
 
         public override int GetHashCode()
         {
-            return _map.ToArray()
-                .Aggregate(17, (hash, b) => (hash * 31) + (b.Key.GetHashCode() ^ b.Value.GetHashCode()));
+            return _map.ToArray().Aggregate(17,
+                (hash, b) =>
+                    (hash * 31) + (b.Key.GetHashCode() ^ b.Value.GetHashCode()));
         }
 
         public void Add(VMObject key, VMObject value)

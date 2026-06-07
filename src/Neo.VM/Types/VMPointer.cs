@@ -22,6 +22,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Numerics;
 
 namespace Neo.VM.Types
@@ -61,7 +62,9 @@ namespace Neo.VM.Types
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), _ip);
+            return _memory.ToArray().Aggregate(17,
+                (hash, b) =>
+                    (hash * 31) + (b ^ _ip));
         }
 
         public override VMObject Clone()

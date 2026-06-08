@@ -42,7 +42,11 @@ namespace Neo.VM.Cryptography.ECC
 
         public bool IsInfinity => _x == BigInteger.Zero && _y == BigInteger.Zero;
 
-        public int Size => _uncompressed.Length;
+        public int Length => _uncompressed.Length;
+
+        public int Size =>
+            sizeof(ECCurveName) +
+            _uncompressed.Length;
 
         public ECCurve Curve => _curve;
 
@@ -131,9 +135,9 @@ namespace Neo.VM.Cryptography.ECC
 
         public override int GetHashCode()
         {
-            return _uncompressed.Aggregate(17,
+            return _uncompressed.Aggregate((int)_curve.Name,
                 (hash, b) =>
-                    (hash * 31) + (b ^ (byte)_curve.Name));
+                    (hash * 31) ^ b);
         }
 
         [return: MaybeNull]
@@ -158,7 +162,7 @@ namespace Neo.VM.Cryptography.ECC
         public int CompareTo(ECPoint? other)
         {
             if (other is null) return 1;
-            var result = _y.CompareTo(other._x);
+            var result = _x.CompareTo(other._x);
             if (result != 0) return result;
             return _y.CompareTo(other._y);
         }

@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.VM.Cryptography.ECC;
+using Neo.VM.Extensions;
 using System;
 
 namespace Neo.VM.Tests.Cryptography.ECC
@@ -70,7 +71,7 @@ namespace Neo.VM.Tests.Cryptography.ECC
             Assert.AreEqual(expectedPoint.X, actualCompressedPoint.X);
             Assert.AreEqual(expectedPoint.Y, actualCompressedPoint.Y);
             Assert.AreEqual(expectedPoint.Size, actualCompressedPoint.Size);
-            Assert.AreEqual(ECPoint.UncompressedLength, actualCompressedPoint.Size);
+            Assert.AreEqual(ECPoint.UncompressedLength, actualCompressedPoint.Length);
             Assert.AreEqual(expectedPoint.Curve.Name, actualCompressedPoint.Curve.Name);
 
             Assert.IsTrue(actualUncompressedSuccessful);
@@ -78,7 +79,7 @@ namespace Neo.VM.Tests.Cryptography.ECC
             Assert.AreEqual(expectedPoint.X, actualUncompressedPoint.X);
             Assert.AreEqual(expectedPoint.Y, actualUncompressedPoint.Y);
             Assert.AreEqual(expectedPoint.Size, actualUncompressedPoint.Size);
-            Assert.AreEqual(ECPoint.UncompressedLength, actualUncompressedPoint.Size);
+            Assert.AreEqual(ECPoint.UncompressedLength, actualUncompressedPoint.Length);
             Assert.AreEqual(expectedPoint.Curve.Name, actualUncompressedPoint.Curve.Name);
         }
 
@@ -104,6 +105,47 @@ namespace Neo.VM.Tests.Cryptography.ECC
             Assert.AreEqual(expectedPoint.GetHashCode(), actualPoint1.GetHashCode());
             Assert.AreNotEqual(expectedPoint.GetHashCode(), actualPoint2.GetHashCode());
             Assert.AreNotEqual(actualPoint1.GetHashCode(), actualPoint2.GetHashCode());
+        }
+
+        [TestMethod]
+        public void TestCompareTo()
+        {
+            var expectedPoint = ECPoint.FromPrivateKey(s_privateKeyBytes, ECCurve.SecP256r1);
+            var actualPoint1 = ECPoint.FromPrivateKey(s_privateKeyBytes, ECCurve.SecP256r1);
+            var actualPoint2 = ECPoint.Parse("03" + Random.Shared.GetHexString(ECPoint.UncompressedLength - 1, true), ECCurve.SecP256r1);
+
+            Assert.AreEqual(0, expectedPoint.CompareTo(actualPoint1));
+            Assert.AreNotEqual(0, expectedPoint.CompareTo(actualPoint2));
+        }
+
+        [TestMethod]
+        public void TestSerializable()
+        {
+            var expectedPoint1 = ECPoint.FromPrivateKey(s_privateKeyBytes, ECCurve.SecP256r1);
+            var expectedPoint2 = ECPoint.Parse("03" + Random.Shared.GetHexString(ECPoint.UncompressedLength - 1, true), ECCurve.SecP256r1);
+            var expectedPointLength = ECPoint.UncompressedLength;
+            var expectedPointSize = expectedPointLength + 1;
+
+            var actualPointBytes1 = expectedPoint1.ToArray();
+            var actualPoint1 = actualPointBytes1.AsSerializable<ECPoint>();
+
+            var actualPointBytes2 = expectedPoint2.ToArray();
+            var actualPoint2 = actualPointBytes2.AsSerializable<ECPoint>();
+
+            Assert.IsNotNull(actualPoint1);
+            Assert.IsNotNull(actualPoint2);
+
+            Assert.AreEqual(expectedPoint1, actualPoint1);
+            Assert.AreEqual(expectedPoint2, actualPoint2);
+
+            Assert.AreNotEqual(expectedPoint1, actualPoint2);
+            Assert.AreNotEqual(expectedPoint2, actualPoint1);
+
+            Assert.AreEqual(expectedPointSize, actualPoint1.Size);
+            Assert.AreEqual(expectedPointSize, actualPoint2.Size);
+
+            Assert.HasCount(expectedPointSize, actualPointBytes1);
+            Assert.HasCount(expectedPointSize, actualPointBytes2);
         }
     }
 }

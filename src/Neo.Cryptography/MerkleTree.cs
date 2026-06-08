@@ -30,8 +30,6 @@ namespace Neo.Cryptography
 {
     public class MerkleTree
     {
-        public int Depth => _leaves.Count;
-
         private readonly byte[] _root = [];
         private readonly List<byte[]> _leaves = [];
 

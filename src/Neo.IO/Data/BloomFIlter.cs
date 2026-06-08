@@ -39,7 +39,6 @@ namespace Neo.IO.Data
 
         public uint Tweak => _tweak;
 
-
         /// <summary>
         /// Creates a Bloom Filter with optimal size and hash count
         /// </summary>

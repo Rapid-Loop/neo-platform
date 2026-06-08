@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
@@ -87,7 +88,7 @@ namespace Neo.VM.Types
             catch
             {
                 bytes = null;
-                return VMUility.StrictUtf8Encoding.GetBytes(_interfaceName);
+                return CoreUilities.StrictUtf8Encoding.GetBytes(_interfaceName);
             }
             finally
             {

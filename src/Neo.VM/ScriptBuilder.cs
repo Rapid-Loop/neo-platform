@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -197,7 +198,7 @@ namespace Neo.VM
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
         public ScriptBuilder EmitPush(string data)
         {
-            return EmitPush(VMUility.StrictUtf8Encoding.GetBytes(data));
+            return EmitPush(CoreUilities.StrictUtf8Encoding.GetBytes(data));
         }
 
         /// <summary>

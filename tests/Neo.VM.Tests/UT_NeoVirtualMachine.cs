@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core;
 using Neo.VM.Types;
 using System;
 using System.Numerics;
@@ -94,7 +95,7 @@ namespace Neo.VM.Tests
             Assert.AreEqual(int.MaxValue, actualResults.Pop().GetInteger());
             Assert.AreEqual(long.MaxValue, actualResults.Pop().GetInteger());
             Assert.AreEqual(BigInteger.Pow(long.MaxValue, 2), actualResults.Pop().GetInteger());
-            Assert.IsTrue(new ReadOnlySpan<byte>(VMUility.StrictUtf8Encoding.GetBytes("NEO")).SequenceEqual(actualResults.Pop().GetReadOnlySpan()));
+            Assert.IsTrue(new ReadOnlySpan<byte>(CoreUilities.StrictUtf8Encoding.GetBytes("NEO")).SequenceEqual(actualResults.Pop().GetReadOnlySpan()));
             Assert.AreEqual(0, actualResults.Pop().GetInteger());
         }
     }

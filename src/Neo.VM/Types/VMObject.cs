@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core;
 using Neo.VM.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -208,6 +209,6 @@ namespace Neo.VM.Types
             new VMByteArray(value);
 
         public static implicit operator VMObject(string value) =>
-            new VMByteArray(VMUility.StrictUtf8Encoding.GetBytes(value));
+            new VMByteArray(CoreUilities.StrictUtf8Encoding.GetBytes(value));
     }
 }

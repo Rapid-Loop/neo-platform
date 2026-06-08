@@ -1,4 +1,16 @@
 <Solution>
-  <Project Path="src/Neo.VM/Neo.VM.csproj" Id="e38e01be-d9e4-4c1d-a0bc-b9a37250d446" />
-  <Project Path="tests/Neo.VM.Tests/Neo.VM.Tests.csproj" Id="47c53794-838b-4c3c-bc6c-e216708dd709" />
+  <Folder Name="/src/">
+    <Project Path="src/Neo.Core/Neo.Core.csproj" Id="e3f90a6a-61dc-4ac4-9d16-a188d1cebba1" />
+    <Project Path="src/Neo.Cryptography/Neo.Cryptography.csproj" Id="77779507-7718-4809-b926-b3f8753d7213" />
+    <Project Path="src/Neo.Extensions/Neo.Extensions.csproj" Id="7b4b1557-55eb-43bd-ab63-c9070e5b7289" />
+    <Project Path="src/Neo.IO/Neo.IO.csproj" Id="476db0c1-403f-4d31-92f8-dc55985e81a4" />
+    <Project Path="src/Neo.VM/Neo.VM.csproj" Id="e38e01be-d9e4-4c1d-a0bc-b9a37250d446" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Neo.Core.Tests/Neo.Core.Tests.csproj" Id="477ff84e-5cbb-4650-8ea1-31b383166bfe" />
+    <Project Path="tests/Neo.Cryptography.Tests/Neo.Cryptography.Tests.csproj" Id="229908f5-b973-4590-a643-4f022d15d321" />
+    <Project Path="tests/Neo.Extensions.Tests/Neo.Extensions.Tests.csproj" Id="43c78e86-26d0-4dad-9f13-faed58f01ff3" />
+    <Project Path="tests/Neo.IO.Tests/Neo.IO.Tests.csproj" Id="1941ba4a-93ce-432f-a9a7-e285846ebab7" />
+    <Project Path="tests/Neo.VM.Tests/Neo.VM.Tests.csproj" Id="47c53794-838b-4c3c-bc6c-e216708dd709" />
+  </Folder>
 </Solution>

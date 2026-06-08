@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core;
 using System;
 using System.Buffers.Binary;
 using System.Collections;
@@ -135,7 +136,7 @@ namespace Neo.VM
         public string DecodeOperand()
         {
             var operand = Operand[OperandPrefixSize..].ToArray();
-            var asStr = VMUility.StrictUtf8Encoding.GetString(operand);
+            var asStr = CoreUilities.StrictUtf8Encoding.GetString(operand);
             var readable = asStr.All(char.IsAsciiLetterOrDigit);
 
             return OpCode switch

@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core;
 using System;
 using System.Linq;
 using System.Numerics;
@@ -79,7 +80,7 @@ namespace Neo.VM.Types
                 return Convert.ToBase64String(_memory.Span);
             }
 
-            return VMUility.StrictUtf8Encoding.GetString(_memory.Span);
+            return CoreUilities.StrictUtf8Encoding.GetString(_memory.Span);
         }
 
         public override VMObject Clone()

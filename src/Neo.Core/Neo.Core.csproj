@@ -9,9 +9,4 @@
     <InternalsVisibleTo Include="$(RootNamespace).Tests" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Neo.Core\Neo.Core.csproj" />
-    <ProjectReference Include="..\Neo.Extensions\Neo.Extensions.csproj" />
-  </ItemGroup>
-
 </Project>

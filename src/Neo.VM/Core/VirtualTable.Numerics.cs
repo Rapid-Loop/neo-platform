@@ -20,7 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.VM.Extensions;
+using Neo.Numerics.Extensions;
 using Neo.VM.Types;
 using System.Numerics;
 

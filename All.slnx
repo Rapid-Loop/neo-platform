@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/Neo.Configuration/Neo.Configuration.csproj" Id="c4462615-3b84-448c-979e-2413261b5041" />
     <Project Path="src/Neo.Core/Neo.Core.csproj" Id="e3f90a6a-61dc-4ac4-9d16-a188d1cebba1" />
     <Project Path="src/Neo.Cryptography/Neo.Cryptography.csproj" Id="77779507-7718-4809-b926-b3f8753d7213" />
     <Project Path="src/Neo.Extensions/Neo.Extensions.csproj" Id="7b4b1557-55eb-43bd-ab63-c9070e5b7289" />
@@ -7,6 +8,7 @@
     <Project Path="src/Neo.VM/Neo.VM.csproj" Id="e38e01be-d9e4-4c1d-a0bc-b9a37250d446" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Neo.Configuration.Tests/Neo.Configuration.Tests.csproj" Id="7217a313-c582-473a-9630-eb961137e665" />
     <Project Path="tests/Neo.Core.Tests/Neo.Core.Tests.csproj" Id="477ff84e-5cbb-4650-8ea1-31b383166bfe" />
     <Project Path="tests/Neo.Cryptography.Tests/Neo.Cryptography.Tests.csproj" Id="229908f5-b973-4590-a643-4f022d15d321" />
     <Project Path="tests/Neo.Extensions.Tests/Neo.Extensions.Tests.csproj" Id="43c78e86-26d0-4dad-9f13-faed58f01ff3" />

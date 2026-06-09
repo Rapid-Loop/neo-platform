@@ -33,8 +33,8 @@ namespace Neo.Cryptography
         /// </summary>
         public static byte[] Generate(byte[] password, byte[] salt, int n, int r, int p, int keyLength = 32)
         {
-            ArgumentNullException.ThrowIfNull(password);
-            ArgumentNullException.ThrowIfNull(salt);
+            ArgumentOutOfRangeException.ThrowIfZero(password.Length, nameof(password));
+            ArgumentOutOfRangeException.ThrowIfZero(salt.Length, nameof(salt));
 
             if (n <= 1 || (n & (n - 1)) != 0) throw new ArgumentException("N must be a power of 2 and > 1");
             if (r < 1) throw new ArgumentException("r must be >= 1");
@@ -49,7 +49,7 @@ namespace Neo.Cryptography
         /// </summary>
         public static byte[] Generate(string password, byte[] salt, int N = 16384, int r = 8, int p = 1, int keyLength = 32)
         {
-            var passBytes = CoreUilities.StrictUtf8Encoding.GetBytes(password ?? "");
+            var passBytes = CoreUilities.StrictUtf8Encoding.GetBytes(password);
             return Generate(passBytes, salt, N, r, p, keyLength);
         }
 

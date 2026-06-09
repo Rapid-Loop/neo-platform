@@ -20,37 +20,44 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Configuration;
+using Neo.Configuration.Interfaces;
 using Neo.Cryptography;
+using Neo.SmartContract;
+using Neo.Wallet.Json;
 using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
-namespace Neo.Configuration.Json.Converters
+namespace Neo.Wallet
 {
-    public class JsonStringUInt160Converter : JsonConverter<UInt160?>
+    public class DevWalletAccount : IWalletAccount<ProtocolSettings>, IMap<WalletAccountModel>
     {
-        public override UInt160? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public ProtocolSettings ProtocolConfiguration => throw new NotImplementedException();
+
+        public UInt160 ScriptHash => throw new NotImplementedException();
+
+        public string? Label => throw new NotImplementedException();
+
+        public bool IsDefault => throw new NotImplementedException();
+
+        public bool IsLocked => throw new NotImplementedException();
+
+        public bool HasKey => throw new NotImplementedException();
+
+        public ProtocolSettings Extra => ProtocolConfiguration;
+
+        public Contract Contract => throw new NotImplementedException();
+
+        public bool ChangePassword(string oldPassword, string newPassword)
         {
-            if (reader.TokenType != JsonTokenType.String)
-                throw new FormatException();
-
-            var valueString = reader.GetString();
-
-            if (string.IsNullOrEmpty(valueString))
-                return default;
-
-            if (UInt160.TryParse(valueString, out var scriptHash) == false)
-                throw new FormatException();
-
-            return scriptHash;
+            throw new NotImplementedException();
         }
 
-        public override void Write(Utf8JsonWriter writer, UInt160? value, JsonSerializerOptions options)
+        public bool VerifyPassword(string password)
         {
-            if (value is null)
-                writer.WriteNullValue();
-            else
-                writer.WriteStringValue(value.ToString());
+            throw new NotImplementedException();
         }
+
+        public WalletAccountModel ToObject() =>
+            new();
     }
 }

@@ -20,13 +20,12 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration.Json;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.Json;
 
-namespace Neo.Configuration.Models
+namespace Neo.Configuration.Json
 {
     public abstract class JsonModel
     {

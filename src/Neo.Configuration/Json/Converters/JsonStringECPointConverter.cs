@@ -27,7 +27,7 @@ using System.Text.Json.Serialization;
 
 namespace Neo.Configuration.Json.Converters
 {
-    internal class JsonStringECPointConverter : JsonConverter<ECPoint?>
+    public class JsonStringECPointConverter : JsonConverter<ECPoint?>
     {
         public override ECPoint? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

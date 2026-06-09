@@ -20,8 +20,6 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.VM.Types;
-
 namespace Neo.VM
 {
     /// <summary>
@@ -118,7 +116,7 @@ namespace Neo.VM
         PUSHF = 0x09,
 
         /// <summary>
-        /// Converts the 4-bytes offset to an <see cref="VMPointer"/>, and pushes it onto the stack.
+        /// Converts the 4-bytes offset to an VMPointer, and pushes it onto the stack.
         /// <para>
         /// The execution will be faulted if the current position + offset is out of script range[0, script.Length).
         /// </para>
@@ -1552,7 +1550,7 @@ namespace Neo.VM
         #region Splice
 
         /// <summary>
-        /// Creates a new <see cref="VMBuffer"/> and pushes it onto the stack, and the top item is the length of the buffer.
+        /// Creates a new VMBuffer and pushes it onto the stack, and the top item is the length of the buffer.
         /// If the top item is not an integer, it will be converted to an integer.
         ///
         /// <example> new Buffer(a) </example>
@@ -1569,7 +1567,7 @@ namespace Neo.VM
         NEWBUFFER = 0x88,
 
         /// <summary>
-        /// Copies a range of bytes from one <see cref="VMBuffer"/> to another.
+        /// Copies a range of bytes from one VMBuffer to another.
         /// Using this opcode will require to dup the destination buffer.
         /// If the destination start index, source start index or count is not an integer, it will be converted to an integer.
         ///

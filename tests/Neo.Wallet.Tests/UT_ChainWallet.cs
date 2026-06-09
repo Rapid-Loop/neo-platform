@@ -20,33 +20,27 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.IO;
 using System;
 
-namespace Neo.Wallet
+namespace Neo.Wallet.Tests
 {
-    public abstract class WalletBase
+    [TestClass]
+    public class UT_ChainWallet
     {
-        /// <summary>
-        /// Decodes a private key from the specified WIF string.
-        /// </summary>
-        /// <param name="wif">The WIF string to be decoded.</param>
-        /// <returns>The decoded private key.</returns>
-        public static byte[] GetKeyFromWifString(string wif)
+        [TestMethod]
+        public void TestGetKeyFromWifString()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(wif);
+            var expectedKeyBytes = Convert.FromHexString("c7134d6fd8e73d819e82755c64c93788d8db0961929e025a53363c4cc02a6962");
 
-            var data = Base58.DecodeCheck(wif);
+            var action = () => ChainWallet.GetKeyFromWifString(string.Empty);
+            Assert.ThrowsExactly<ArgumentException>(action);
 
-            if (data.Length != 34 || data[0] != 0x80 || data[33] != 0x01)
-                throw new FormatException("Invalid WIF key");
+            action = () => ChainWallet.GetKeyFromWifString("3vQB7B6MrGQZaxCuFg4oh");
+            Assert.ThrowsExactly<FormatException>(action);
 
-            var privateKey = new byte[32];
+            var actualKeyBytes = ChainWallet.GetKeyFromWifString("L3tgppXLgdaeqSGSFw1Go3skBiy8vQAM7YMXvTHsKQtE16PBncSU");
 
-            Buffer.BlockCopy(data, 1, privateKey, 0, privateKey.Length);
-            Array.Clear(data, 0, data.Length);
-
-            return privateKey;
+            CollectionAssert.AreEqual(expectedKeyBytes, actualKeyBytes);
         }
     }
 }

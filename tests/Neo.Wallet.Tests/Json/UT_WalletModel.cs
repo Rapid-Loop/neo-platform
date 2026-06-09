@@ -20,8 +20,9 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration.Models;
-using Neo.Configuration.Models.Wallets;
+using Neo.Configuration.Json;
+using Neo.Wallet.Json;
+using Neo.Wallet.Tests;
 using System.Linq;
 
 namespace Neo.Configuration.Tests.Model.Wallets

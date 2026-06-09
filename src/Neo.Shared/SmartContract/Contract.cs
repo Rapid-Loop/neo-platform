@@ -1,0 +1,144 @@
+// BSD 2-Clause License
+//
+// Copyright (c) 2026, Rapid Loop
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+//
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation
+//    and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES
+
+using Neo.Core.SmartContract;
+using Neo.Cryptography;
+using Neo.Cryptography.ECC;
+using Neo.Cryptography.Extensions;
+using Neo.VM;
+using System;
+using System.Linq;
+
+namespace Neo.SmartContract
+{
+    /// <summary>
+    /// Represents a contract that can be invoked.
+    /// </summary>
+    public sealed class Contract
+    {
+        /// <summary>
+        /// The hash of the contract.
+        /// </summary>
+        public UInt160 ScriptHash => _scriptHash;
+
+        /// <summary>
+        /// The script of the contract.
+        /// </summary>
+        public byte[] Script => _redeemScriptBytes;
+
+        /// <summary>
+        /// The parameters of the contract.
+        /// </summary>
+        public ContractParameterType[] ParameterList => _contractParameters;
+
+        private readonly ContractParameterType[] _contractParameters;
+        private readonly byte[] _redeemScriptBytes;
+        private readonly UInt160 _scriptHash;
+
+        private Contract(byte[] redeemScriptBytes, ContractParameterType[] contractParameters)
+        {
+            _redeemScriptBytes = redeemScriptBytes;
+            _contractParameters = contractParameters;
+            _scriptHash = _redeemScriptBytes.ToScriptHash();
+        }
+
+        private Contract(UInt160 scriptHash, ContractParameterType[] contractParameters)
+        {
+            _scriptHash = scriptHash;
+            _redeemScriptBytes = [];
+            _contractParameters = contractParameters;
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="Contract"/> class.
+        /// </summary>
+        /// <param name="redeemScriptBytes">The script of the contract.</param>
+        /// <param name="parameterList">The parameters of the contract.</param>
+        /// <returns>The created contract.</returns>
+        public static Contract Create(byte[] redeemScriptBytes, params ContractParameterType[] parameterList) =>
+            new(redeemScriptBytes, parameterList);
+
+        /// <summary>
+        /// Constructs a special contract with empty script, will get the script with scriptHash from blockchain when doing the verification.
+        /// </summary>
+        /// <param name="scriptHash">The hash of the contract.</param>
+        /// <param name="parameterList">The parameters of the contract.</param>
+        /// <returns>The created contract.</returns>
+        public static Contract Create(UInt160 scriptHash, params ContractParameterType[] parameterList) =>
+            new(scriptHash, parameterList);
+
+        /// <summary>
+        /// Creates a multi-sig contract.
+        /// </summary>
+        /// <param name="m">The number of correct signatures that need to be provided in order for the verification to pass.</param>
+        /// <param name="publicKeys">The public keys of the contract.</param>
+        /// <returns>The created contract.</returns>
+        public static Contract CreateMultiSigContract(int m, params ECPoint[] publicKeys) =>
+            new(CreateMultiSigRedeemScript(m, publicKeys), [.. Enumerable.Repeat(ContractParameterType.Signature, m)]);
+
+        /// <summary>
+        /// Creates the script of multi-sig contract.
+        /// </summary>
+        /// <param name="m">The number of correct signatures that need to be provided in order for the verification to pass.</param>
+        /// <param name="publicKeys">The public keys of the contract.</param>
+        /// <returns>The created script.</returns>
+        public static byte[] CreateMultiSigRedeemScript(int m, params ECPoint[] publicKeys)
+        {
+            if (!(1 <= m && m <= publicKeys.Length && publicKeys.Length <= 1024))
+                throw new ArgumentException($"Invalid multisig parameters: m={m}, publicKeys.Count={publicKeys.Length}");
+
+            using var sb = new ScriptBuilder();
+            sb.EmitPush(m);
+
+            foreach (var publicKey in publicKeys.OrderBy(p => p))
+                sb.EmitPush(publicKey.Encode(true));
+
+            sb.EmitPush(publicKeys.Length);
+            sb.EmitSysCall(0xdeadc0de); // TODO: Add real VM SystemCall Address
+
+            return sb.ToArray();
+        }
+
+        /// <summary>
+        /// Creates a signature contract.
+        /// </summary>
+        /// <param name="publicKey">The public key of the contract.</param>
+        /// <returns>The created contract.</returns>
+        public static Contract CreateSignatureContract(ECPoint publicKey) =>
+            new(CreateSignatureRedeemScript(publicKey), [ContractParameterType.Signature]);
+
+        /// <summary>
+        /// Creates the script of signature contract.
+        /// </summary>
+        /// <param name="publicKey">The public key of the contract.</param>
+        /// <returns>The created script.</returns>
+        public static byte[] CreateSignatureRedeemScript(ECPoint publicKey)
+        {
+            using var sb = new ScriptBuilder();
+
+            sb.EmitPush(publicKey.Encode(true));
+            sb.EmitSysCall(0xbadc0de); // TODO: Add real VM SystemCall Address
+
+            return sb.ToArray();
+        }
+    }
+}

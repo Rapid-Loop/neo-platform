@@ -20,37 +20,29 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Configuration.Json;
+using Neo.Configuration.Json.Converters;
 using Neo.Cryptography;
-using System;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Neo.Configuration.Json.Converters
+namespace Neo.Wallet.Json
 {
-    public class JsonStringUInt160Converter : JsonConverter<UInt160?>
+    public class WalletAccountModel : JsonModel
     {
-        public override UInt160? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            if (reader.TokenType != JsonTokenType.String)
-                throw new FormatException();
+        [JsonConverter(typeof(JsonStringAddressConverter))]
+        public UInt160? Address { get; set; }
 
-            var valueString = reader.GetString();
+        public string? Label { get; set; }
 
-            if (string.IsNullOrEmpty(valueString))
-                return default;
+        public bool IsDefault { get; set; }
 
-            if (UInt160.TryParse(valueString, out var scriptHash) == false)
-                throw new FormatException();
+        public bool Lock { get; set; }
 
-            return scriptHash;
-        }
+        [JsonConverter(typeof(JsonStringHexFormatConverter))]
+        public byte[]? Key { get; set; }
 
-        public override void Write(Utf8JsonWriter writer, UInt160? value, JsonSerializerOptions options)
-        {
-            if (value is null)
-                writer.WriteNullValue();
-            else
-                writer.WriteStringValue(value.ToString());
-        }
+        public ContractModel? Contract { get; set; }
+
+        public ProtocolSettingsModel? Extra { get; set; }
     }
 }

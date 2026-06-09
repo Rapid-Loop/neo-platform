@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.Core;
+using Neo.IO.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,38 +35,15 @@ namespace Neo.VM
     /// </summary>
     public class ScriptBuilder : IDisposable
     {
-        private readonly MemoryStream _stream;
-        private readonly BinaryWriter _writer;
+        private readonly MemoryStream _stream = new();
 
         /// <summary>
         /// The length of the script.
         /// </summary>
-        public int Length => (int)_stream.Position;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScriptBuilder"/> class.
-        /// </summary>
-        /// <param name="initialCapacity">The initial capacity of the script.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when <paramref name="initialCapacity"/> is negative.
-        /// </exception>
-        public ScriptBuilder(int initialCapacity = 0)
-        {
-            ArgumentOutOfRangeException.ThrowIfNegative(initialCapacity, nameof(initialCapacity));
-
-            _stream = new(initialCapacity);
-            _writer = new(_stream);
-        }
-
-        public ScriptBuilder()
-        {
-            _stream = new();
-            _writer = new(_stream);
-        }
+        public int Length => (int)_stream.Length;
 
         public void Dispose()
         {
-            _writer.Dispose();
             _stream.Dispose();
 
             GC.SuppressFinalize(this);
@@ -77,7 +55,6 @@ namespace Neo.VM
         /// <returns>A byte array contains the script.</returns>
         public byte[] ToArray()
         {
-            _writer.Flush();
             return _stream.ToArray();
         }
 
@@ -89,8 +66,8 @@ namespace Neo.VM
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
         public ScriptBuilder Emit(OpCode opcode, ReadOnlySpan<byte> operand = default)
         {
-            _writer.Write((byte)opcode);
-            _writer.Write(operand);
+            _stream.Write((byte)opcode);
+            _stream.Write(operand);
             return this;
         }
 
@@ -173,21 +150,22 @@ namespace Neo.VM
             if (data.Length < 0x100)
             {
                 Emit(OpCode.PUSHDATA1);
-                _writer.Write((byte)data.Length);
-                _writer.Write(data);
+                _stream.Write((byte)data.Length);
+                _stream.Write(data);
             }
             else if (data.Length < 0x10000)
             {
                 Emit(OpCode.PUSHDATA2);
-                _writer.Write((ushort)data.Length);
-                _writer.Write(data);
+                _stream.Write((ushort)data.Length);
+                _stream.Write(data);
             }
             else// if (data.Length < 0x100000000L)
             {
                 Emit(OpCode.PUSHDATA4);
-                _writer.Write(data.Length);
-                _writer.Write(data);
+                _stream.Write(data.Length);
+                _stream.Write(data);
             }
+
             return this;
         }
 
@@ -208,7 +186,7 @@ namespace Neo.VM
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
         public ScriptBuilder EmitRaw(ReadOnlySpan<byte> script = default)
         {
-            _writer.Write(script);
+            _stream.Write(script);
             return this;
         }
 
@@ -311,9 +289,6 @@ namespace Neo.VM
                 case BigInteger data:
                     EmitPush(data);
                     break;
-                //case ISerializable data:
-                //    EmitPush(data);
-                //    break;
                 case sbyte data:
                     EmitPush(data);
                     break;
@@ -344,9 +319,6 @@ namespace Neo.VM
                 case Enum data:
                     EmitPush(BigInteger.Parse(data.ToString("d")));
                     break;
-                //case ContractParameter data:
-                //    EmitPush(data);
-                //    break;
                 case null:
                     Emit(OpCode.PUSHNULL);
                     break;

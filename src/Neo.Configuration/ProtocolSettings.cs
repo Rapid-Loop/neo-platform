@@ -20,6 +20,8 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Configuration.Interfaces;
+using Neo.Configuration.Json;
 using Neo.Cryptography.ECC;
 using System;
 using System.Collections.Generic;
@@ -28,7 +30,7 @@ using System.Linq;
 
 namespace Neo.Configuration
 {
-    public class ProtocolSettings
+    public class ProtocolSettings : IMap<ProtocolSettingsModel>
     {
         /// <summary>
         /// The magic number of the NEO network.
@@ -86,8 +88,7 @@ namespace Neo.Configuration
         /// <summary>
         /// Indicates the maximum number of blocks that can be traced in the smart contract. Note
         /// that starting from HF_Echidna the maximum number of traceable blocks is managed by
-        /// native Policy contract, hence use NeoSystemExtensions.GetMaxTraceableBlocks extension
-        /// method instead of direct access to this property.
+        /// native Policy contract method instead of direct access to this property.
         /// </summary>
         public uint MaxTraceableBlocks { get; init; }
 
@@ -124,5 +125,21 @@ namespace Neo.Configuration
             MaxTraceableBlocks = 2_102_400u,
             InitialGasDistribution = 52_000_000_00000000ul,
         };
+
+        public ProtocolSettingsModel ToObject() =>
+            new()
+            {
+                Network = Network,
+                AddressVersion = AddressVersion,
+                StandbyCommittee = [.. StandbyCommittee],
+                ValidatorsCount = ValidatorsCount,
+                SeedList = [.. SeedList],
+                MillisecondsPerBlock = MillisecondsPerBlock,
+                MaxTransactionsPerBlock = MaxTransactionsPerBlock,
+                MemoryPoolMaxTransactions = MemoryPoolMaxTransactions,
+                MaxTraceableBlocks = MaxTraceableBlocks,
+                InitialGasDistribution = InitialGasDistribution,
+                Hardforks = Hardforks.ToDictionary(),
+            };
     }
 }

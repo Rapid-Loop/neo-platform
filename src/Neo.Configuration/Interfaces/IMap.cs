@@ -20,30 +20,11 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.Configuration.Models.Wallets
+namespace Neo.Configuration.Interfaces
 {
-    public class SCryptModel : JsonModel
+    public interface IMap<TDestination>
+        where TDestination : notnull
     {
-        public static readonly SCryptModel Default = new()
-        {
-            N = 16384,
-            R = 8,
-            P = 8,
-        };
-
-        /// <summary>
-        /// CPU/Memory cost parameter. Must be larger than 1, a power of 2 and less than 2^(128 * r / 8).
-        /// </summary>
-        public int N { get; set; }
-
-        /// <summary>
-        /// The block size, must be >= 1.
-        /// </summary>
-        public int R { get; set; }
-
-        /// <summary>
-        /// Parallelization parameter. Must be a positive integer less than or equal to Int32.MaxValue / (128 * r * 8).
-        /// </summary>
-        public int P { get; set; }
+        TDestination ToObject();
     }
 }

@@ -20,37 +20,15 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Cryptography;
-using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Neo.Configuration.Json;
+using Neo.Core.SmartContract;
 
-namespace Neo.Configuration.Json.Converters
+namespace Neo.Wallet.Json
 {
-    public class JsonStringUInt160Converter : JsonConverter<UInt160?>
+    public class ContractParameterModel : JsonModel
     {
-        public override UInt160? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            if (reader.TokenType != JsonTokenType.String)
-                throw new FormatException();
+        public string? Name { get; set; }
 
-            var valueString = reader.GetString();
-
-            if (string.IsNullOrEmpty(valueString))
-                return default;
-
-            if (UInt160.TryParse(valueString, out var scriptHash) == false)
-                throw new FormatException();
-
-            return scriptHash;
-        }
-
-        public override void Write(Utf8JsonWriter writer, UInt160? value, JsonSerializerOptions options)
-        {
-            if (value is null)
-                writer.WriteNullValue();
-            else
-                writer.WriteStringValue(value.ToString());
-        }
+        public ContractParameterType Type { get; set; }
     }
 }

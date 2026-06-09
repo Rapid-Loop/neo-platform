@@ -20,14 +20,22 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core.SmartContract;
+using System.Security.Cryptography;
 
-namespace Neo.Configuration.Models.Wallets
+namespace Neo.Cryptography.Extensions
 {
-    public class ContractParameterModel : JsonModel
+    public static class ByteExtensions
     {
-        public string? Name { get; set; }
+        public static byte[] ToRipeMD160(this byte[] data) =>
+            RipeMD160.HashData(data);
 
-        public ContractParameterType Type { get; set; }
+        public static byte[] ToSha256(this byte[] data) =>
+            SHA256.HashData(data);
+
+        public static byte[] ToHash160(this byte[] data) =>
+            data.ToSha256().ToRipeMD160();
+
+        public static UInt160 ToScriptHash(this byte[] data) =>
+            new(data.ToHash160());
     }
 }

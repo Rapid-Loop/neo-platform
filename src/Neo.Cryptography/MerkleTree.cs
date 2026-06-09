@@ -46,7 +46,7 @@ namespace Neo.Cryptography
             if (hashes.Length == 0) return UInt256.Zero;
             if (hashes.Length == 1) return hashes[0];
 
-            var tree = new MerkleTree(hashes.Select(s => s.ToArray()));
+            var tree = new MerkleTree(hashes.Select(static s => s.ToArray()));
             return new(tree._root);
         }
 

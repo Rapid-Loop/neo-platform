@@ -20,22 +20,33 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using System;
-using System.Text.Json.Serialization;
+using Neo.Configuration;
+using Neo.Cryptography;
+using Neo.SmartContract;
 
-namespace Neo.Configuration.Models.Wallets
+namespace Neo.Wallet
 {
-    public class WalletModel : JsonModel
+    public interface IWalletAccount<TExtras>
+        where TExtras : class?, new()
     {
-        public string? Name { get; set; }
+        ProtocolSettings ProtocolConfiguration { get; }
 
-        public Version? Version { get; set; }
+        UInt160 ScriptHash { get; }
 
-        [JsonPropertyName("scrypt")]
-        public SCryptModel? SCrypt { get; set; }
+        string? Label { get; }
 
-        public WalletAccountModel[]? Accounts { get; set; }
+        bool IsDefault { get; }
 
-        public object? Extra { get; set; }
+        bool IsLocked { get; }
+
+        bool HasKey { get; }
+
+        TExtras Extra { get; }
+
+        Contract Contract { get; }
+
+        bool ChangePassword(string oldPassword, string newPassword);
+
+        bool VerifyPassword(string password);
     }
 }

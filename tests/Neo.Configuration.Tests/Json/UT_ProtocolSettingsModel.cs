@@ -20,10 +20,10 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration.Models;
+using Neo.Configuration.Json;
 using Neo.Cryptography.ECC;
 
-namespace Neo.Configuration.Tests.Model
+namespace Neo.Configuration.Tests.Json
 {
     [TestClass]
     public class UT_ProtocolSettingsModel

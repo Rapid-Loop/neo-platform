@@ -20,28 +20,32 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration.Json.Converters;
-using Neo.Cryptography;
-using System.Text.Json.Serialization;
+using Neo.Configuration.Json;
 
-namespace Neo.Configuration.Models.Wallets
+namespace Neo.Wallet.Json
 {
-    public class WalletAccountModel : JsonModel
+    public class SCryptModel : JsonModel
     {
-        [JsonConverter(typeof(JsonStringAddressConverter))]
-        public UInt160? Address { get; set; }
+        public static readonly SCryptModel Default = new()
+        {
+            N = 16384,
+            R = 8,
+            P = 8,
+        };
 
-        public string? Label { get; set; }
+        /// <summary>
+        /// CPU/Memory cost parameter. Must be larger than 1, a power of 2 and less than 2^(128 * r / 8).
+        /// </summary>
+        public int N { get; set; }
 
-        public bool IsDefault { get; set; }
+        /// <summary>
+        /// The block size, must be >= 1.
+        /// </summary>
+        public int R { get; set; }
 
-        public bool Lock { get; set; }
-
-        [JsonConverter(typeof(JsonStringHexFormatConverter))]
-        public byte[]? Key { get; set; }
-
-        public ContractModel? Contract { get; set; }
-
-        public ProtocolSettingsModel? Extra { get; set; }
+        /// <summary>
+        /// Parallelization parameter. Must be a positive integer less than or equal to Int32.MaxValue / (128 * r * 8).
+        /// </summary>
+        public int P { get; set; }
     }
 }

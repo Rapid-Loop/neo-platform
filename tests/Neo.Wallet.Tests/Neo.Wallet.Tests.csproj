@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Neo.Configuration\Neo.Configuration.csproj" />
     <ProjectReference Include="..\..\src\Neo.Wallet\Neo.Wallet.csproj" />
   </ItemGroup>
 

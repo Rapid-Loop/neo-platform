@@ -29,6 +29,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="$(RootNamespace).Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="../../.images/logo.png" Pack="true" Visible="false" PackagePath=""/>
     <None Include="../../README.md" Pack="true" Visible="false" PackagePath=""/>
   </ItemGroup>

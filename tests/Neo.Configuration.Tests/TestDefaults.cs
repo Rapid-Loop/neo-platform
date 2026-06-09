@@ -21,6 +21,10 @@
 // SERVICES
 
 using Neo.Configuration.Json.Converters;
+using Neo.Configuration.Models.Wallets;
+using Neo.Core.SmartContract;
+using Neo.Wallet;
+using System;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -48,6 +52,36 @@ namespace Neo.Configuration.Tests
                 new JsonStringECPointConverter(),
                 new JsonStringUInt160Converter(),
             }
+        };
+
+        public static readonly WalletModel TestWalletModel = new()
+        {
+            Name = "Unit Test Wallet",
+            Version = new(1, 0),
+            SCrypt = SCryptModel.Default,
+            Accounts = [
+                new()
+                {
+                    Address = "0xce45fca32b8cd071bfbc20389c20cd7025f85ff0",
+                    IsDefault = true,
+                    Label = "Main Test Account",
+                    Lock = false,
+                    Key = WalletBase.GetKeyFromWifString("Ky7cYncUA92kWnh7xymshpfgz7QiX46qPWCQBQPVUSv5vndE2VTR"),
+                    Contract = new()
+                    {
+                        Deployed = false,
+                        Script = Convert.FromBase64String("DCECjNhSCkN5\u002BL\u002BEc0/cgGPMgQkyrl8V2ddjYtevNcqDcahBVuezJw=="),
+                        Parameters = [
+                            new()
+                            {
+                                Name = "Signature",
+                                Type = ContractParameterType.Signature,
+                            },
+                        ],
+                    },
+                },
+            ],
+            Extra = null,
         };
     }
 }

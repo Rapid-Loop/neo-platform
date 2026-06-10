@@ -20,11 +20,34 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.Core.Interfaces
+using Neo.Configuration;
+using Neo.Configuration.Interfaces;
+using System.Linq;
+
+namespace Neo.Wallet.Json
 {
-    public interface IMap<TDestination>
-        where TDestination : notnull
+    public class DevWalletAccountModel : WalletAccountModel, IMap<DevWalletAccount>
     {
-        TDestination ToObject();
+        // TODO: Add support for MultiSigAddresses
+        public DevWalletAccount ToObject() =>
+            Address == default
+            ? new(
+                Key ?? [],
+                Extra?.ToObject() ?? ProtocolSettings.Default)
+            {
+                Label = Label,
+                IsDefault = IsDefault,
+                IsLocked = Lock,
+            }
+            : new(
+                Address,
+                Extra?.ToObject() ?? ProtocolSettings.Default,
+                [.. Contract?.Parameters?.Select(s => s.ToObject()) ?? []],
+                Key)
+            {
+                Label = Label,
+                IsDefault = IsDefault,
+                IsLocked = Lock,
+            };
     }
 }

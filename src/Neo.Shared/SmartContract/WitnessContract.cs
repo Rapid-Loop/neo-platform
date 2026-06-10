@@ -33,7 +33,7 @@ namespace Neo.SmartContract
     /// <summary>
     /// Represents a contract that can be invoked.
     /// </summary>
-    public sealed class Contract
+    public sealed class WitnessContract
     {
         /// <summary>
         /// The hash of the contract.
@@ -54,14 +54,14 @@ namespace Neo.SmartContract
         private readonly byte[] _redeemScriptBytes;
         private readonly UInt160 _scriptHash;
 
-        private Contract(byte[] redeemScriptBytes, ContractParameterType[] contractParameters)
+        private WitnessContract(byte[] redeemScriptBytes, ContractParameterType[] contractParameters)
         {
             _redeemScriptBytes = redeemScriptBytes;
             _contractParameters = contractParameters;
             _scriptHash = _redeemScriptBytes.ToScriptHash();
         }
 
-        private Contract(UInt160 scriptHash, ContractParameterType[] contractParameters)
+        private WitnessContract(UInt160 scriptHash, ContractParameterType[] contractParameters)
         {
             _scriptHash = scriptHash;
             _redeemScriptBytes = [];
@@ -69,12 +69,12 @@ namespace Neo.SmartContract
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Contract"/> class.
+        /// Creates a new instance of the <see cref="WitnessContract"/> class.
         /// </summary>
         /// <param name="redeemScriptBytes">The script of the contract.</param>
         /// <param name="parameterList">The parameters of the contract.</param>
         /// <returns>The created contract.</returns>
-        public static Contract Create(byte[] redeemScriptBytes, params ContractParameterType[] parameterList) =>
+        public static WitnessContract Create(byte[] redeemScriptBytes, params ContractParameterType[] parameterList) =>
             new(redeemScriptBytes, parameterList);
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Neo.SmartContract
         /// <param name="scriptHash">The hash of the contract.</param>
         /// <param name="parameterList">The parameters of the contract.</param>
         /// <returns>The created contract.</returns>
-        public static Contract Create(UInt160 scriptHash, params ContractParameterType[] parameterList) =>
+        public static WitnessContract Create(UInt160 scriptHash, params ContractParameterType[] parameterList) =>
             new(scriptHash, parameterList);
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Neo.SmartContract
         /// <param name="m">The number of correct signatures that need to be provided in order for the verification to pass.</param>
         /// <param name="publicKeys">The public keys of the contract.</param>
         /// <returns>The created contract.</returns>
-        public static Contract CreateMultiSigContract(int m, params ECPoint[] publicKeys) =>
+        public static WitnessContract CreateMultiSigContract(int m, params ECPoint[] publicKeys) =>
             new(CreateMultiSigRedeemScript(m, publicKeys), [.. Enumerable.Repeat(ContractParameterType.Signature, m)]);
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Neo.SmartContract
         /// </summary>
         /// <param name="publicKey">The public key of the contract.</param>
         /// <returns>The created contract.</returns>
-        public static Contract CreateSignatureContract(ECPoint publicKey) =>
+        public static WitnessContract CreateSignatureContract(ECPoint publicKey) =>
             new(CreateSignatureRedeemScript(publicKey), [ContractParameterType.Signature]);
 
         /// <summary>

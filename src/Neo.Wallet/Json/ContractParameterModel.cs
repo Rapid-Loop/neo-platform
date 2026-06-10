@@ -20,15 +20,19 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Configuration.Interfaces;
 using Neo.Configuration.Json;
 using Neo.Core.SmartContract;
 
 namespace Neo.Wallet.Json
 {
-    public class ContractParameterModel : JsonModel
+    public class ContractParameterModel : JsonModel, IMap<ContractParameterType>
     {
         public string? Name { get; set; }
 
         public ContractParameterType Type { get; set; }
+
+        public ContractParameterType ToObject() =>
+            Type;
     }
 }

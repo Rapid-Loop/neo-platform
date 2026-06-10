@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Neo.Configuration\Neo.Configuration.csproj" />
     <ProjectReference Include="..\Neo.Cryptography\Neo.Cryptography.csproj" />
     <ProjectReference Include="..\Neo.Extensions\Neo.Extensions.csproj" />
   </ItemGroup>

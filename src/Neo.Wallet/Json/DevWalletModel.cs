@@ -21,15 +21,12 @@
 // SERVICES
 
 using Neo.Configuration.Interfaces;
-using System;
 
 namespace Neo.Wallet.Json
 {
     public class DevWalletModel : WalletModel, IMap<DevWallet>
     {
-        public DevWallet ToObject()
-        {
-            throw new NotImplementedException();
-        }
+        public DevWallet ToObject() =>
+            new();
     }
 }

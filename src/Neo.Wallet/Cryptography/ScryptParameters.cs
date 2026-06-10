@@ -21,36 +21,47 @@
 // SERVICES
 
 using Neo.Configuration.Interfaces;
-using Neo.Configuration.Json;
-using Neo.Wallet.Cryptography;
+using Neo.Wallet.Json;
 
-namespace Neo.Wallet.Json
+namespace Neo.Wallet.Cryptography
 {
-    public class SCryptModel : JsonModel, IMap<ScryptParameters>
+    /// <summary>
+    /// Represents the parameters of the SCrypt algorithm.
+    /// </summary>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="ScryptParameters"/> class.
+    /// </remarks>
+    /// <param name="n">CPU/Memory cost parameter.</param>
+    /// <param name="r">The block size.</param>
+    /// <param name="p">Parallelization parameter.</param>
+    public class ScryptParameters(int n, int r, int p) : IMap<SCryptModel>
     {
-        public static readonly SCryptModel Default = new()
-        {
-            N = 16384,
-            R = 8,
-            P = 8,
-        };
+        /// <summary>
+        /// The default parameters
+        /// </summary>
+        public static ScryptParameters Default { get; } = new ScryptParameters(16384, 8, 8);
 
         /// <summary>
         /// CPU/Memory cost parameter. Must be larger than 1, a power of 2 and less than 2^(128 * r / 8).
         /// </summary>
-        public int N { get; set; }
+        public int N => n;
 
         /// <summary>
         /// The block size, must be >= 1.
         /// </summary>
-        public int R { get; set; }
+        public int R => r;
 
         /// <summary>
         /// Parallelization parameter. Must be a positive integer less than or equal to Int32.MaxValue / (128 * r * 8).
         /// </summary>
-        public int P { get; set; }
+        public int P => p;
 
-        public ScryptParameters ToObject() =>
-            new(N, R, P);
+        public SCryptModel ToObject() =>
+            new()
+            {
+                N = N,
+                R = R,
+                P = P,
+            };
     }
 }

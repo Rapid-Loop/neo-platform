@@ -9,7 +9,7 @@
     <Import_RootNamespace>Neo.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)SmartContract\Contract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SmartContract\WitnessContract.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VM\OpCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VM\OperandSizeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VM\ScriptBuilder.cs" />

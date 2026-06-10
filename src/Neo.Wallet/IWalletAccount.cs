@@ -33,6 +33,8 @@ namespace Neo.Wallet
 
         UInt160 ScriptHash { get; }
 
+        string Address { get; }
+
         string? Label { get; }
 
         bool IsDefault { get; }
@@ -43,10 +45,12 @@ namespace Neo.Wallet
 
         TExtras Extra { get; }
 
-        Contract Contract { get; }
+        WitnessContract Contract { get; }
 
         bool ChangePassword(string oldPassword, string newPassword);
 
         bool VerifyPassword(string password);
+
+        byte[] GetPrivateKey();
     }
 }

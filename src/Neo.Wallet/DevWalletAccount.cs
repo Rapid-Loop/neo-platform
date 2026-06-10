@@ -22,42 +22,115 @@
 
 using Neo.Configuration;
 using Neo.Configuration.Interfaces;
+using Neo.Core.SmartContract;
 using Neo.Cryptography;
+using Neo.Cryptography.ECC;
+using Neo.Cryptography.Extensions;
 using Neo.SmartContract;
 using Neo.Wallet.Json;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Neo.Wallet
 {
     public class DevWalletAccount : IWalletAccount<ProtocolSettings>, IMap<WalletAccountModel>
     {
-        public ProtocolSettings ProtocolConfiguration => throw new NotImplementedException();
+        public ProtocolSettings ProtocolConfiguration => _protocolSettings;
 
-        public UInt160 ScriptHash => throw new NotImplementedException();
+        public UInt160 ScriptHash => Contract.ScriptHash;
 
-        public string? Label => throw new NotImplementedException();
+        public string Address => ScriptHash.ToAddress(_protocolSettings.AddressVersion);
 
-        public bool IsDefault => throw new NotImplementedException();
+        public string? Label { get; set; }
 
-        public bool IsLocked => throw new NotImplementedException();
+        public bool IsDefault { get; set; }
 
-        public bool HasKey => throw new NotImplementedException();
+        public bool IsLocked { get; set; }
+
+        public bool HasKey => _privateKeyBytes.Length > 0;
 
         public ProtocolSettings Extra => ProtocolConfiguration;
 
-        public Contract Contract => throw new NotImplementedException();
+        public WitnessContract Contract => _witnessContract;
 
+        private readonly ProtocolSettings _protocolSettings;
+        private readonly WitnessContract _witnessContract;
+
+        private readonly byte[] _privateKeyBytes = [];
+
+        public DevWalletAccount(ECPoint[] publicKeys, ProtocolSettings protocolSettings) : this((int)Math.Ceiling((2 * publicKeys.Length + 1) / 3m), publicKeys, protocolSettings) { }
+
+        public DevWalletAccount(int m, ECPoint[] publicKeys, ProtocolSettings protocolSettings)
+        {
+            ArgumentOutOfRangeException.ThrowIfEqual(publicKeys.Length, 0, nameof(publicKeys));
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(m, publicKeys.Length, nameof(publicKeys));
+            ArgumentOutOfRangeException.ThrowIfLessThan(m, 1, nameof(m));
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(m, 1024, nameof(m));
+
+            _protocolSettings = protocolSettings;
+            _witnessContract = WitnessContract.CreateMultiSigContract(m, publicKeys);
+        }
+
+        public DevWalletAccount(UInt160 contractHash, ProtocolSettings protocolSettings, ContractParameterType[]? contractParameters = default, byte[]? privateKeyBytes = default)
+        {
+            _protocolSettings = protocolSettings;
+            _witnessContract = WitnessContract.Create(contractHash, contractParameters ?? []);
+
+            if (privateKeyBytes is not null)
+                _privateKeyBytes = privateKeyBytes;
+        }
+
+        public DevWalletAccount(byte[] privateKeyBytes, ProtocolSettings protocolSettings)
+        {
+            _privateKeyBytes = privateKeyBytes;
+            _protocolSettings = protocolSettings;
+
+            var privateKeySpan = privateKeyBytes.AsSpan();
+            var publicKeyPoint = ECPoint.FromPrivateKey(privateKeySpan, ECCurve.SecP256r1);
+
+            _witnessContract = WitnessContract.CreateSignatureContract(publicKeyPoint);
+        }
+
+        [DoesNotReturn]
         public bool ChangePassword(string oldPassword, string newPassword)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
+        [DoesNotReturn]
         public bool VerifyPassword(string password)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
+        public byte[] GetPrivateKey() =>
+            _privateKeyBytes[..];
+
         public WalletAccountModel ToObject() =>
-            new();
+            new()
+            {
+                Address = Address,
+                Contract = new()
+                {
+                    Deployed = HasKey,
+                    Script = _witnessContract.Script,
+                    Parameters = [
+                        .. _witnessContract.ParameterList
+                            .Select(static (s, i) =>
+                                new ContractParameterModel()
+                                {
+                                    Name = $"Signature{i}",
+                                    Type = s,
+                                }
+                            ),
+                        ],
+                },
+                Key = _privateKeyBytes[..],
+                Label = Label,
+                IsDefault = IsDefault,
+                Lock = IsLocked,
+                Extra = Extra.ToObject(),
+            };
     }
 }

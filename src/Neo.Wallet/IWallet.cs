@@ -40,7 +40,7 @@ namespace Neo.Wallet
 
         TExtras? Extra { get; }
 
-        bool Contains(UInt160 address);
+        bool Contains(UInt160 scriptHash);
 
         IWalletAccount<TAccountExtras> CreateAccount(ProtocolSettings protocolSettings);
 
@@ -48,15 +48,15 @@ namespace Neo.Wallet
 
         IWalletAccount<TAccountExtras> CreateAccount(string wifString, ProtocolSettings protocolSettings);
 
-        IWalletAccount<TAccountExtras> CreateAccount(UInt160 address, ProtocolSettings protocolSettings);
+        IWalletAccount<TAccountExtras> CreateAccount(UInt160 contractHash, ProtocolSettings protocolSettings);
 
-        bool RemoveAccount(UInt160 address);
+        bool RemoveAccount(UInt160 scriptHash);
 
-        void SetDefaultAccount(UInt160 address);
+        void SetDefaultAccount(UInt160 scriptHash);
 
         IWalletAccount<TAccountExtras> GetDefaultAccount();
 
-        IWalletAccount<TAccountExtras> GetAccount(UInt160 address);
+        IWalletAccount<TAccountExtras> GetAccount(UInt160 scriptHash);
 
         IWalletAccount<TAccountExtras> GetAccount(ECPoint publickKey);
 
@@ -68,8 +68,8 @@ namespace Neo.Wallet
 
         IEnumerable<IWalletAccount<TAccountExtras>> GetMultiSigAccounts();
 
-        IWalletAccount<TAccountExtras> CreateMultiSigAccount(params ECPoint[] publicKeys);
+        IWalletAccount<TAccountExtras> CreateMultiSigAccount(ProtocolSettings protocolSettings, params ECPoint[] publicKeys);
 
-        IWalletAccount<TAccountExtras> CreateMultiSigAccount(int m, params ECPoint[] publicKeys);
+        IWalletAccount<TAccountExtras> CreateMultiSigAccount(ProtocolSettings protocolSettings, int m, params ECPoint[] publicKeys);
     }
 }

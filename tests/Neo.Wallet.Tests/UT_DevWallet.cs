@@ -20,38 +20,15 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration.Json;
-using Neo.IO;
-using Neo.Wallet.Json;
-using System;
-using System.IO;
-
-namespace Neo.Wallet
+namespace Neo.Wallet.Tests
 {
-    public static class ChainWallet
+    [TestClass]
+    public class UT_DevWallet
     {
-        public const int MaxPrivateKeySizeInBytes = 32;
-
-        /// <summary>
-        /// Decodes a private key from the specified WIF string.
-        /// </summary>
-        /// <param name="wif">The WIF string to be decoded.</param>
-        /// <returns>The decoded private key.</returns>
-        public static byte[] GetKeyFromWifString(string wif)
+        [TestMethod]
+        public void TestCreateAccount()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(wif);
 
-            var decodedWifBytes = Base58.DecodeCheck(wif);
-
-            if (decodedWifBytes.Length != 34 ||
-                decodedWifBytes[0] != 0x80 ||
-                decodedWifBytes[33] != 0x01)
-                throw new FormatException("Invalid WIF key");
-
-            return decodedWifBytes[1..^1];
         }
-
-        public static DevWallet OpenDevFile(FileInfo file) =>
-            JsonModel.FromJson<DevWalletModel>(file)?.ToObject() ?? new();
     }
 }

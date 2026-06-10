@@ -118,6 +118,17 @@ namespace Neo.SmartContract
             return sb.ToArray();
         }
 
+        public static bool IsMultiSigContract(byte[] redeemScriptBytes)
+        {
+            using var sb = new ScriptBuilder();
+            sb.EmitSysCall(0xdeadc0de); // TODO: Add real VM SystemCall Address
+
+            var contractScriptSpan = sb.ToArray().AsSpan();
+            var redeemScriptSpan = redeemScriptBytes.AsSpan();
+
+            return contractScriptSpan.SequenceEqual(redeemScriptSpan[^contractScriptSpan.Length..]);
+        }
+
         /// <summary>
         /// Creates a signature contract.
         /// </summary>

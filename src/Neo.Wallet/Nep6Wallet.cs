@@ -31,11 +31,12 @@ using Neo.Wallet.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using RandomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator;
 
 namespace Neo.Wallet
 {
-    internal class Nep6Wallet : IWallet<object, ProtocolSettings>, IMap<WalletModel>
+    public class Nep6Wallet : IWallet<object, ProtocolSettings>, IMap<Nep6WalletModel>
     {
         private static readonly Version s_walletVersion = new(1, 0);
 
@@ -50,9 +51,37 @@ namespace Neo.Wallet
         private readonly Dictionary<UInt160, Nep6WalletAccount> _walletAccounts = [];
         private readonly ScryptParameters _scryptParameters;
 
-        public Nep6Wallet()
+        public Nep6Wallet(ScryptParameters? scryptParameters = default)
         {
-            _scryptParameters = ScryptParameters.Default;
+            _scryptParameters = scryptParameters ?? ScryptParameters.Default;
+        }
+
+        public Nep6Wallet(Nep6WalletModel nep6WalletModel, IDictionary<UInt160, string> accountPasswordList) : this()
+        {
+            _scryptParameters = nep6WalletModel.SCrypt?.ToObject() ?? ScryptParameters.Default;
+
+            if (nep6WalletModel.Accounts is not null)
+            {
+                foreach (var accountModel in nep6WalletModel.Accounts)
+                {
+                    if (accountModel.Key is null) continue;
+
+                    if (accountPasswordList.TryGetValue(accountModel.Key, out var password))
+                    {
+                        var nep2String = Encoding.UTF8.GetString(accountModel.Key ?? []);
+
+                        // TODO: Allow Contracts
+                        if (string.IsNullOrEmpty(nep2String)) continue;
+
+                        var protocolSettings = accountModel.Extra?.ToObject() ?? ProtocolSettings.Default;
+                        var account = new Nep6WalletAccount(nep2String, password, protocolSettings, _scryptParameters);
+
+                        if (account.ScriptHash != accountModel.Address) continue;
+
+                        _walletAccounts[account.ScriptHash] = account;
+                    }
+                }
+            }
         }
 
         public bool Contains(UInt160 scriptHash) =>
@@ -140,7 +169,7 @@ namespace Neo.Wallet
             _walletAccounts[scriptHash].IsDefault = true;
         }
 
-        public WalletModel ToObject() =>
+        public Nep6WalletModel ToObject() =>
             new()
             {
                 Version = Version,

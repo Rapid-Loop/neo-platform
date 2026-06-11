@@ -29,6 +29,7 @@ using Neo.SmartContract;
 using Neo.Wallet.Cryptography;
 using Neo.Wallet.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -60,6 +61,29 @@ namespace Neo.Wallet
             return decodedWifBytes[1..^1];
         }
 
+        public static string ToNep2String(byte[] privateKeyBytes, string password, ScryptParameters scryptParameters, byte addressVersion = 53)
+        {
+            const int SCryptKeyLengthInBytes = 64;
+            const int SaltLengthInBytes = 4;
+
+            var passwordBytes = Encoding.UTF8.GetBytes(password);
+            var salt = RandomNumberGenerator.GetBytes(SaltLengthInBytes);
+
+            var scrypt = SCrypt.Generate(passwordBytes, salt, scryptParameters.N, scryptParameters.R, scryptParameters.P, SCryptKeyLengthInBytes);
+            var derivedHalf1 = scrypt[..32];
+            var derivedHalf2 = scrypt[32..];
+
+            var ciphertextBytes = AesEncryptECB(privateKeyBytes.Xor(derivedHalf1), derivedHalf2);
+
+            byte[] nep2StringBytes = [
+                0x01, 0x42, 0xe0,
+                .. salt,
+                .. ciphertextBytes,
+            ];
+
+            return Base58.EncodeCheck(nep2StringBytes);
+        }
+
         public static byte[] GetKeyFromNep2String(string nep2String, string password, ScryptParameters scryptParameters, byte addressVersion = 53)
         {
             ArgumentNullException.ThrowIfNullOrWhiteSpace(nep2String, nameof(nep2String));
@@ -75,9 +99,10 @@ namespace Neo.Wallet
                 throw new FormatException("Invalid NEP-2 key");
 
             const int SCryptKeyLengthInBytes = 64;
+            const int SaltLengthInBytes = 4;
 
             var passwordBytes = Encoding.UTF8.GetBytes(password);
-            var salt = decodedSpan.Slice(3, 4);
+            var salt = decodedSpan.Slice(3, SaltLengthInBytes);
 
             var scrypt = SCrypt.Generate(passwordBytes, [.. salt], scryptParameters.N, scryptParameters.R, scryptParameters.P, SCryptKeyLengthInBytes);
             var derivedHalf1 = scrypt[..32];
@@ -100,7 +125,7 @@ namespace Neo.Wallet
             return privateKeyBytes;
         }
 
-        public static byte[] AesDecryptECB(byte[] inputBytes, byte[] keyBytes)
+        public static byte[] AesDecryptECB(byte[] ciphertextBytes, byte[] keyBytes)
         {
             using var aes = Aes.Create();
             aes.Key = keyBytes;
@@ -108,10 +133,24 @@ namespace Neo.Wallet
             aes.Padding = PaddingMode.None;
 
             using var decryptor = aes.CreateDecryptor();
-            return decryptor.TransformFinalBlock(inputBytes, 0, inputBytes.Length);
+            return decryptor.TransformFinalBlock(ciphertextBytes, 0, ciphertextBytes.Length);
         }
 
-        public static DevWallet OpenDevFile(FileInfo file) =>
+        public static byte[] AesEncryptECB(byte[] plaintextBytes, byte[] keyBytes)
+        {
+            using var aes = Aes.Create();
+            aes.Key = keyBytes;
+            aes.Mode = CipherMode.ECB;
+            aes.Padding = PaddingMode.None;
+
+            using var encryptor = aes.CreateEncryptor();
+            return encryptor.TransformFinalBlock(plaintextBytes, 0, plaintextBytes.Length);
+        }
+
+        public static DevWallet OpenDevWalletFile(FileInfo file) =>
             JsonModel.FromJson<DevWalletModel>(file)?.ToObject() ?? new();
+
+        public static Nep6Wallet? OpenNep6WalletFie(FileInfo file, IDictionary<UInt160, string> accountPasswordList) =>
+            new(JsonModel.FromJson<Nep6WalletModel>(file) ?? new(), accountPasswordList);
     }
 }

@@ -31,10 +31,11 @@ using Neo.Wallet.Cryptography;
 using Neo.Wallet.Json;
 using System;
 using System.Linq;
+using System.Text;
 
 namespace Neo.Wallet
 {
-    public class Nep6WalletAccount : IWalletAccount<ProtocolSettings>, IMap<WalletAccountModel>
+    public class Nep6WalletAccount : IWalletAccount<ProtocolSettings>, IMap<Nep6WalletAccountModel>
     {
         public ProtocolSettings ProtocolConfiguration => _protocolSettings;
 
@@ -54,13 +55,14 @@ namespace Neo.Wallet
 
         public WitnessContract Contract => _witnessContract;
 
-        private readonly ProtocolSettings _protocolSettings;
         private readonly WitnessContract _witnessContract;
+        private readonly ProtocolSettings _protocolSettings;
 
         private readonly byte[] _privateKeyBytes = [];
         private readonly ScryptParameters _scryptParameters;
 
         private ProtectedString _password = string.Empty;
+        private ProtectedString _nep2String = string.Empty;
 
         public Nep6WalletAccount(ECPoint[] publicKeys, ProtocolSettings protocolSettings, ScryptParameters? scryptParameters = default) : this((int)Math.Ceiling((2 * publicKeys.Length + 1) / 3m), publicKeys, protocolSettings, scryptParameters) { }
 
@@ -92,7 +94,22 @@ namespace Neo.Wallet
             _scryptParameters = scryptParameters ?? ScryptParameters.Default;
             _protocolSettings = protocolSettings;
 
-            var privateKeySpan = privateKeyBytes.AsSpan();
+            var privateKeySpan = _privateKeyBytes.AsSpan();
+            var publicKeyPoint = ECPoint.FromPrivateKey(privateKeySpan, ECCurve.SecP256r1);
+
+            _witnessContract = WitnessContract.CreateSignatureContract(publicKeyPoint);
+        }
+
+        public Nep6WalletAccount(string nep2String, string password, ProtocolSettings protocolSettings, ScryptParameters? scryptParameters = default)
+        {
+            _nep2String = nep2String;
+            _password = password;
+            _protocolSettings = protocolSettings;
+            _scryptParameters = scryptParameters ?? ScryptParameters.Default;
+
+            _privateKeyBytes = ChainWallet.GetKeyFromNep2String(nep2String, _password, _scryptParameters, _protocolSettings.AddressVersion);
+
+            var privateKeySpan = _privateKeyBytes.AsSpan();
             var publicKeyPoint = ECPoint.FromPrivateKey(privateKeySpan, ECCurve.SecP256r1);
 
             _witnessContract = WitnessContract.CreateSignatureContract(publicKeyPoint);
@@ -108,8 +125,9 @@ namespace Neo.Wallet
             if (oldPassword == newPassword) return false;
 
             _password.Dispose();
-
             _password = newPassword;
+
+            _nep2String = ChainWallet.ToNep2String(_privateKeyBytes, _password, _scryptParameters, _protocolSettings.AddressVersion);
 
             return true;
         }
@@ -120,7 +138,7 @@ namespace Neo.Wallet
         public byte[] GetPrivateKey() =>
             _privateKeyBytes[..];
 
-        public WalletAccountModel ToObject() =>
+        public Nep6WalletAccountModel ToObject() =>
             new()
             {
                 Address = Address,
@@ -139,7 +157,7 @@ namespace Neo.Wallet
                             ),
                         ],
                 },
-                Key = _privateKeyBytes[..],
+                Key = Encoding.UTF8.GetBytes(_nep2String),
                 Label = Label,
                 IsDefault = IsDefault,
                 Lock = IsLocked,

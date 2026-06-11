@@ -20,25 +20,34 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration.Json;
 using System;
+using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Neo.Wallet.Json
+namespace Neo.Configuration.Json.Converters
 {
-    public class WalletModel<TExtras, TAccountModel> : JsonModel
-        where TExtras : class?, new()
-        where TAccountModel : class?, new()
+    public class JsonStringByteArrayConverter : JsonConverter<byte[]?>
     {
-        public string? Name { get; set; }
+        public override byte[]? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType != JsonTokenType.String)
+                throw new FormatException();
 
-        public Version? Version { get; set; }
+            var valueString = reader.GetString();
 
-        [JsonPropertyName("scrypt")]
-        public SCryptModel? SCrypt { get; set; }
+            if (string.IsNullOrEmpty(valueString))
+                return default;
 
-        public TAccountModel[]? Accounts { get; set; }
+            return Encoding.UTF8.GetBytes(valueString);
+        }
 
-        public TExtras? Extra { get; set; }
+        public override void Write(Utf8JsonWriter writer, byte[]? value, JsonSerializerOptions options)
+        {
+            if (value is null)
+                writer.WriteNullValue();
+            else
+                writer.WriteStringValue(Encoding.UTF8.GetString(value));
+        }
     }
 }

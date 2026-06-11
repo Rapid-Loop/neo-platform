@@ -152,7 +152,7 @@ namespace Neo.Cryptography
             return a.Equals(b);
         }
 
-        public static bool operator !=(ProtectedString a, Pro b) =>
+        public static bool operator !=(ProtectedString a, ProtectedString b) =>
             !(a == b);
     }
 }

@@ -21,24 +21,14 @@
 // SERVICES
 
 using Neo.Configuration.Json;
-using System;
+using Neo.Configuration.Json.Converters;
 using System.Text.Json.Serialization;
 
 namespace Neo.Wallet.Json
 {
-    public class WalletModel<TExtras, TAccountModel> : JsonModel
-        where TExtras : class?, new()
-        where TAccountModel : class?, new()
+    public class Nep6WalletAccountModel : WalletAccountModel<ProtocolSettingsModel>
     {
-        public string? Name { get; set; }
-
-        public Version? Version { get; set; }
-
-        [JsonPropertyName("scrypt")]
-        public SCryptModel? SCrypt { get; set; }
-
-        public TAccountModel[]? Accounts { get; set; }
-
-        public TExtras? Extra { get; set; }
+        [JsonConverter(typeof(JsonStringByteArrayConverter))]
+        public override byte[]? Key { get => base.Key; set => base.Key = value; }
     }
 }

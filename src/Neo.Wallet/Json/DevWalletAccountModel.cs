@@ -22,13 +22,19 @@
 
 using Neo.Configuration;
 using Neo.Configuration.Interfaces;
+using Neo.Configuration.Json;
+using Neo.Configuration.Json.Converters;
 using System;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Neo.Wallet.Json
 {
-    public class DevWalletAccountModel : WalletAccountModel, IMap<DevWalletAccount>
+    public class DevWalletAccountModel : WalletAccountModel<ProtocolSettingsModel>, IMap<DevWalletAccount>
     {
+        [JsonConverter(typeof(JsonStringHexFormatConverter))]
+        public override byte[]? Key { get => base.Key; set => base.Key = value; }
+
         // TODO: Add support for MultiSigAddresses
         public DevWalletAccount ToObject() =>
             (Key is not null && Key.Length > 0)

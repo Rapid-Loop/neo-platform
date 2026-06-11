@@ -36,7 +36,7 @@ namespace Neo.Wallet.Tests.Json
 
             var expectedTestWalletModel = TestDefaults.TestDevWalletModel;
 
-            var actualTestWalletModel = JsonModel.FromJson<WalletModel>(jsonTestString, TestDefaults.JsonDefaultSerializerOptions);
+            var actualTestWalletModel = JsonModel.FromJson<DevWalletModel>(jsonTestString, TestDefaults.JsonDefaultSerializerOptions);
 
             Assert.IsNotNull(actualTestWalletModel);
 

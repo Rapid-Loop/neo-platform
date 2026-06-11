@@ -24,7 +24,7 @@ using Neo.Configuration.Interfaces;
 
 namespace Neo.Wallet.Json
 {
-    public class DevWalletModel : WalletModel, IMap<DevWallet>
+    public class DevWalletModel : WalletModel<object, DevWalletAccountModel>, IMap<DevWallet>
     {
         public DevWallet ToObject() =>
             new(this);

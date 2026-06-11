@@ -34,7 +34,7 @@ using System.Linq;
 
 namespace Neo.Wallet
 {
-    public class DevWalletAccount : IWalletAccount<ProtocolSettings>, IMap<WalletAccountModel>
+    public class DevWalletAccount : IWalletAccount<ProtocolSettings>, IMap<DevWalletAccountModel>
     {
         public ProtocolSettings ProtocolConfiguration => _protocolSettings;
 
@@ -110,7 +110,7 @@ namespace Neo.Wallet
         public byte[] GetPrivateKey() =>
             _privateKeyBytes[..];
 
-        public WalletAccountModel ToObject() =>
+        public DevWalletAccountModel ToObject() =>
             new()
             {
                 Address = Address,

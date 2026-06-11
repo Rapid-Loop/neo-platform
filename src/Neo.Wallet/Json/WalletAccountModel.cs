@@ -27,7 +27,8 @@ using System.Text.Json.Serialization;
 
 namespace Neo.Wallet.Json
 {
-    public class WalletAccountModel : JsonModel
+    public class WalletAccountModel<TExtra> : JsonModel
+        where TExtra : class?, new()
     {
         [JsonConverter(typeof(JsonStringAddressConverter))]
         public UInt160? Address { get; set; }
@@ -38,11 +39,10 @@ namespace Neo.Wallet.Json
 
         public bool Lock { get; set; }
 
-        [JsonConverter(typeof(JsonStringHexFormatConverter))]
-        public byte[]? Key { get; set; }
+        public virtual byte[]? Key { get; set; }
 
         public ContractModel? Contract { get; set; }
 
-        public ProtocolSettingsModel? Extra { get; set; }
+        public TExtra? Extra { get; set; }
     }
 }

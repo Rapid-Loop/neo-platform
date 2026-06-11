@@ -54,13 +54,13 @@ namespace Neo.Wallet.Tests
             }
         };
 
-        public static readonly WalletModel TestWalletModel = new()
+        public static readonly DevWalletModel TestDevWalletModel = new()
         {
             Name = "Unit Test Wallet",
             Version = new(1, 0),
             SCrypt = SCryptModel.Default,
             Accounts = [
-                new()
+                new DevWalletAccountModel()
                 {
                     Address = "0xce45fca32b8cd071bfbc20389c20cd7025f85ff0",
                     IsDefault = true,

@@ -22,6 +22,7 @@
 
 using Neo.Configuration;
 using Neo.Configuration.Interfaces;
+using System;
 using System.Linq;
 
 namespace Neo.Wallet.Json
@@ -30,7 +31,7 @@ namespace Neo.Wallet.Json
     {
         // TODO: Add support for MultiSigAddresses
         public DevWalletAccount ToObject() =>
-            Address == default
+            (Key is not null && Key.Length > 0)
             ? new(
                 Key ?? [],
                 Extra?.ToObject() ?? ProtocolSettings.Default)
@@ -40,7 +41,7 @@ namespace Neo.Wallet.Json
                 IsLocked = Lock,
             }
             : new(
-                Address,
+                Address ?? throw new InvalidOperationException(),
                 Extra?.ToObject() ?? ProtocolSettings.Default,
                 [.. Contract?.Parameters?.Select(s => s.ToObject()) ?? []],
                 Key)

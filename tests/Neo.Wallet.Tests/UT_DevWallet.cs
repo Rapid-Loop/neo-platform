@@ -20,6 +20,9 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Wallet.Json;
+using System.Linq;
+
 namespace Neo.Wallet.Tests
 {
     [TestClass]
@@ -28,7 +31,33 @@ namespace Neo.Wallet.Tests
         [TestMethod]
         public void TestCreateAccount()
         {
+            var expectedWallet = TestDefaults.TestDevWalletModel;
+            var actualWallet = new DevWallet();
 
+            Assert.IsNotNull(expectedWallet.Accounts);
+
+            foreach (var expectedAccountModel in expectedWallet.Accounts.Select(s => (DevWalletAccountModel)s))
+            {
+                if (expectedAccountModel is null) continue;
+
+                var expectedAccount = expectedAccountModel.ToObject();
+                var actualAccount = actualWallet.CreateAccount(expectedAccountModel);
+
+                // TODO: Add check for 'expectedAccountModel.Address == actualAccount.ScriptHash'
+                //       currently this will not match until we change the SysCall method to use the
+                //       right method address
+                Assert.AreEqual(expectedAccount.Label, actualAccount.Label);
+                Assert.AreEqual(expectedAccount.ScriptHash, actualAccount.ScriptHash);
+                Assert.AreEqual(expectedAccount.HasKey, actualAccount.HasKey);
+                Assert.AreEqual(expectedAccount.Address, actualAccount.Address);
+                Assert.AreEqual(expectedAccount.IsDefault, actualAccount.IsDefault);
+                Assert.AreEqual(expectedAccount.IsLocked, actualAccount.IsLocked);
+                Assert.AreEqual(expectedAccount.Contract.ScriptHash, actualAccount.Contract.ScriptHash);
+
+                CollectionAssert.AreEqual(expectedAccount.Contract.Script, actualAccount.Contract.Script);
+                CollectionAssert.AreEqual(expectedAccount.Contract.ParameterList, actualAccount.Contract.ParameterList);
+                CollectionAssert.AreEqual(expectedAccount.GetPrivateKey(), actualAccount.GetPrivateKey());
+            }
         }
     }
 }

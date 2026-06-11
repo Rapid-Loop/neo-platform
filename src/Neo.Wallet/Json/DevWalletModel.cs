@@ -27,6 +27,6 @@ namespace Neo.Wallet.Json
     public class DevWalletModel : WalletModel, IMap<DevWallet>
     {
         public DevWallet ToObject() =>
-            new();
+            new(this);
     }
 }

@@ -22,10 +22,9 @@
 
 using Neo.Configuration.Json;
 using Neo.Wallet.Json;
-using Neo.Wallet.Tests;
 using System.Linq;
 
-namespace Neo.Configuration.Tests.Model.Wallets
+namespace Neo.Wallet.Tests.Json
 {
     [TestClass]
     public class UT_WalletModel
@@ -35,7 +34,7 @@ namespace Neo.Configuration.Tests.Model.Wallets
         {
             var jsonTestString = "{\"name\":\"Unit Test Wallet\",\"version\":\"1.0\",\"scrypt\":{\"n\":16384,\"r\":8,\"p\":8},\"accounts\":[{\"address\":\"NhpxKrsHrFCizcupug2pTNkM7TnhyMzwEa\",\"label\":\"Main Test Account\",\"isDefault\":true,\"lock\":false,\"key\":\"3889c6201680d433ffdccb94a6b01c09863f5dc83aa85a003ae4dfe9460cf33f\",\"contract\":{\"script\":\"0c21028cd8520a4379f8bf84734fdc8063cc810932ae5f15d9d76362d7af35ca8371a84156e7b327\",\"parameters\":[{\"name\":\"Signature\",\"type\":\"Signature\"}],\"deployed\":false},\"extra\":null}],\"extra\":null}";
 
-            var expectedTestWalletModel = TestDefaults.TestWalletModel;
+            var expectedTestWalletModel = TestDefaults.TestDevWalletModel;
 
             var actualTestWalletModel = JsonModel.FromJson<WalletModel>(jsonTestString, TestDefaults.JsonDefaultSerializerOptions);
 

@@ -51,6 +51,16 @@ namespace Neo.Wallet
 
         public DevWallet() { }
 
+        public DevWallet(DevWalletModel devWalletModel)
+        {
+            if (devWalletModel.Accounts is not null)
+            {
+                foreach (var account in devWalletModel.Accounts
+                    .Select(s => ((DevWalletAccountModel)s).ToObject()))
+                    _walletAccounts[account.ScriptHash] = account;
+            }
+        }
+
         public override string ToString() =>
             $"{ToObject()}";
 
@@ -81,6 +91,14 @@ namespace Neo.Wallet
                 throw new InvalidOperationException();
 
             return _walletAccounts[newWalletAccount.ScriptHash] = newWalletAccount;
+        }
+
+        public IWalletAccount<ProtocolSettings> CreateAccount(DevWalletAccountModel walletAccountModel)
+        {
+            if (walletAccountModel.Address is null)
+                throw new InvalidOperationException();
+
+            return _walletAccounts[walletAccountModel.Address] = walletAccountModel.ToObject();
         }
 
         public IWalletAccount<ProtocolSettings> CreateMultiSigAccount(ProtocolSettings protocolSettings, params ECPoint[] publicKeys) =>

@@ -116,7 +116,7 @@ namespace Neo.VM.Types
         {
             return _map.ToArray().Aggregate(RefCount,
                 (hash, b) =>
-                    (hash * 31) + (b.Key.GetHashCode() ^ b.Value.GetHashCode()));
+                        (hash * 31) + (b.Key.GetHashCode() ^ b.Value.GetHashCode()));
         }
 
         public void Add(VMObject key, VMObject value)

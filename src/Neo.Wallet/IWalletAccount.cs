@@ -47,9 +47,9 @@ namespace Neo.Wallet
 
         WitnessContract Contract { get; }
 
-        bool ChangePassword(string oldPassword, string newPassword);
+        bool ChangePassword(ProtectedString oldPassword, ProtectedString newPassword);
 
-        bool VerifyPassword(string password);
+        bool VerifyPassword(ProtectedString password);
 
         byte[] GetPrivateKey();
     }

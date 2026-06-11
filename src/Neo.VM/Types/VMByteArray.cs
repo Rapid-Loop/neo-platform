@@ -63,7 +63,7 @@ namespace Neo.VM.Types
         {
             return _memory.ToArray().Aggregate(RefCount,
                 (hash, b) =>
-                    (hash * 31) ^ b);
+                        (hash * 31) ^ b);
         }
 
         protected override void Dispose(bool disposing)

@@ -23,6 +23,7 @@
 using Neo.Configuration;
 using Neo.Cryptography;
 using Neo.Cryptography.ECC;
+using Neo.Wallet.Cryptography;
 using System;
 using System.Collections.Generic;
 
@@ -36,7 +37,7 @@ namespace Neo.Wallet
 
         string? Name { get; }
 
-        byte[] Scrypt { get; }
+        ScryptParameters SCrypt { get; }
 
         TExtras? Extra { get; }
 

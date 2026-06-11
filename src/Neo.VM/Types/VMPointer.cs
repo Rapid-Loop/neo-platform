@@ -64,7 +64,7 @@ namespace Neo.VM.Types
         {
             return _memory.ToArray().Aggregate(_ip,
                 (hash, b) =>
-                    (hash * 31) ^ b);
+                        (hash * 31) ^ b);
         }
 
         public override VMObject Clone()

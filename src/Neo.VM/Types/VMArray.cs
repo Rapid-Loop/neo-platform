@@ -84,7 +84,7 @@ namespace Neo.VM.Types
         {
             return _array.Aggregate(RefCount,
                 (hash, b) =>
-                    (hash * 31) ^ b.GetHashCode());
+                        (hash * 31) ^ b.GetHashCode());
         }
 
         public override bool Equals(object? obj)

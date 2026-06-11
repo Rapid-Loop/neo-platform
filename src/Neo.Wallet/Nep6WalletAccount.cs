@@ -27,14 +27,14 @@ using Neo.Cryptography;
 using Neo.Cryptography.ECC;
 using Neo.Cryptography.Extensions;
 using Neo.SmartContract;
+using Neo.Wallet.Cryptography;
 using Neo.Wallet.Json;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Neo.Wallet
 {
-    public class DevWalletAccount : IWalletAccount<ProtocolSettings>, IMap<WalletAccountModel>
+    public class Nep6WalletAccount : IWalletAccount<ProtocolSettings>, IMap<WalletAccountModel>
     {
         public ProtocolSettings ProtocolConfiguration => _protocolSettings;
 
@@ -58,22 +58,27 @@ namespace Neo.Wallet
         private readonly WitnessContract _witnessContract;
 
         private readonly byte[] _privateKeyBytes = [];
+        private readonly ScryptParameters _scryptParameters;
 
-        public DevWalletAccount(ECPoint[] publicKeys, ProtocolSettings protocolSettings) : this((int)Math.Ceiling((2 * publicKeys.Length + 1) / 3m), publicKeys, protocolSettings) { }
+        private ProtectedString _password = string.Empty;
 
-        public DevWalletAccount(int m, ECPoint[] publicKeys, ProtocolSettings protocolSettings)
+        public Nep6WalletAccount(ECPoint[] publicKeys, ProtocolSettings protocolSettings, ScryptParameters? scryptParameters = default) : this((int)Math.Ceiling((2 * publicKeys.Length + 1) / 3m), publicKeys, protocolSettings, scryptParameters) { }
+
+        public Nep6WalletAccount(int m, ECPoint[] publicKeys, ProtocolSettings protocolSettings, ScryptParameters? scryptParameters = default)
         {
             ArgumentOutOfRangeException.ThrowIfEqual(publicKeys.Length, 0, nameof(publicKeys));
             ArgumentOutOfRangeException.ThrowIfGreaterThan(m, publicKeys.Length, nameof(publicKeys));
             ArgumentOutOfRangeException.ThrowIfLessThan(m, 1, nameof(m));
             ArgumentOutOfRangeException.ThrowIfGreaterThan(m, 1024, nameof(m));
 
+            _scryptParameters = scryptParameters ?? ScryptParameters.Default;
             _protocolSettings = protocolSettings;
             _witnessContract = WitnessContract.CreateMultiSigContract(m, publicKeys);
         }
 
-        public DevWalletAccount(UInt160 contractHash, ProtocolSettings protocolSettings, ContractParameterType[]? contractParameters = default, byte[]? privateKeyBytes = default)
+        public Nep6WalletAccount(UInt160 contractHash, ProtocolSettings protocolSettings, ContractParameterType[]? contractParameters = default, byte[]? privateKeyBytes = default, ScryptParameters? scryptParameters = default)
         {
+            _scryptParameters = scryptParameters ?? ScryptParameters.Default;
             _protocolSettings = protocolSettings;
             _witnessContract = WitnessContract.Create(contractHash, contractParameters ?? []);
 
@@ -81,9 +86,10 @@ namespace Neo.Wallet
                 _privateKeyBytes = privateKeyBytes;
         }
 
-        public DevWalletAccount(byte[] privateKeyBytes, ProtocolSettings protocolSettings)
+        public Nep6WalletAccount(byte[] privateKeyBytes, ProtocolSettings protocolSettings, ScryptParameters? scryptParameters = default)
         {
             _privateKeyBytes = privateKeyBytes;
+            _scryptParameters = scryptParameters ?? ScryptParameters.Default;
             _protocolSettings = protocolSettings;
 
             var privateKeySpan = privateKeyBytes.AsSpan();
@@ -95,17 +101,21 @@ namespace Neo.Wallet
         public override string ToString() =>
             $"{ToObject()}";
 
-        [DoesNotReturn]
         public bool ChangePassword(ProtectedString oldPassword, ProtectedString newPassword)
         {
-            throw new NotSupportedException();
+            if (string.IsNullOrEmpty(oldPassword)) return false;
+            if (string.IsNullOrEmpty(newPassword)) return false;
+            if (oldPassword == newPassword) return false;
+
+            _password.Dispose();
+
+            _password = newPassword;
+
+            return true;
         }
 
-        [DoesNotReturn]
-        public bool VerifyPassword(ProtectedString password)
-        {
-            throw new NotSupportedException();
-        }
+        public bool VerifyPassword(ProtectedString password) =>
+            string.Equals(_password, password);
 
         public byte[] GetPrivateKey() =>
             _privateKeyBytes[..];

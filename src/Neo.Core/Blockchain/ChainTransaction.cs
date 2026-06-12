@@ -25,6 +25,7 @@ using Neo.Core.Extensions;
 using Neo.Core.Serialization;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Neo.Core.Blockchain
 {
@@ -75,7 +76,18 @@ namespace Neo.Core.Blockchain
         /// </summary>
         public TransactionAttribute[] Attributes { get; set; } = [];
 
+        /// <summary>
+        /// The signers of the transaction.
+        /// </summary>
+        public ChainSigner[] Signers { get; set; } = [];
+
         public ChainWitness[] Witnesses { get; set; } = [];
+
+        /// <summary>
+        /// The sender is the first signer of the transaction, regardless of its <see cref="WitnessScope"/>.
+        /// </summary>
+        /// <remarks>Note: The sender will pay the fees of the transaction.</remarks>
+        public UInt160 Sender => Signers.FirstOrDefault()?.Account ?? UInt160.Zero;
 
         public InventoryType InventoryType => InventoryType.TX;
 
@@ -85,8 +97,9 @@ namespace Neo.Core.Blockchain
             sizeof(long) +  //SystemFee
             sizeof(long) +  //NetworkFee
             sizeof(uint) +  //ValidUntilBlock
-            Script.GetSerializedSize() +
+            Signers.GetSerializedSize() +
             Attributes.GetSerializedSize() +
+            Script.GetSerializedSize() +
             Witnesses.GetSerializedSize();
 
         public override int GetHashCode()
@@ -115,6 +128,7 @@ namespace Neo.Core.Blockchain
             SystemFee = reader.Read<long>();
             NetworkFee = reader.Read<long>();
             ValidUnitBlock = reader.Read<uint>();
+            Signers = reader.ReadObjects<ChainSigner>();
             Attributes = reader.ReadObjects<TransactionAttribute>();
             Script = reader.ReadDynamic<byte>();
             Witnesses = reader.ReadObjects<ChainWitness>();
@@ -127,6 +141,7 @@ namespace Neo.Core.Blockchain
             writer.Write(SystemFee);
             writer.Write(NetworkFee);
             writer.Write(ValidUnitBlock);
+            writer.WriteObjects(Signers);
             writer.WriteObjects(Attributes);
             writer.Write<byte>(Script.Span);
             writer.WriteObjects(Witnesses);

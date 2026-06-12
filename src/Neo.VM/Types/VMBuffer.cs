@@ -33,31 +33,36 @@ namespace Neo.VM.Types
     {
         public override VMObjectType Type => VMObjectType.Buffer;
 
-        public int Length => _memoryOwner.Memory.Length;
+        public int Length => _byteCount;
 
         private readonly IMemoryOwner<byte> _memoryOwner;
+        private readonly int _byteCount;
 
         public VMBuffer(int size)
         {
             ArgumentOutOfRangeException.ThrowIfNegative(size);
-            _memoryOwner = _memoryOwner = MemoryPool<byte>.Shared.Rent(size);
+            _byteCount = size;
+            _memoryOwner = MemoryPool<byte>.Shared.Rent(_byteCount);
         }
 
         public VMBuffer(byte[] data)
         {
-            _memoryOwner = MemoryPool<byte>.Shared.Rent(data.Length);
+            _byteCount = data.Length;
+            _memoryOwner = MemoryPool<byte>.Shared.Rent(_byteCount);
             data.AsMemory().TryCopyTo(_memoryOwner.Memory);
         }
 
         public VMBuffer(VMByteArray source)
         {
-            _memoryOwner = MemoryPool<byte>.Shared.Rent(source.Length);
+            _byteCount = source.Length;
+            _memoryOwner = MemoryPool<byte>.Shared.Rent(_byteCount);
             source.GetReadOnlySpan().TryCopyTo(_memoryOwner.Memory.Span);
         }
 
         public VMBuffer(Memory<byte> source)
         {
-            _memoryOwner = MemoryPool<byte>.Shared.Rent(source.Length);
+            _byteCount = source.Length;
+            _memoryOwner = MemoryPool<byte>.Shared.Rent(_byteCount);
             source.TryCopyTo(_memoryOwner.Memory);
         }
 
@@ -66,7 +71,10 @@ namespace Neo.VM.Types
             if (ReferenceEquals(other, this)) return true;
             if (other is null) return false;
             if (RefCount != other.RefCount) return false;
-            return _memoryOwner.Memory.Span.SequenceEqual(other._memoryOwner.Memory.Span);
+            if (Length != other.Length) return false;
+            return _memoryOwner.Memory[.._byteCount]
+                .Span
+                .SequenceEqual(other._memoryOwner.Memory[..other._byteCount].Span);
         }
 
         public override bool Equals(object? obj)
@@ -84,33 +92,35 @@ namespace Neo.VM.Types
 
         public override int GetHashCode()
         {
-            return _memoryOwner.Memory.ToHashCode(RefCount ^ 397);
+            return _memoryOwner.Memory[.._byteCount]
+                .ToHashCode(RefCount ^ 397);
         }
 
         public override string ToString()
         {
-            foreach (var v in _memoryOwner.Memory.Span)
+            foreach (var v in _memoryOwner.Memory[.._byteCount].Span)
             {
                 if (char.IsAsciiLetterOrDigit((char)v)) continue;
-                return Convert.ToBase64String(_memoryOwner.Memory.Span);
+                return Convert.ToBase64String(_memoryOwner.Memory[.._byteCount].Span);
             }
 
-            return CoreUtilities.StrictUtf8Encoding.GetString(_memoryOwner.Memory.Span);
+            return CoreUtilities.StrictUtf8Encoding.GetString(_memoryOwner.Memory[.._byteCount].Span);
         }
 
         public void CopyTo(VMBuffer dstBuffer, int startIndex, int dstIndex, int count)
         {
-            _memoryOwner.Memory.Slice(startIndex, count).CopyTo(dstBuffer._memoryOwner.Memory[dstIndex..]);
+            _memoryOwner.Memory.Slice(startIndex, count)
+                .CopyTo(dstBuffer._memoryOwner.Memory[dstIndex..]);
         }
 
         public void Reverse()
         {
-            _memoryOwner.Memory.Span.Reverse();
+            _memoryOwner.Memory[.._byteCount].Span.Reverse();
         }
 
         public override VMObject Clone()
         {
-            var clone = new VMBuffer(_memoryOwner.Memory.ToArray());
+            var clone = new VMBuffer(_memoryOwner.Memory[.._byteCount].ToArray());
 
             clone.AddReference();
 
@@ -119,7 +129,7 @@ namespace Neo.VM.Types
 
         public override bool GetBoolean()
         {
-            return !_memoryOwner.Memory.IsEmpty;
+            return !_memoryOwner.Memory[.._byteCount].IsEmpty;
         }
 
         public override BigInteger GetInteger()
@@ -129,18 +139,18 @@ namespace Neo.VM.Types
 
         public override ReadOnlySpan<byte> GetReadOnlySpan()
         {
-            return _memoryOwner.Memory.Span;
+            return _memoryOwner.Memory[.._byteCount].Span;
         }
 
         public byte this[int index]
         {
-            get => _memoryOwner.Memory.Span[index];
-            set => _memoryOwner.Memory.Span[index] = value;
+            get => _memoryOwner.Memory[.._byteCount].Span[index];
+            set => _memoryOwner.Memory[.._byteCount].Span[index] = value;
         }
 
         public string ToHexString()
         {
-            return Convert.ToHexStringLower(_memoryOwner.Memory.Span);
+            return Convert.ToHexStringLower(_memoryOwner.Memory[.._byteCount].Span);
         }
 
         /// <summary>
@@ -148,7 +158,12 @@ namespace Neo.VM.Types
         /// </summary>
         public static VMBuffer operator +(VMBuffer a, VMBuffer b)
         {
-            return new([.. a._memoryOwner.Memory.Span, .. b._memoryOwner.Memory.Span]);
+            return new(
+                [
+                    .. a._memoryOwner.Memory[..a._byteCount].Span,
+                    .. b._memoryOwner.Memory[..b._byteCount].Span,
+                ]
+            );
         }
 
         /// <summary>
@@ -164,7 +179,8 @@ namespace Neo.VM.Types
 
         public static implicit operator BigInteger(VMBuffer value)
         {
-            return new BigInteger(value._memoryOwner.Memory.Span[..VMInteger.MaxSize]);
+            return new BigInteger(value._memoryOwner.Memory[..value._byteCount]
+                .Span[..VMInteger.MaxSize]);
         }
     }
 }

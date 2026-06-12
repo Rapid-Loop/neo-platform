@@ -45,19 +45,19 @@ namespace Neo.Core.Blockchain
         /// The contracts that allowed by the witness.
         /// Only available when the <see cref="WitnessScope.CustomContracts"/> flag is set.
         /// </summary>
-        public UInt160[]? AllowedContracts { get; set; }
+        public UInt160[] AllowedContracts { get; set; } = [];
 
         /// <summary>
         /// The groups that allowed by the witness.
         /// Only available when the <see cref="WitnessScope.CustomGroups"/> flag is set.
         /// </summary>
-        public ECPoint[]? AllowedGroups { get; set; }
+        public ECPoint[] AllowedGroups { get; set; } = [];
 
-        ///// <summary>
-        ///// The rules that the witness must meet.
-        ///// Only available when the <see cref="WitnessScope.WitnessRules"/> flag is set.
-        ///// </summary>
-        //public WitnessRule[]? Rules { get; set; }
+        /// <summary>
+        /// The rules that the witness must meet.
+        /// Only available when the <see cref="WitnessScope.WitnessRules"/> flag is set.
+        /// </summary>
+        public ChainWitnessRule[] Rules { get; set; } = [];
 
         public int Size => throw new NotImplementedException();
 
@@ -71,6 +71,7 @@ namespace Neo.Core.Blockchain
                 hash *= 31 ^ Scopes.GetHashCode();
                 hash *= 31 ^ ((AllowedContracts as IReadOnlyList<UInt160>)?.ToHashCode() ?? 0);
                 hash *= 31 ^ ((AllowedGroups as IReadOnlyList<ECPoint>)?.ToHashCode() ?? 0);
+                hash *= 31 ^ ((Rules as IReadOnlyList<ChainWitnessRule>)?.ToHashCode() ?? 0);
 
                 return hash;
             }
@@ -90,28 +91,51 @@ namespace Neo.Core.Blockchain
             if (Scopes != other.Scopes) return false;
 
             if (Scopes.HasFlag(WitnessScope.CustomContracts) &&
-                AllowedContracts?.SequenceEqual(other.AllowedContracts) == false)
+                AllowedContracts.SequenceEqual(other.AllowedContracts) == false)
                 return false;
 
             if (Scopes.HasFlag(WitnessScope.CustomGroups) &&
-                AllowedGroups?.SequenceEqual(other.AllowedGroups) == false)
+                AllowedGroups.SequenceEqual(other.AllowedGroups) == false)
                 return false;
 
-            //if (Scopes.HasFlag(WitnessScope.WitnessRules) &&
-            //    Rules.SequenceEqual(other.Rules) == false)
-            //    return false;
+            if (Scopes.HasFlag(WitnessScope.WitnessRules) &&
+                Rules.SequenceEqual(other.Rules) == false)
+                return false;
 
             return true;
         }
 
         public void Deserialize(Stream reader)
         {
-            throw new NotImplementedException();
+            Account.Deserialize(reader);
+            Scopes = reader.Read<WitnessScope>();
+
+            if (Scopes.HasFlag(WitnessScope.Global) && Scopes != WitnessScope.Global)
+                throw new FormatException($"[{nameof(WitnessScope)}] Value {Scopes} in {nameof(ChainSigner)} is not valid.");
+
+            if (Scopes.HasFlag(WitnessScope.CustomContracts))
+                AllowedContracts = reader.ReadObjects<UInt160>();
+
+            if (Scopes.HasFlag(WitnessScope.CustomGroups))
+                AllowedGroups = reader.ReadObjects<ECPoint>();
+
+            if (Scopes.HasFlag(WitnessScope.WitnessRules))
+                Rules = reader.ReadObjects<ChainWitnessRule>();
         }
 
         public void Serialize(Stream writer)
         {
-            throw new NotImplementedException();
+            Account.Serialize(writer);
+            writer.Write(Scopes);
+
+            if (Scopes.HasFlag(WitnessScope.CustomContracts))
+                writer.WriteObjects(AllowedContracts);
+
+            if (Scopes.HasFlag(WitnessScope.CustomGroups))
+                writer.WriteObjects(AllowedGroups);
+
+            if (Scopes.HasFlag(WitnessScope.WitnessRules))
+                writer.WriteObjects(Rules);
         }
     }
 }

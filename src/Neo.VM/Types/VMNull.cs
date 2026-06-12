@@ -49,8 +49,7 @@ namespace Neo.VM.Types
 
         public bool Equals(VMNull? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            return other is null;
+            return true;
         }
 
         public override int GetHashCode()

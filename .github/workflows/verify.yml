@@ -23,32 +23,39 @@ jobs:
     - name: Verify Formatting
       run: dotnet format --verify-no-changes --verbosity diagnostic
 
-  verify-packages:
-    name: Verify Safe Packages
-    needs: [verify-code]
+# --------------------------------------
+# Currnly there is bug in dotnet cli for
+# nuget that breaks when using
+# `Shared Projects`.
+# --------------------------------------
+# TURNING OFF JOB FOR NOW
+#---------------------------------------
+#  verify-packages:
+#    name: Verify Safe Packages
+#    needs: [verify-code]
 
-    timeout-minutes: 5
+#    timeout-minutes: 5
 
-    runs-on: ubuntu-latest
+#    runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout (github)
-      uses: actions/checkout@v6
+#    steps:
+#    - name: Checkout (github)
+#      uses: actions/checkout@v6
 
-    - name: Setup .NET ${{ env.DOTNET_VERSION }}
-      uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+#    - name: Setup .NET ${{ env.DOTNET_VERSION }}
+#      uses: actions/setup-dotnet@v5
+#      with:
+#        dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Restore Solution
-      run: dotnet restore
+#    - name: Restore Solution
+#      run: dotnet restore
 
-    - name: Check Solution Packages
-      run: dotnet list package --vulnerable --include-transitive
+#    - name: Check Solution Packages
+#      run: dotnet list package --vulnerable --include-transitive
 
   verify-tests:
     name: Verify Tests on ${{ matrix.os }}
-    needs: [verify-code, verify-packages]
+    needs: [verify-code]
 
     timeout-minutes: 5
 

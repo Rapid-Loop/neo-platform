@@ -77,7 +77,7 @@ namespace Neo.VM.Types
                 return Convert.ToBase64String(_memory.Span);
             }
 
-            return CoreUilities.StrictUtf8Encoding.GetString(_memory.Span);
+            return CoreUtilities.StrictUtf8Encoding.GetString(_memory.Span);
         }
 
         public void CopyTo(VMBuffer dstBuffer, int startIndex, int dstIndex, int count)

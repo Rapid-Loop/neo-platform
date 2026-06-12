@@ -22,8 +22,8 @@
 
 using Neo.Configuration.Json;
 using Neo.Core.Extensions;
+using Neo.Core.Text;
 using Neo.Cryptography;
-using Neo.IO;
 using Neo.Wallet.Cryptography;
 using Neo.Wallet.Json;
 using System;

@@ -20,8 +20,13 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.Serialization;
+using Neo.Cryptography;
 using System;
+using System.IO;
 using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 
 namespace Neo.Core.Extensions
 {
@@ -61,5 +66,36 @@ namespace Neo.Core.Extensions
 
             return xorByteArray;
         }
+
+        /// <summary>
+        /// Converts a byte array to an <see cref="INeoSerializable"/> object.
+        /// </summary>
+        /// <typeparam name="T">The type to convert to.</typeparam>
+        /// <param name="array">The byte array to be converted.</param>
+        /// <param name="startIndex">The offset into the byte array from which to begin using data.</param>
+        /// <returns>The converted <see cref="INeoSerializable"/> object.</returns>
+        public static T? AsSerializable<T>(this byte[] array, int startIndex = 0)
+            where T : class?, INeoSerializable?
+        {
+            using var ms = new MemoryStream(array, false);
+            ms.Seek(startIndex, SeekOrigin.Begin);
+
+            var newObject = RuntimeHelpers.GetUninitializedObject(typeof(T)) as T;
+            newObject?.Deserialize(ms);
+
+            return newObject;
+        }
+
+        public static UInt160 ToScriptHash(this byte[] data) =>
+            new(data.ToHash160());
+
+        public static byte[] ToRipeMD160(this byte[] data) =>
+            RipeMD160.HashData(data);
+
+        public static byte[] ToSha256(this byte[] data) =>
+            SHA256.HashData(data);
+
+        public static byte[] ToHash160(this byte[] data) =>
+            data.ToSha256().ToRipeMD160();
     }
 }

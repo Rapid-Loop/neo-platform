@@ -21,7 +21,7 @@
 // SERVICES
 
 using Neo.Configuration;
-using Neo.Cryptography;
+using Neo.Core;
 using Neo.Cryptography.ECC;
 using Neo.Wallet.Cryptography;
 using System;
@@ -59,7 +59,7 @@ namespace Neo.Wallet
 
         IWalletAccount<TAccountExtras> GetAccount(UInt160 scriptHash);
 
-        IWalletAccount<TAccountExtras> GetAccount(ECPoint publickKey);
+        IWalletAccount<TAccountExtras> GetAccount(ECPoint publicKey);
 
         IEnumerable<IWalletAccount<TAccountExtras>> GetAccounts();
 

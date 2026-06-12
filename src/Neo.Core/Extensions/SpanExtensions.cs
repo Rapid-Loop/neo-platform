@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.Serialization;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -36,5 +37,17 @@ namespace Neo.Core.Extensions
             where T : unmanaged =>
             readOnlySpan.Length.GetCompactSize() +
             (readOnlySpan.Length * Unsafe.SizeOf<T>());
+
+        /// <summary>
+        /// Converts a byte array to an <see cref="INeoSerializable"/> object.
+        /// </summary>
+        /// <typeparam name="T">The type to convert to.</typeparam>
+        /// <param name="span">The byte array to be converted.</param>
+        /// <param name="startIndex"></param>
+        /// <returns>The converted <see cref="INeoSerializable"/> object.</returns>
+        public static T? AsSerializable<T>(this ReadOnlySpan<byte> span, int startIndex = 0)
+            where T : class?, INeoSerializable? =>
+            span.ToArray()
+                .AsSerializable<T>(startIndex);
     }
 }

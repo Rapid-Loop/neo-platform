@@ -21,7 +21,7 @@
 // SERVICES
 
 using Neo.Core;
-using Neo.IO.Extensions;
+using Neo.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -176,7 +176,7 @@ namespace Neo.VM
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
         public ScriptBuilder EmitPush(string data)
         {
-            return EmitPush(CoreUilities.StrictUtf8Encoding.GetBytes(data));
+            return EmitPush(CoreUtilities.StrictUtf8Encoding.GetBytes(data));
         }
 
         /// <summary>

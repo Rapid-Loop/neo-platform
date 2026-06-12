@@ -20,10 +20,10 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core;
+using Neo.Core.Extensions;
 using Neo.Core.SmartContract;
-using Neo.Cryptography;
 using Neo.Cryptography.ECC;
-using Neo.Cryptography.Extensions;
 using Neo.VM;
 using System;
 using System.Linq;

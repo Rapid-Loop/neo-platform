@@ -209,6 +209,6 @@ namespace Neo.VM.Types
             new VMByteArray(value);
 
         public static implicit operator VMObject(string value) =>
-            new VMByteArray(CoreUilities.StrictUtf8Encoding.GetBytes(value));
+            new VMByteArray(CoreUtilities.StrictUtf8Encoding.GetBytes(value));
     }
 }

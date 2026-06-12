@@ -21,7 +21,6 @@
 // SERVICES
 
 using Neo.Core.Extensions;
-using Neo.IO.Extensions;
 using System;
 using System.IO;
 

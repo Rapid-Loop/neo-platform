@@ -136,7 +136,7 @@ namespace Neo.VM
         public string DecodeOperand()
         {
             var operand = Operand[OperandPrefixSize..].ToArray();
-            var asStr = CoreUilities.StrictUtf8Encoding.GetString(operand);
+            var asStr = CoreUtilities.StrictUtf8Encoding.GetString(operand);
             var readable = asStr.All(char.IsAsciiLetterOrDigit);
 
             return OpCode switch

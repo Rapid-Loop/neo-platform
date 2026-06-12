@@ -88,7 +88,7 @@ namespace Neo.VM.Types
             catch
             {
                 bytes = null;
-                return CoreUilities.StrictUtf8Encoding.GetBytes(_interfaceName);
+                return CoreUtilities.StrictUtf8Encoding.GetBytes(_interfaceName);
             }
             finally
             {

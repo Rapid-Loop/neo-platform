@@ -7,8 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Neo.Configuration\Neo.Configuration.csproj" />
-    <ProjectReference Include="..\Neo.Cryptography\Neo.Cryptography.csproj" />
-    <ProjectReference Include="..\Neo.Extensions\Neo.Extensions.csproj" />
   </ItemGroup>
 
   <Import Project="..\Neo.Shared\Neo.Shared.projitems" Label="Shared" />

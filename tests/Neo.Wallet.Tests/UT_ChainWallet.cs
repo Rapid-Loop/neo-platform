@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Wallet.Cryptography;
 using System;
 
 namespace Neo.Wallet.Tests
@@ -41,6 +42,18 @@ namespace Neo.Wallet.Tests
             var actualKeyBytes = ChainWallet.GetKeyFromWifString("L3tgppXLgdaeqSGSFw1Go3skBiy8vQAM7YMXvTHsKQtE16PBncSU");
 
             CollectionAssert.AreEqual(expectedKeyBytes, actualKeyBytes);
+        }
+
+        [TestMethod]
+        public void TestNep2String()
+        {
+            var defaultSCryptParameters = new ScryptParameters(2, 1, 1);
+            var expectedPrivateKeyBytes = ChainWallet.GetKeyFromWifString("Ky7cYncUA92kWnh7xymshpfgz7QiX46qPWCQBQPVUSv5vndE2VTR");
+
+            var actualNep2String = ChainWallet.ToNep2String(expectedPrivateKeyBytes, "pwd", defaultSCryptParameters);
+            var actualPrivateKeyBytes = ChainWallet.GetKeyFromNep2String(actualNep2String, "pwd", defaultSCryptParameters);
+
+            CollectionAssert.AreEqual(expectedPrivateKeyBytes, actualPrivateKeyBytes);
         }
     }
 }

@@ -31,7 +31,6 @@ using Neo.Wallet.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using RandomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator;
 
 namespace Neo.Wallet
@@ -56,7 +55,7 @@ namespace Neo.Wallet
             _scryptParameters = scryptParameters ?? ScryptParameters.Default;
         }
 
-        public Nep6Wallet(Nep6WalletModel nep6WalletModel, IDictionary<UInt160, string> accountPasswordList) : this()
+        public Nep6Wallet(Nep6WalletModel nep6WalletModel)
         {
             _scryptParameters = nep6WalletModel.SCrypt?.ToObject() ?? ScryptParameters.Default;
 
@@ -65,27 +64,27 @@ namespace Neo.Wallet
                 foreach (var accountModel in nep6WalletModel.Accounts)
                 {
                     if (accountModel.Key is null) continue;
+                    if (accountModel.Contract is null) continue;
 
-                    if (accountPasswordList.TryGetValue(accountModel.Key, out var password))
-                    {
-                        var nep2String = Encoding.UTF8.GetString(accountModel.Key ?? []);
+                    var account = new Nep6WalletAccount(accountModel, _scryptParameters);
 
-                        // TODO: Allow Contracts
-                        if (string.IsNullOrEmpty(nep2String)) continue;
-
-                        var protocolSettings = accountModel.Extra?.ToObject() ?? ProtocolSettings.Default;
-                        var account = new Nep6WalletAccount(nep2String, password, protocolSettings, _scryptParameters);
-
-                        if (account.ScriptHash != accountModel.Address) continue;
-
-                        _walletAccounts[account.ScriptHash] = account;
-                    }
+                    _walletAccounts[account.Address] = account;
                 }
             }
         }
 
         public bool Contains(UInt160 scriptHash) =>
             _walletAccounts.ContainsKey(scriptHash);
+
+        public IWalletAccount<ProtocolSettings> CreateAccount(Nep6WalletAccountModel walletAccountModel)
+        {
+            if (walletAccountModel.Address is null)
+                throw new InvalidOperationException();
+
+            var account = new Nep6WalletAccount(walletAccountModel, _scryptParameters);
+
+            return _walletAccounts[walletAccountModel.Address] = account;
+        }
 
         public IWalletAccount<ProtocolSettings> CreateAccount(ProtocolSettings protocolSettings) =>
             CreateAccount(RandomNumberGenerator.GetBytes(ChainWallet.MaxPrivateKeySizeInBytes), protocolSettings);

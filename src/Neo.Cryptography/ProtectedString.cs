@@ -51,9 +51,7 @@ namespace Neo.Cryptography
 
         public void Dispose()
         {
-            CryptographicOperations.ZeroMemory(s_entropy);
             CryptographicOperations.ZeroMemory(_protectedMemory.Span);
-
             GC.SuppressFinalize(this);
         }
 
@@ -84,13 +82,13 @@ namespace Neo.Cryptography
         public int CompareTo(ProtectedString? other)
         {
             if (other is null) return 1;
-            return _protectedMemory.Span.SequenceCompareTo(other._protectedMemory.Span);
+            return string.Compare(this, other);
         }
 
         public bool Equals(ProtectedString? other)
         {
             if (other is null) return false;
-            return _protectedMemory.Equals(other._protectedMemory);
+            return string.Equals(this, other);
         }
 
         private static Memory<byte> ProtectData(byte[] data)

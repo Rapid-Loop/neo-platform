@@ -48,11 +48,13 @@ namespace Neo.Cryptography.Tests
 
             Assert.AreEqual(actualProtectedString.GetHashCode(), actualProtectedString.GetHashCode());
             Assert.AreEqual<string>(expectedPasswordString, actualProtectedString);
+            Assert.AreEqual<ProtectedString>(expectedPasswordString, actualProtectedString);
 
             Assert.AreEqual(0, string.Compare(expectedPasswordString, actualProtectedString));
+            Assert.AreEqual(0, expectedPasswordString.CompareTo(actualProtectedString));
 
-            Assert.IsFalse(actualProtectedString.Equals(expectedPasswordString));
-            Assert.IsFalse(actualProtectedString == expectedPasswordString);
+            Assert.IsTrue(actualProtectedString.Equals(expectedPasswordString));
+            Assert.IsTrue(actualProtectedString == expectedPasswordString);
         }
     }
 }

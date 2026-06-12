@@ -20,13 +20,16 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Configuration.Interfaces;
 using Neo.Configuration.Json;
 using Neo.Configuration.Json.Converters;
+using Neo.SmartContract;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Neo.Wallet.Json
 {
-    public class ContractModel : JsonModel
+    public class ContractModel : JsonModel, IMap<WitnessContract>
     {
         [JsonConverter(typeof(JsonStringHexFormatConverter))]
         public byte[]? Script { get; set; }
@@ -34,5 +37,15 @@ namespace Neo.Wallet.Json
         public ContractParameterModel[]? Parameters { get; set; }
 
         public bool Deployed { get; set; }
+
+        public WitnessContract ToObject() =>
+            WitnessContract.Create(
+                Script ?? [],
+                [
+                    .. Parameters?.Select(
+                        static s =>
+                            s.ToObject()) ?? [],
+                ]
+            );
     }
 }

@@ -107,6 +107,12 @@ namespace Neo.Wallet
             throw new NotSupportedException();
         }
 
+        [DoesNotReturn]
+        public void SetLock()
+        {
+            throw new NotSupportedException();
+        }
+
         public byte[] GetPrivateKey() =>
             _privateKeyBytes[..];
 

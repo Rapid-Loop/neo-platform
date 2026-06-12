@@ -23,18 +23,13 @@
 using Neo.Configuration.Json;
 using Neo.Core.Extensions;
 using Neo.Cryptography;
-using Neo.Cryptography.Extensions;
 using Neo.IO;
-using Neo.SmartContract;
 using Neo.Wallet.Cryptography;
 using Neo.Wallet.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using ECCurve = Neo.Cryptography.ECC.ECCurve;
-using ECPoint = Neo.Cryptography.ECC.ECPoint;
 
 namespace Neo.Wallet
 {
@@ -61,10 +56,12 @@ namespace Neo.Wallet
             return decodedWifBytes[1..^1];
         }
 
-        public static string ToNep2String(byte[] privateKeyBytes, string password, ScryptParameters scryptParameters, byte addressVersion = 53)
+        public static string ToNep2String(byte[] privateKeyBytes, string password, ScryptParameters? scryptParameters = default, byte addressVersion = 53)
         {
             const int SCryptKeyLengthInBytes = 64;
             const int SaltLengthInBytes = 4;
+
+            scryptParameters ??= ScryptParameters.Default;
 
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             var salt = RandomNumberGenerator.GetBytes(SaltLengthInBytes);
@@ -112,16 +109,6 @@ namespace Neo.Wallet
             var decryptedBytes = AesDecryptECB(encryptedKeyBytes, derivedHalf2);
             var privateKeyBytes = decryptedBytes.Xor(derivedHalf1);
 
-            var publicKeyPoint = ECPoint.FromPrivateKey(privateKeyBytes, ECCurve.SecP256r1);
-            var scriptHash = WitnessContract.CreateSignatureRedeemScript(publicKeyPoint).ToScriptHash();
-            var address = scriptHash.ToAddress(addressVersion);
-
-            var addressBytes = Encoding.UTF8.GetBytes(address);
-            var addressHashBytes = SHA256.HashData(SHA256.HashData(addressBytes));
-
-            if (addressHashBytes.AsSpan(0, 4).SequenceEqual(salt) == false)
-                throw new InvalidDataException("NEP-2 key is not valid");
-
             return privateKeyBytes;
         }
 
@@ -148,9 +135,9 @@ namespace Neo.Wallet
         }
 
         public static DevWallet OpenDevWalletFile(FileInfo file) =>
-            JsonModel.FromJson<DevWalletModel>(file)?.ToObject() ?? new();
+            JsonModel.FromJson<DevWalletModel>(file)!.ToObject();
 
-        public static Nep6Wallet? OpenNep6WalletFie(FileInfo file, IDictionary<UInt160, string> accountPasswordList) =>
-            new(JsonModel.FromJson<Nep6WalletModel>(file) ?? new(), accountPasswordList);
+        public static Nep6Wallet? OpenNep6WalletFie(FileInfo file) =>
+            JsonModel.FromJson<Nep6WalletModel>(file)!.ToObject();
     }
 }

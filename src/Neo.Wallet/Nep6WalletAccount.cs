@@ -47,7 +47,7 @@ namespace Neo.Wallet
 
         public bool IsDefault { get; set; }
 
-        public bool IsLocked { get; set; }
+        public bool IsLocked => _isLocked;
 
         public bool HasKey => _privateKeyBytes.Length > 0;
 
@@ -55,12 +55,14 @@ namespace Neo.Wallet
 
         public WitnessContract Contract => _witnessContract;
 
-        private readonly WitnessContract _witnessContract;
         private readonly ProtocolSettings _protocolSettings;
 
-        private readonly byte[] _privateKeyBytes = [];
         private readonly ScryptParameters _scryptParameters;
 
+        private byte[] _privateKeyBytes = [];
+        private bool _isLocked;
+
+        private WitnessContract _witnessContract;
         private ProtectedString _password = string.Empty;
         private ProtectedString _nep2String = string.Empty;
 
@@ -115,28 +117,74 @@ namespace Neo.Wallet
             _witnessContract = WitnessContract.CreateSignatureContract(publicKeyPoint);
         }
 
+        public Nep6WalletAccount(Nep6WalletAccountModel accountModel, ScryptParameters? scryptParameters = default)
+        {
+            _nep2String = Encoding.UTF8.GetString(accountModel.Key ?? []);
+            _protocolSettings = accountModel.Extra?.ToObject() ?? ProtocolSettings.Default;
+            _scryptParameters = scryptParameters ?? ScryptParameters.Default;
+            _witnessContract = accountModel.Contract?.ToObject() ?? WitnessContract.Create([], []);
+            _isLocked = true;
+        }
+
         public override string ToString() =>
             $"{ToObject()}";
 
         public bool ChangePassword(ProtectedString oldPassword, ProtectedString newPassword)
         {
-            if (string.IsNullOrEmpty(oldPassword)) return false;
+            if (_isLocked) return false;
+            if (_privateKeyBytes.Length == 0) return false;
             if (string.IsNullOrEmpty(newPassword)) return false;
             if (oldPassword == newPassword) return false;
+            if (_password != oldPassword) return false;
 
             _password.Dispose();
             _password = newPassword;
 
-            _nep2String = ChainWallet.ToNep2String(_privateKeyBytes, _password, _scryptParameters, _protocolSettings.AddressVersion);
+            _nep2String = ChainWallet.ToNep2String(
+                _privateKeyBytes,
+                _password,
+                _scryptParameters,
+                _protocolSettings.AddressVersion
+            );
+
+            _isLocked = true;
 
             return true;
         }
 
-        public bool VerifyPassword(ProtectedString password) =>
-            string.Equals(_password, password);
+        public bool VerifyPassword(ProtectedString password)
+        {
+            if (string.IsNullOrEmpty(password)) return false;
+            if (string.IsNullOrEmpty(_nep2String))
+                throw new InvalidOperationException($"Password is not set. Call {nameof(ChangePassword)} first.");
 
-        public byte[] GetPrivateKey() =>
-            _privateKeyBytes[..];
+            var testKeyBytes = ChainWallet.GetKeyFromNep2String(
+                    _nep2String,
+                    password,
+                    _scryptParameters,
+                    _protocolSettings.AddressVersion);
+
+            _password = password;
+            _privateKeyBytes = testKeyBytes;
+            _isLocked = false;
+
+            var privateKeySpan = _privateKeyBytes.AsSpan();
+            var publicKeyPoint = ECPoint.FromPrivateKey(privateKeySpan, ECCurve.SecP256r1);
+            _witnessContract = WitnessContract.CreateSignatureContract(publicKeyPoint);
+
+            return true;
+        }
+
+        public void SetLock() =>
+            _isLocked = true;
+
+        public byte[] GetPrivateKey()
+        {
+            if (_isLocked == true || _privateKeyBytes.Length == 0)
+                throw new InvalidOperationException($"Account is locked. Call {nameof(VerifyPassword)} first.");
+
+            return _privateKeyBytes[..];
+        }
 
         public Nep6WalletAccountModel ToObject() =>
             new()

@@ -52,5 +52,7 @@ namespace Neo.Wallet
         bool VerifyPassword(ProtectedString password);
 
         byte[] GetPrivateKey();
+
+        void SetLock();
     }
 }

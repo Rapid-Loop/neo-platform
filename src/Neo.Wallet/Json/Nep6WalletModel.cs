@@ -20,7 +20,13 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Configuration.Interfaces;
+
 namespace Neo.Wallet.Json
 {
-    public class Nep6WalletModel : WalletModel<object, Nep6WalletAccountModel> { }
+    public class Nep6WalletModel : WalletModel<object, Nep6WalletAccountModel>, IMap<Nep6Wallet>
+    {
+        public Nep6Wallet ToObject() =>
+            new(this);
+    }
 }

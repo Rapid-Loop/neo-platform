@@ -20,16 +20,19 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Configuration;
+using System;
+
 namespace Neo.Wallet.Tests
 {
     [TestClass]
-    public class UT_DevWallet
+    public class UT_Nep6Wallet
     {
         [TestMethod]
         public void TestCreateAccount()
         {
-            var expectedWallet = TestDefaults.TestDevWalletModel;
-            var actualWallet = new DevWallet();
+            var expectedWallet = TestDefaults.TestNep6WalletModel;
+            var actualWallet = new Nep6Wallet();
 
             Assert.IsNotNull(expectedWallet.Accounts);
 
@@ -43,6 +46,9 @@ namespace Neo.Wallet.Tests
                 // TODO: Add check for 'expectedAccountModel.Address == actualAccount.ScriptHash'
                 //       currently this will not match until we change the SysCall method to use the
                 //       right method address
+                Assert.IsTrue(expectedAccount.VerifyPassword("abc123"));
+                Assert.IsTrue(actualAccount.VerifyPassword("abc123"));
+
                 Assert.AreEqual(expectedAccount.Label, actualAccount.Label);
                 Assert.AreEqual(expectedAccount.ScriptHash, actualAccount.ScriptHash);
                 Assert.AreEqual(expectedAccount.HasKey, actualAccount.HasKey);
@@ -54,7 +60,22 @@ namespace Neo.Wallet.Tests
                 CollectionAssert.AreEqual(expectedAccount.Contract.Script, actualAccount.Contract.Script);
                 CollectionAssert.AreEqual(expectedAccount.Contract.ParameterList, actualAccount.Contract.ParameterList);
                 CollectionAssert.AreEqual(expectedAccount.GetPrivateKey(), actualAccount.GetPrivateKey());
+
+                Assert.IsTrue(expectedAccount.ChangePassword("abc123", "pwd"));
+                Assert.IsTrue(actualAccount.ChangePassword("abc123", "pwd"));
+                Assert.IsFalse(actualAccount.ChangePassword("pwd", "pwd"));
+
+                actualAccount.SetLock();
+
+                Assert.IsTrue(actualAccount.IsLocked);
+                Assert.ThrowsExactly<InvalidOperationException>(() => actualAccount.GetPrivateKey());
             }
+
+            var actualNewAccount = actualWallet.CreateAccount(ProtocolSettings.Default);
+
+            Assert.ThrowsExactly<InvalidOperationException>(() => actualNewAccount.VerifyPassword("12345"));
+            Assert.IsTrue(actualNewAccount.ChangePassword(string.Empty, "12345"));
+            Assert.IsTrue(actualNewAccount.VerifyPassword("12345"));
         }
     }
 }

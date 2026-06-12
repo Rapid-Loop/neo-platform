@@ -25,6 +25,7 @@ using Neo.Configuration.Json.Converters;
 using Neo.Core.SmartContract;
 using Neo.Wallet.Json;
 using System;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -67,6 +68,37 @@ namespace Neo.Wallet.Tests
                     Label = "Main Test Account",
                     Lock = false,
                     Key = ChainWallet.GetKeyFromWifString("Ky7cYncUA92kWnh7xymshpfgz7QiX46qPWCQBQPVUSv5vndE2VTR"),
+                    Contract = new()
+                    {
+                        Deployed = false,
+                        Script = Convert.FromBase64String("DCECjNhSCkN5\u002BL\u002BEc0/cgGPMgQkyrl8V2ddjYtevNcqDcahBVuezJw=="),
+                        Parameters = [
+                            new()
+                            {
+                                Name = "Signature",
+                                Type = ContractParameterType.Signature,
+                            },
+                        ],
+                    },
+                    Extra = ProtocolSettings.Default.ToObject(),
+                },
+            ],
+            Extra = null,
+        };
+
+        public static readonly Nep6WalletModel TestNep6WalletModel = new()
+        {
+            Name = "Unit Test Wallet",
+            Version = new(1, 0),
+            SCrypt = SCryptModel.Default,
+            Accounts = [
+                new Nep6WalletAccountModel()
+                {
+                    Address = "0xce45fca32b8cd071bfbc20389c20cd7025f85ff0",
+                    IsDefault = true,
+                    Label = "Main Test Account",
+                    Lock = false,
+                    Key = Encoding.UTF8.GetBytes(ChainWallet.ToNep2String(ChainWallet.GetKeyFromWifString("Ky7cYncUA92kWnh7xymshpfgz7QiX46qPWCQBQPVUSv5vndE2VTR"), "abc123")),
                     Contract = new()
                     {
                         Deployed = false,

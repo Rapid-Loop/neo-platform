@@ -23,15 +23,47 @@
 using Neo.Core;
 using System;
 using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace Neo.IO.Extensions
 {
     public static class StreamExtensions
     {
+        public static void WriteCompact<T>(this Stream stream, T value)
+            where T : unmanaged, IBinaryInteger<T>
+        {
+            if (stream.CanWrite == false)
+                throw new NotSupportedException("Stream does not support writing.");
+
+            var v = Convert.ToUInt64(value);
+
+            switch (v)
+            {
+                case < 0xfd:
+                    stream.Write((byte)v);
+                    break;
+                case <= ushort.MaxValue:
+                    stream.Write((byte)0xfd);
+                    stream.Write((ushort)v);
+                    break;
+                case <= uint.MaxValue:
+                    stream.Write((byte)0xfe);
+                    stream.Write((uint)v);
+                    break;
+                default:
+                    stream.Write((byte)0xff);
+                    stream.Write(v);
+                    break;
+            }
+        }
+
         public static void Write<T>(this Stream stream, T value)
             where T : unmanaged
         {
+            if (stream.CanWrite == false)
+                throw new NotSupportedException("Stream does not support writing.");
+
             var tSpan = MemoryMarshal.CreateSpan(ref value, 1);
             var span = MemoryMarshal.AsBytes(tSpan);
 
@@ -41,6 +73,9 @@ namespace Neo.IO.Extensions
         public static void Write<T>(this Stream stream, ref T value)
             where T : unmanaged
         {
+            if (stream.CanWrite == false)
+                throw new NotSupportedException("Stream does not support writing.");
+
             var tSpan = MemoryMarshal.CreateSpan(ref value, 1);
             var span = MemoryMarshal.AsBytes(tSpan);
 
@@ -50,24 +85,33 @@ namespace Neo.IO.Extensions
         public static void Write<T>(this Stream stream, T[] values)
             where T : unmanaged
         {
+            if (stream.CanWrite == false)
+                throw new NotSupportedException("Stream does not support writing.");
+
             var tSpan = values.AsSpan();
             var span = MemoryMarshal.AsBytes(tSpan);
 
-            stream.Write(values.Length);
+            stream.WriteCompact(values.Length);
             stream.Write(span);
         }
 
         public static void Write<T>(this Stream stream, Span<T> values)
             where T : unmanaged
         {
+            if (stream.CanWrite == false)
+                throw new NotSupportedException("Stream does not support writing.");
+
             var span = MemoryMarshal.AsBytes(values);
 
-            stream.Write(values.Length);
+            stream.WriteCompact(values.Length);
             stream.Write(span);
         }
 
         public static void Write(this Stream stream, string value)
         {
+            if (stream.CanWrite == false)
+                throw new NotSupportedException("Stream does not support writing.");
+
             var encoding = CoreUilities.StrictUtf8Encoding;
             var valueSpan = value.AsSpan();
             var encodedLength = encoding.GetByteCount(valueSpan);
@@ -75,12 +119,15 @@ namespace Neo.IO.Extensions
             Span<byte> byteSpan = stackalloc byte[encodedLength];
             var byteLength = encoding.GetBytes(valueSpan, byteSpan);
 
-            stream.Write(byteLength);
+            stream.WriteCompact(byteLength);
             stream.Write(byteSpan);
         }
 
         public static void Write(this Stream stream, char[] value)
         {
+            if (stream.CanWrite == false)
+                throw new NotSupportedException("Stream does not support writing.");
+
             var encoding = CoreUilities.StrictUtf8Encoding;
             var valueSpan = value.AsSpan();
             var encodedLength = encoding.GetByteCount(valueSpan);
@@ -88,14 +135,40 @@ namespace Neo.IO.Extensions
             Span<byte> byteSpan = stackalloc byte[encodedLength];
             var byteLength = encoding.GetBytes(valueSpan, byteSpan);
 
-            stream.Write(byteLength);
-            stream.Write(value.Length);
+            stream.WriteCompact(byteLength);
+            stream.WriteCompact(value.Length);
             stream.Write(byteSpan);
+        }
+
+        public static T ReadCompact<T>(this Stream stream) where T : unmanaged, IBinaryInteger<T>
+        {
+            if (stream.CanRead == false)
+                throw new NotSupportedException("Stream does not support reading.");
+
+            var prefixByte = stream.ReadByte();
+
+            if (prefixByte == -1)
+                throw new EndOfStreamException("Unexpected end of stream while reading CompactSize.");
+
+            var flag = (byte)prefixByte;
+
+            var value = flag switch
+            {
+                < 0xfd => flag,
+                0xfd => stream.Read<ushort>(),
+                0xfe => stream.Read<uint>(),
+                0xff => stream.Read<ulong>(),
+            };
+
+            return T.CreateChecked(value); // Throws on overflow for the target type
         }
 
         public static ref T Read<T>(this Stream stream, ref T result)
             where T : unmanaged
         {
+            if (stream.CanRead == false)
+                throw new NotSupportedException("Stream does not support reading.");
+
             var tSpan = MemoryMarshal.CreateSpan(ref result, 1);
             var span = MemoryMarshal.AsBytes(tSpan);
 
@@ -107,6 +180,9 @@ namespace Neo.IO.Extensions
         public static T Read<T>(this Stream stream)
             where T : unmanaged
         {
+            if (stream.CanRead == false)
+                throw new NotSupportedException("Stream does not support reading.");
+
             var result = default(T);
             var tSpan = MemoryMarshal.CreateSpan(ref result, 1);
             var span = MemoryMarshal.AsBytes(tSpan);
@@ -118,8 +194,11 @@ namespace Neo.IO.Extensions
 
         public static char[] ReadCharArray(this Stream stream)
         {
-            var byteLength = stream.Read<int>();
-            var charLength = stream.Read<int>();
+            if (stream.CanRead == false)
+                throw new NotSupportedException("Stream does not support reading.");
+
+            var byteLength = stream.ReadCompact<int>();
+            var charLength = stream.ReadCompact<int>();
 
             Span<byte> span = stackalloc byte[byteLength];
             stream.ReadExactly(span);
@@ -134,8 +213,11 @@ namespace Neo.IO.Extensions
 
         public static string ReadString(this Stream stream)
         {
+            if (stream.CanRead == false)
+                throw new NotSupportedException("Stream does not support reading.");
+
             var encoding = CoreUilities.StrictUtf8Encoding;
-            var byteLength = stream.Read<int>();
+            var byteLength = stream.ReadCompact<int>();
 
             Span<byte> bytes = stackalloc byte[byteLength];
             stream.ReadExactly(bytes);
@@ -146,10 +228,13 @@ namespace Neo.IO.Extensions
         public static T[] ReadArray<T>(this Stream stream)
             where T : unmanaged
         {
+            if (stream.CanRead == false)
+                throw new NotSupportedException("Stream does not support reading.");
+
             if (typeof(T) == typeof(char))
                 throw new NotImplementedException($"\'{typeof(T).FullName}\' type is not supported.");
 
-            var length = stream.Read<int>();
+            var length = stream.ReadCompact<int>();
             var results = new T[length];
 
             var tSpan = results.AsSpan();

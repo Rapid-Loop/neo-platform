@@ -32,8 +32,7 @@ namespace Neo.Core.Extensions
         /// </summary>
         public static byte[] Xor(this byte[] x, byte[] y)
         {
-            if (x.Length != y.Length)
-                throw new ArgumentException($"Array lengths must be equal. x.Length={x.Length}, y.Length={y.Length}");
+            ArgumentOutOfRangeException.ThrowIfNotEqual(y.Length, x.Length, nameof(y));
 
             var xorByteArray = GC.AllocateUninitializedArray<byte>(x.Length, false);
             var i = 0;

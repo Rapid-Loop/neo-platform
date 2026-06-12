@@ -20,9 +20,10 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.Cryptography;
 using System;
 
-namespace Neo.Cryptography.Tests
+namespace Neo.Core.Tests.Cryptography
 {
     [TestClass]
     public class UT_SCrypt

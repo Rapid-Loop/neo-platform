@@ -21,7 +21,7 @@
 // SERVICES
 
 using Neo.Configuration.Interfaces;
-using Neo.Cryptography.ECC;
+using Neo.Core.Cryptography.ECC;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -48,7 +48,7 @@ namespace Neo.Configuration.Json
 
         public string[]? SeedList { get; set; }
 
-        public IDictionary<Hardfork, uint>? Hardforks { get; set; }
+        public IDictionary<Hardfork, uint>? HardForks { get; set; }
 
         public ECPoint[]? StandbyCommittee { get; set; }
 
@@ -64,7 +64,7 @@ namespace Neo.Configuration.Json
                 InitialGasDistribution = InitialGasDistribution,
                 ValidatorsCount = ValidatorsCount,
                 SeedList = SeedList ?? [],
-                Hardforks = Hardforks?.ToImmutableDictionary() ?? [],
+                HardForks = HardForks?.ToImmutableDictionary() ?? [],
                 StandbyCommittee = StandbyCommittee?.ToList() ?? [],
             };
     }

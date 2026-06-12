@@ -22,7 +22,7 @@
 
 using Neo.Configuration.Interfaces;
 using Neo.Configuration.Json;
-using Neo.Cryptography.ECC;
+using Neo.Core.Cryptography.ECC;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -93,9 +93,9 @@ namespace Neo.Configuration
         public uint MaxTraceableBlocks { get; init; }
 
         /// <summary>
-        /// Sets the block height from which a hardfork is activated.
+        /// Sets the block height from which a hard fork is activated.
         /// </summary>
-        public IReadOnlyDictionary<Hardfork, uint> Hardforks { get; init; } = Enum.GetValues<Hardfork>().ToImmutableDictionary(k => k, v => 0u);
+        public IReadOnlyDictionary<Hardfork, uint> HardForks { get; init; } = Enum.GetValues<Hardfork>().ToImmutableDictionary(k => k, v => 0u);
 
         /// <summary>
         /// Indicates the amount of gas to distribute during initialization.
@@ -139,7 +139,7 @@ namespace Neo.Configuration
                 MemoryPoolMaxTransactions = MemoryPoolMaxTransactions,
                 MaxTraceableBlocks = MaxTraceableBlocks,
                 InitialGasDistribution = InitialGasDistribution,
-                Hardforks = Hardforks.ToDictionary(),
+                HardForks = HardForks.ToDictionary(),
             };
     }
 }

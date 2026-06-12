@@ -24,7 +24,7 @@ using System;
 using System.Numerics;
 using CECCurve = System.Security.Cryptography.ECCurve;
 
-namespace Neo.Cryptography.ECC
+namespace Neo.Core.Cryptography.ECC
 {
     public class ECCurve
     {

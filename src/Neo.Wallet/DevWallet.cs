@@ -23,9 +23,9 @@
 using Neo.Configuration;
 using Neo.Configuration.Interfaces;
 using Neo.Core;
+using Neo.Core.Cryptography.ECC;
 using Neo.Core.Extensions;
-using Neo.Cryptography.ECC;
-using Neo.SmartContract;
+using Neo.Core.SmartContract;
 using Neo.Wallet.Cryptography;
 using Neo.Wallet.Json;
 using System;

@@ -40,6 +40,7 @@ namespace Neo.Configuration.Tests
             UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
             WriteIndented = false,
             RespectNullableAnnotations = false,
+            PropertyNameCaseInsensitive = true,
             Converters =
             {
                 // TODO: Make sure you add the same converters from JsonDefaults.SerializerOptions.Converters

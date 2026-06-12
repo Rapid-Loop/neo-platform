@@ -40,6 +40,7 @@ namespace Neo.Configuration.Json
             UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
             WriteIndented = true,
             RespectNullableAnnotations = true,
+            PropertyNameCaseInsensitive = true,
             Converters =
             {
                 // TODO: Add more defaults for NEP-6

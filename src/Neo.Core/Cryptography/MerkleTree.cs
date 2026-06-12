@@ -20,14 +20,13 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core;
 using Neo.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace Neo.Cryptography
+namespace Neo.Core.Cryptography
 {
     public class MerkleTree
     {

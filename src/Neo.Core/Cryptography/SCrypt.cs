@@ -20,11 +20,10 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core;
 using System;
 using System.Security.Cryptography;
 
-namespace Neo.Cryptography
+namespace Neo.Core.Cryptography
 {
     public static class SCrypt
     {

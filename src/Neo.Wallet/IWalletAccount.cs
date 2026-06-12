@@ -23,8 +23,7 @@
 using Neo.Configuration;
 using Neo.Core;
 using Neo.Core.Cryptography;
-using Neo.Cryptography;
-using Neo.SmartContract;
+using Neo.Core.SmartContract;
 
 namespace Neo.Wallet
 {

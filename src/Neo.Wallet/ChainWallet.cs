@@ -21,9 +21,9 @@
 // SERVICES
 
 using Neo.Configuration.Json;
+using Neo.Core.Cryptography;
 using Neo.Core.Extensions;
 using Neo.Core.Text;
-using Neo.Cryptography;
 using Neo.Wallet.Cryptography;
 using Neo.Wallet.Json;
 using System;
@@ -66,9 +66,9 @@ namespace Neo.Wallet
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             var salt = RandomNumberGenerator.GetBytes(SaltLengthInBytes);
 
-            var scrypt = SCrypt.Generate(passwordBytes, salt, scryptParameters.N, scryptParameters.R, scryptParameters.P, SCryptKeyLengthInBytes);
-            var derivedHalf1 = scrypt[..32];
-            var derivedHalf2 = scrypt[32..];
+            var sCrypt = SCrypt.Generate(passwordBytes, salt, scryptParameters.N, scryptParameters.R, scryptParameters.P, SCryptKeyLengthInBytes);
+            var derivedHalf1 = sCrypt[..32];
+            var derivedHalf2 = sCrypt[32..];
 
             var ciphertextBytes = AesEncryptECB(privateKeyBytes.Xor(derivedHalf1), derivedHalf2);
 

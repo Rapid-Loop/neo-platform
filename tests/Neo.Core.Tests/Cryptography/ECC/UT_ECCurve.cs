@@ -20,7 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Cryptography.ECC;
+using Neo.Core.Cryptography.ECC;
 using System;
 
 namespace Neo.Core.Tests.Cryptography.ECC

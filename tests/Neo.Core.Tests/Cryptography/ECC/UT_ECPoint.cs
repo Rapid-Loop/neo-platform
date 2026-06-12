@@ -20,8 +20,8 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.Cryptography.ECC;
 using Neo.Core.Extensions;
-using Neo.Cryptography.ECC;
 using System;
 
 namespace Neo.Core.Tests.Cryptography.ECC
@@ -84,7 +84,7 @@ namespace Neo.Core.Tests.Cryptography.ECC
         }
 
         [TestMethod]
-        public void TestEquatable()
+        public void TestIEquatable()
         {
             var expectedPoint = ECPoint.FromPrivateKey(s_privateKeyBytes, ECCurve.SecP256r1);
             var actualPoint = ECPoint.FromPrivateKey(s_privateKeyBytes, ECCurve.SecP256r1);

@@ -20,7 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.Cryptography.ECC
+namespace Neo.Core.Cryptography.ECC
 {
     public enum ECCurveName : byte
     {

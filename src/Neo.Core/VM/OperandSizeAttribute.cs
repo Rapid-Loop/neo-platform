@@ -22,7 +22,7 @@
 
 using System;
 
-namespace Neo.VM
+namespace Neo.Core.VM
 {
     /// <summary>
     /// Indicates the operand length of an <see cref="OpCode"/>.

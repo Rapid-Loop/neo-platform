@@ -23,7 +23,7 @@
 using Neo.Configuration.Interfaces;
 using Neo.Configuration.Json;
 using Neo.Configuration.Json.Converters;
-using Neo.SmartContract;
+using Neo.Core.SmartContract;
 using System.Linq;
 using System.Text.Json.Serialization;
 

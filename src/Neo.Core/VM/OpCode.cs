@@ -20,7 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.VM
+namespace Neo.Core.VM
 {
     /// <summary>
     /// Represents the opcode of an <see cref="VMInstruction"/>.

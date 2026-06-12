@@ -20,8 +20,8 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.Cryptography;
 using Neo.Core.Extensions;
-using Neo.Cryptography;
 using System.Linq;
 using System.Security.Cryptography;
 

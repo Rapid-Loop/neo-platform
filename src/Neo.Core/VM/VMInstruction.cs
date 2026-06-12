@@ -20,7 +20,6 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core;
 using System;
 using System.Buffers.Binary;
 using System.Collections;
@@ -33,7 +32,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Neo.VM
+namespace Neo.Core.VM
 {
     [DebuggerDisplay("OpCode={OpCode}, OperandSize={OperandSize}")]
     public sealed class VMInstruction : IEnumerable<VMInstruction>

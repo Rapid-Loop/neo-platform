@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.Core.Extensions;
+using Neo.Core.VM;
 using Neo.VM.Types;
 using System.Numerics;
 

@@ -20,15 +20,13 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core;
+using Neo.Core.Cryptography.ECC;
 using Neo.Core.Extensions;
-using Neo.Core.SmartContract;
-using Neo.Cryptography.ECC;
-using Neo.VM;
+using Neo.Core.VM;
 using System;
 using System.Linq;
 
-namespace Neo.SmartContract
+namespace Neo.Core.SmartContract
 {
     /// <summary>
     /// Represents a contract that can be invoked.
@@ -104,7 +102,7 @@ namespace Neo.SmartContract
         public static byte[] CreateMultiSigRedeemScript(int m, params ECPoint[] publicKeys)
         {
             if (!(1 <= m && m <= publicKeys.Length && publicKeys.Length <= 1024))
-                throw new ArgumentException($"Invalid multisig parameters: m={m}, publicKeys.Count={publicKeys.Length}");
+                throw new ArgumentException($"Invalid multi-signature parameters: m={m}, publicKeys.Count={publicKeys.Length}");
 
             using var sb = new ScriptBuilder();
             sb.EmitPush(m);

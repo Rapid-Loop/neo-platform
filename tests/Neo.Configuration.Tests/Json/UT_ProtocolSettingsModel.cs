@@ -21,7 +21,7 @@
 // SERVICES
 
 using Neo.Configuration.Json;
-using Neo.Cryptography.ECC;
+using Neo.Core.Cryptography.ECC;
 
 namespace Neo.Configuration.Tests.Json
 {
@@ -45,8 +45,8 @@ namespace Neo.Configuration.Tests.Json
             Assert.AreEqual(5_200_000_000_000_000uL, actualProtocolOptionsModel.InitialGasDistribution);
             Assert.AreEqual(1, actualProtocolOptionsModel.ValidatorsCount);
 
-            Assert.IsNotNull(actualProtocolOptionsModel.Hardforks);
-            Assert.AreEqual(666u, actualProtocolOptionsModel.Hardforks[Hardfork.HF_Aspidochelone]);
+            Assert.IsNotNull(actualProtocolOptionsModel.HardForks);
+            Assert.AreEqual(666u, actualProtocolOptionsModel.HardForks[Hardfork.HF_Aspidochelone]);
 
             Assert.IsNotNull(actualProtocolOptionsModel.StandbyCommittee);
             Assert.AreEqual(ECPoint.Parse("03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c", ECCurve.SecP256r1), actualProtocolOptionsModel.StandbyCommittee[0]);
@@ -74,8 +74,8 @@ namespace Neo.Configuration.Tests.Json
             Assert.AreEqual(5_200_000_000_000_000uL, actualProtocolSettings.InitialGasDistribution);
             Assert.AreEqual(1, actualProtocolSettings.ValidatorsCount);
 
-            Assert.IsNotNull(actualProtocolSettings.Hardforks);
-            Assert.AreEqual(666u, actualProtocolSettings.Hardforks[Hardfork.HF_Aspidochelone]);
+            Assert.IsNotNull(actualProtocolSettings.HardForks);
+            Assert.AreEqual(666u, actualProtocolSettings.HardForks[Hardfork.HF_Aspidochelone]);
 
             Assert.IsNotNull(actualProtocolSettings.StandbyCommittee);
             Assert.AreEqual(ECPoint.Parse("03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c", ECCurve.SecP256r1), actualProtocolSettings.StandbyCommittee[0]);

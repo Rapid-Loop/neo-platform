@@ -23,7 +23,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace Neo.Cryptography
+namespace Neo.Core.Cryptography
 {
     public class RipeMD160 : HashAlgorithm
     {

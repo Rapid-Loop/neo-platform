@@ -29,7 +29,7 @@ using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
 
-namespace Neo.Cryptography.ECC
+namespace Neo.Core.Cryptography.ECC
 {
     public class ECPoint : IEquatable<ECPoint>, IComparable, IComparable<ECPoint>, INeoSerializable
     {

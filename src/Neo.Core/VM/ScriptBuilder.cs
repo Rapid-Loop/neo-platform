@@ -20,15 +20,15 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core;
 using Neo.Core.Extensions;
+using Neo.Core.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 
-namespace Neo.VM
+namespace Neo.Core.VM
 {
     /// <summary>
     /// A helper class for building scripts.
@@ -318,6 +318,9 @@ namespace Neo.VM
                     break;
                 case Enum data:
                     EmitPush(BigInteger.Parse(data.ToString("d")));
+                    break;
+                case INeoSerializable data:
+                    EmitPush(data.ToArray());
                     break;
                 case null:
                     Emit(OpCode.PUSHNULL);

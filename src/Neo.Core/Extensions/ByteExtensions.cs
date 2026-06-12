@@ -20,8 +20,8 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.Cryptography;
 using Neo.Core.Serialization;
-using Neo.Cryptography;
 using System;
 using System.IO;
 using System.Numerics;

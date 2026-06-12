@@ -22,7 +22,7 @@
 
 using Neo.Configuration;
 using Neo.Core;
-using Neo.Cryptography.ECC;
+using Neo.Core.Cryptography.ECC;
 using Neo.Wallet.Cryptography;
 using System;
 using System.Collections.Generic;

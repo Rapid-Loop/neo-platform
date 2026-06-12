@@ -23,7 +23,6 @@
 using Neo.Configuration.Json;
 using Neo.Configuration.Json.Converters;
 using Neo.Core;
-using Neo.Cryptography;
 using System.Text.Json.Serialization;
 
 namespace Neo.Wallet.Json

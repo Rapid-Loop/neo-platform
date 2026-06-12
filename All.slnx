@@ -1,7 +1,4 @@
 <Solution>
-  <Folder Name="/shared/">
-    <Project Path="src/Neo.Shared/Neo.Shared.shproj" Id="f03b5a0f-467b-4847-a694-318a605b2381" />
-  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Neo.Configuration/Neo.Configuration.csproj" Id="c4462615-3b84-448c-979e-2413261b5041" />
     <Project Path="src/Neo.Core/Neo.Core.csproj" />

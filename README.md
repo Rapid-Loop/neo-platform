@@ -1,5 +1,6 @@
-# NEO Platform - C# Blockchain SDK
 ![NEO Logo](/.images/logo.png)
+
+# NEO Platform - C# Blockchain SDK
 
 [![License](https://img.shields.io/github/license/Rapid-Loop/neo-platform)](https://github.com/Rapid-Loop/neo-platform/blob/master/LICENSE)
 [![Stars](https://img.shields.io/github/stars/Rapid-Loop/neo-platform)](https://github.com/Rapid-Loop/neo-platform/stargazers)

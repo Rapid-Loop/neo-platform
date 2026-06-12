@@ -28,7 +28,7 @@ using System.Runtime.InteropServices;
 
 namespace Neo.VM.Types
 {
-    public class VMInteropInterface : VMObject
+    public class VMInteropInterface : VMObject, IEquatable<VMInteropInterface>
     {
         public override VMObjectType Type => VMObjectType.InteropInterface;
 
@@ -48,9 +48,25 @@ namespace Neo.VM.Types
             _interfaceName = name;
         }
 
+        public bool Equals(VMInteropInterface? other)
+        {
+            if (ReferenceEquals(other, this)) return true;
+            if (other is null) return false;
+            if (RefCount != other.RefCount) return false;
+            return Equals(_underlyingObject, other._underlyingObject) &&
+                string.Equals(_interfaceName, other._interfaceName);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(obj, this)) return true;
+            if (obj is null) return false;
+            return Equals(obj as VMInteropInterface);
+        }
+
         public override int GetHashCode()
         {
-            return HashCode.Combine(_underlyingObject, _interfaceName);
+            return HashCode.Combine(RefCount, _underlyingObject, _interfaceName);
         }
 
         protected override void Dispose(bool disposing)
@@ -73,7 +89,7 @@ namespace Neo.VM.Types
             var size = Marshal.SizeOf(_underlyingObject);
 
             if (size <= 0)
-                return [];
+                return CoreUtilities.StrictUtf8Encoding.GetBytes(_interfaceName);
 
             var bytes = GC.AllocateUninitializedArray<byte>(size);
             var ptr = Marshal.AllocHGlobal(size);
@@ -108,7 +124,7 @@ namespace Neo.VM.Types
             return _underlyingObject != null;
         }
 
-        public T GetInterface<T>()
+        public T CastTo<T>()
         {
             if (_underlyingObject is T t)
                 return t;

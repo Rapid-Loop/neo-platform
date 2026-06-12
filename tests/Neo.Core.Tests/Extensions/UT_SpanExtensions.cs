@@ -30,11 +30,11 @@ namespace Neo.Core.Tests.Extensions
     public class UT_SpanExtensions
     {
         [TestMethod]
-        public void TestGetByteCount()
+        public void TestSerializedSize()
         {
             Span<uint> expectedIntSpan = [1u, 0xfffffffe];
 
-            var actualByteCount = expectedIntSpan.GetByteCount();
+            var actualByteCount = expectedIntSpan.GetSerializedSize();
 
             using var ms = new MemoryStream();
             ms.Write(expectedIntSpan.ToArray());

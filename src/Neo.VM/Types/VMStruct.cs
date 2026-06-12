@@ -37,11 +37,11 @@ namespace Neo.VM.Types
             // Important: Use a mapping to handle cycles during cloning
             var objectMap = new Dictionary<VMObject, VMObject>();
 
-            _array.ForEach(i =>
+            Array.ForEach(i =>
             {
                 if (i is null || i is VMNull)
                 {
-                    clone._array.Add(VMNull.Instance);
+                    clone.Array.Add(VMNull.Instance);
                     return;
                 }
 
@@ -49,13 +49,13 @@ namespace Neo.VM.Types
                 {
                     // Cycle detected during cloning - reuse the cloned object
                     alreadyCloned.AddReference();
-                    clone._array.Add(alreadyCloned);
+                    clone.Array.Add(alreadyCloned);
                 }
                 else
                 {
                     var clonedItem = i.Clone();
                     objectMap[i] = clonedItem;
-                    clone._array.Add(clonedItem);
+                    clone.Array.Add(clonedItem);
                 }
             });
 

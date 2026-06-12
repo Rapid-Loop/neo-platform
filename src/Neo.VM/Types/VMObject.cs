@@ -21,7 +21,7 @@
 // SERVICES
 
 using Neo.Core;
-using Neo.VM.Interfaces;
+using Neo.Core.VM.Interface;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -45,10 +45,11 @@ namespace Neo.VM.Types
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
+            if (obj is null) return false;
             return Equals(obj as VMObject);
         }
 
-        public virtual bool Equals(VMObject? other)
+        public bool Equals(VMObject? other)
         {
             if (other is null) return false;
             if (Type != other.Type) return false;

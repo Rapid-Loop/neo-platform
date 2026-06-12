@@ -71,13 +71,13 @@ namespace Neo.Core.Extensions
         /// Converts a byte array to an <see cref="INeoSerializable"/> object.
         /// </summary>
         /// <typeparam name="T">The type to convert to.</typeparam>
-        /// <param name="array">The byte array to be converted.</param>
+        /// <param name="data">The byte array to be converted.</param>
         /// <param name="startIndex">The offset into the byte array from which to begin using data.</param>
         /// <returns>The converted <see cref="INeoSerializable"/> object.</returns>
-        public static T? AsSerializable<T>(this byte[] array, int startIndex = 0)
+        public static T? AsSerializable<T>(this byte[] data, int startIndex = 0)
             where T : class?, INeoSerializable?
         {
-            using var ms = new MemoryStream(array, false);
+            using var ms = new MemoryStream(data, false);
             ms.Seek(startIndex, SeekOrigin.Begin);
 
             var newObject = RuntimeHelpers.GetUninitializedObject(typeof(T)) as T;
@@ -85,6 +85,9 @@ namespace Neo.Core.Extensions
 
             return newObject;
         }
+
+        public static int GetSerializedSize(this byte[] data) =>
+            data.Length.GetCompactSize() + data.Length;
 
         public static UInt160 ToScriptHash(this byte[] data) =>
             new(data.ToHash160());
@@ -97,5 +100,14 @@ namespace Neo.Core.Extensions
 
         public static byte[] ToHash160(this byte[] data) =>
             data.ToSha256().ToRipeMD160();
+
+        public static UInt256 ToTxHash(this byte[] data) =>
+            new(data.ToSha256());
+        public static int ToHashCode(this byte[] data, int seed = 397) =>
+            data.Aggregate(seed,
+                (hash, b) =>
+                        unchecked((hash * 31) ^ b)
+                );
+
     }
 }

@@ -20,29 +20,10 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core.Serialization;
-using System.IO;
-using System.Linq;
-
-namespace Neo.Core.Extensions
+namespace Neo.Core.Blockchain.Interface
 {
-    public static class INeoSerializableExtensions
+    public interface IInventory
     {
-        /// <summary>
-        /// Converts an <see cref="INeoSerializable"/> object to a byte array.
-        /// </summary>
-        /// <param name="source">The <see cref="INeoSerializable"/> object to be converted.</param>
-        /// <returns>The converted byte array.</returns>
-        public static byte[] ToArray(this INeoSerializable source)
-        {
-            using var ms = new MemoryStream();
-
-            source.Serialize(ms);
-            return ms.ToArray();
-        }
-
-        public static int GetSerializedSize(this INeoSerializable[] source) =>
-            source.Length.GetCompactSize() +
-            (source.Length * source.Sum(s => s.Size));
+        InventoryType InventoryType { get; }
     }
 }

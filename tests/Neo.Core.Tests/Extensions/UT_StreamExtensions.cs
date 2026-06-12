@@ -74,7 +74,7 @@ namespace Neo.Core.Tests.Extensions
             Assert.AreEqual("Hello", ms.ReadString());
 
             uint[] expectedArrayData = [0xd0d1d2d3];
-            var actualArrayData = ms.ReadArray<uint>();
+            var actualArrayData = ms.ReadDynamic<uint>();
 
             Assert.HasCount(1, actualArrayData);
             CollectionAssert.AreEqual(expectedArrayData, actualArrayData);

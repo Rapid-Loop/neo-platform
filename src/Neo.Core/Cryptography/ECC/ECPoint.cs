@@ -25,7 +25,6 @@ using Neo.Core.Serialization;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
 
@@ -124,20 +123,14 @@ namespace Neo.Core.Cryptography.ECC
 
         public override bool Equals(object? obj)
         {
-            if (ReferenceEquals(this, obj))
-                return true;
-
-            if (obj is null)
-                return false;
-
+            if (ReferenceEquals(obj, this)) return true;
+            if (obj is null) return false;
             return Equals(obj as ECPoint);
         }
 
         public override int GetHashCode()
         {
-            return _uncompressed.Aggregate((int)_curve.Name,
-                (hash, b) =>
-                    (hash * 31) ^ b);
+            return _uncompressed.ToHashCode();
         }
 
         [return: MaybeNull]
@@ -148,6 +141,7 @@ namespace Neo.Core.Cryptography.ECC
 
         public bool Equals(ECPoint? other)
         {
+            if (ReferenceEquals(other, this)) return true;
             if (other is null) return false;
             if (_curve != other._curve) return false;
             return _x == other._x && _y == other._y;

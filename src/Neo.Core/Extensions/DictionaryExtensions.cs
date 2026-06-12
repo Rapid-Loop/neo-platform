@@ -20,29 +20,23 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core.Serialization;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Neo.Core.Extensions
 {
-    public static class INeoSerializableExtensions
+    public static class DictionaryExtensions
     {
-        /// <summary>
-        /// Converts an <see cref="INeoSerializable"/> object to a byte array.
-        /// </summary>
-        /// <param name="source">The <see cref="INeoSerializable"/> object to be converted.</param>
-        /// <returns>The converted byte array.</returns>
-        public static byte[] ToArray(this INeoSerializable source)
-        {
-            using var ms = new MemoryStream();
+        public static int ToHashCode<TKey, TValue>(this IDictionary<TKey, TValue> source, int seed = 397) =>
+            source.Aggregate(seed,
+                (hash, b) =>
+                       unchecked((hash * 31) + ((b.Key?.GetHashCode() ?? 0) ^ (b.Value?.GetHashCode() ?? 0)))
+                );
 
-            source.Serialize(ms);
-            return ms.ToArray();
-        }
-
-        public static int GetSerializedSize(this INeoSerializable[] source) =>
-            source.Length.GetCompactSize() +
-            (source.Length * source.Sum(s => s.Size));
+        public static int ToHashCode<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> source, int seed = 397) =>
+            source.Aggregate(seed,
+                (hash, b) =>
+                        unchecked((hash * 31) + ((b.Key?.GetHashCode() ?? 0) ^ (b.Value?.GetHashCode() ?? 0)))
+                );
     }
 }

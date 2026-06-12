@@ -22,6 +22,7 @@
 
 using Neo.Core.Extensions;
 using System;
+using System.IO;
 
 namespace Neo.Core.Tests.Extensions
 {
@@ -54,6 +55,22 @@ namespace Neo.Core.Tests.Extensions
             CollectionAssert.AreEqual(expectedBytes3, actualXorByte3);
 
             Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new byte[0].Xor(new byte[ushort.MaxValue]));
+        }
+
+        [TestMethod]
+        public void TestSerializedSize()
+        {
+            byte[] expectedBytes = [0xad, 0xde];
+
+            var actualByteCount = expectedBytes.GetSerializedSize();
+
+            using var ms = new MemoryStream();
+            ms.Write<byte>(expectedBytes);
+
+            var actualBytes = ms.ToArray();
+
+            Assert.AreEqual(3, actualByteCount);
+            Assert.HasCount(3, actualBytes);
         }
     }
 }

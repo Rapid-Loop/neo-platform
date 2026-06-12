@@ -30,11 +30,11 @@ namespace Neo.Core.Tests.Extensions
     public class UT_MemoryExtensions
     {
         [TestMethod]
-        public void TestGetByteCount()
+        public void TestSerializedSize()
         {
             Memory<uint> expectedIntMemory = (uint[])[1u, 0xfffffffe];
 
-            var actualByteCount = expectedIntMemory.GetByteCount();
+            var actualByteCount = expectedIntMemory.GetSerializedSize();
 
             using var ms = new MemoryStream();
             ms.Write(expectedIntMemory.ToArray());

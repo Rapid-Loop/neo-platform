@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.Serialization;
 using System;
 using System.IO;
 using System.Numerics;
@@ -95,6 +96,10 @@ namespace Neo.Core.Extensions
         }
 
         public static void Write<T>(this Stream stream, Span<T> values)
+            where T : unmanaged =>
+            stream.Write((ReadOnlySpan<T>)values);
+
+        public static void Write<T>(this Stream stream, ReadOnlySpan<T> values)
             where T : unmanaged
         {
             if (stream.CanWrite == false)
@@ -137,6 +142,18 @@ namespace Neo.Core.Extensions
             stream.WriteCompact(byteLength);
             stream.WriteCompact(value.Length);
             stream.Write(byteSpan);
+        }
+
+        public static void WriteObjects<T>(this Stream stream, T[] values)
+            where T : INeoSerializable
+        {
+            if (stream.CanWrite == false)
+                throw new NotSupportedException("Stream does not support writing.");
+
+            stream.WriteCompact(values.Length);
+
+            foreach (var t in values)
+                t.Serialize(stream);
         }
 
         public static T ReadCompact<T>(this Stream stream) where T : unmanaged, IBinaryInteger<T>
@@ -224,7 +241,7 @@ namespace Neo.Core.Extensions
             return encoding.GetString(bytes);
         }
 
-        public static T[] ReadArray<T>(this Stream stream)
+        public static T[] ReadDynamic<T>(this Stream stream)
             where T : unmanaged
         {
             if (stream.CanRead == false)
@@ -239,6 +256,24 @@ namespace Neo.Core.Extensions
             var tSpan = results.AsSpan();
             var span = MemoryMarshal.AsBytes(tSpan);
             stream.ReadExactly(span);
+
+            return results;
+        }
+
+        public static T[] ReadObjects<T>(this Stream stream)
+            where T : INeoSerializable
+        {
+            if (stream.CanRead == false)
+                throw new NotSupportedException("Stream does not support reading.");
+
+            if (typeof(T) == typeof(char))
+                throw new NotImplementedException($"\'{typeof(T).FullName}\' type is not supported.");
+
+            var length = stream.ReadCompact<int>();
+            var results = new T[length];
+
+            foreach (var t in results)
+                t.Deserialize(stream);
 
             return results;
         }

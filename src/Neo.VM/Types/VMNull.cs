@@ -25,7 +25,7 @@ using System.Numerics;
 
 namespace Neo.VM.Types
 {
-    public class VMNull : VMObject
+    public class VMNull : VMObject, IEquatable<VMNull>
     {
         public override VMObjectType Type => VMObjectType.Any;
 
@@ -42,7 +42,15 @@ namespace Neo.VM.Types
 
         public override bool Equals(object? obj)
         {
-            return obj is VMNull || obj is null;
+            if (ReferenceEquals(obj, this)) return true;
+            if (obj is null) return true;
+            return Equals(obj as VMNull);
+        }
+
+        public bool Equals(VMNull? other)
+        {
+            if (ReferenceEquals(other, this)) return true;
+            return other is null;
         }
 
         public override int GetHashCode()

@@ -21,11 +21,12 @@
 // SERVICES
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Neo.VM.Types
 {
-    public class VMBoolean : VMObject
+    public class VMBoolean : VMObject, IEquatable<VMBoolean>
     {
         public override VMObjectType Type => VMObjectType.Boolean;
 
@@ -36,12 +37,28 @@ namespace Neo.VM.Types
             _value = value;
         }
 
+        public bool Equals(VMBoolean? other)
+        {
+            if (ReferenceEquals(other, this)) return true;
+            if (other is null) return false;
+            if (RefCount != other.RefCount) return false;
+            return _value == other._value;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(obj, this)) return true;
+            if (obj is null) return false;
+            return Equals(obj as VMBoolean);
+        }
+
         public override int GetHashCode()
         {
             return _value ? 1 : 0;
         }
 
-        public override string ToString()
+        [return: MaybeNull]
+        public override string? ToString()
         {
             return _value.ToString();
         }

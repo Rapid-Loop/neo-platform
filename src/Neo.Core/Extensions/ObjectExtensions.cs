@@ -20,29 +20,15 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core.Serialization;
-using System.IO;
-using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Neo.Core.Extensions
 {
-    public static class INeoSerializableExtensions
+    public static class ObjectExtensions
     {
-        /// <summary>
-        /// Converts an <see cref="INeoSerializable"/> object to a byte array.
-        /// </summary>
-        /// <param name="source">The <see cref="INeoSerializable"/> object to be converted.</param>
-        /// <returns>The converted byte array.</returns>
-        public static byte[] ToArray(this INeoSerializable source)
-        {
-            using var ms = new MemoryStream();
-
-            source.Serialize(ms);
-            return ms.ToArray();
-        }
-
-        public static int GetSerializedSize(this INeoSerializable[] source) =>
+        public static int GetSerializedSize<TSource>(this TSource[] source)
+            where TSource : unmanaged =>
             source.Length.GetCompactSize() +
-            (source.Length * source.Sum(s => s.Size));
+            (source.Length * Unsafe.SizeOf<TSource>());
     }
 }

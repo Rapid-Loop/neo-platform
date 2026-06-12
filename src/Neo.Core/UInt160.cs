@@ -45,7 +45,7 @@ namespace Neo.Core
         /// <summary>
         /// Represents 0.
         /// </summary>
-        public readonly static UInt160 Zero = new();
+        public static UInt160 Zero => new();
 
         [FieldOffset(0)] private ulong _value1;
         [FieldOffset(8)] private ulong _value2;
@@ -87,8 +87,6 @@ namespace Neo.Core
             return _value1.CompareTo(other._value1);
         }
 
-
-        /// <inheritdoc/>
         public void Deserialize(Stream reader)
         {
             _value1 = reader.Read<ulong>();
@@ -112,10 +110,18 @@ namespace Neo.Core
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_value1, _value2, _value3);
+            unchecked
+            {
+                var hash = 397;   // ← Prime seed
+
+                hash *= 31 ^ _value1.GetHashCode();
+                hash *= 31 ^ _value2.GetHashCode();
+                hash *= 31 ^ _value3.GetHashCode();
+
+                return hash;
+            }
         }
 
-        /// <inheritdoc/>
         public void Serialize(Stream writer)
         {
             writer.Write(_value1);

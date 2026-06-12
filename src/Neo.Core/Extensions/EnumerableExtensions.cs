@@ -20,13 +20,17 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Neo.VM.Interfaces
+namespace Neo.Core.Extensions
 {
-    internal interface IVMComponent : IDisposable
+    public static class EnumerableExtensions
     {
-        int Size { get; }
-        int RefCount { get; }
+        public static int ToHashCode<TSource>(this IEnumerable<TSource> source, int seed = 397) =>
+            source.Aggregate(seed,
+                (hash, b) =>
+                        unchecked((hash * 31) ^ (b?.GetHashCode() ?? 0))
+                );
     }
 }

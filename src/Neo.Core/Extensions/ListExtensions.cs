@@ -20,23 +20,23 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.Core.Blockchain
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Neo.Core.Extensions
 {
-    public class Witness
+    public static class ListExtensions
     {
-        public const int MaxInvocationScript = 1024;
-        public const int MaxVerificationScript = 1024;
+        public static int ToHashCode<TSource>(this IList<TSource> source, int seed = 397) =>
+            source.Aggregate(seed,
+                (hash, b) =>
+                        unchecked((hash * 31) ^ (b?.GetHashCode() ?? 0))
+                );
 
-
-        /// <summary>
-        /// The invocation script of the witness. Used to pass arguments for <see cref="VerificationScript"/>.
-        /// </summary>
-        public byte[] InvocationScript { get; set; } = [];
-
-        /// <summary>
-        /// The verification script of the witness. It can be empty if the contract is deployed.
-        /// </summary>
-        public byte[] VerificationScript { get; set; } = [];
-
+        public static int ToHashCode<TSource>(this IReadOnlyList<TSource> source, int seed = 397) =>
+            source.Aggregate(seed,
+                (hash, b) =>
+                        unchecked((hash * 31) ^ (b?.GetHashCode() ?? 0))
+                );
     }
 }

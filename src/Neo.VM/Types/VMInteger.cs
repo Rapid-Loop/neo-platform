@@ -25,7 +25,7 @@ using System.Numerics;
 
 namespace Neo.VM.Types
 {
-    public class VMInteger : VMObject
+    public class VMInteger : VMObject, IEquatable<VMInteger>
     {
         public const int MaxSize = 32;
 
@@ -48,6 +48,7 @@ namespace Neo.VM.Types
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
+            if (obj is null) return false;
             return Equals(obj as VMInteger);
         }
 
@@ -78,6 +79,14 @@ namespace Neo.VM.Types
         public override ReadOnlySpan<byte> GetReadOnlySpan()
         {
             return _value.ToByteArray();
+        }
+
+        public bool Equals(VMInteger? other)
+        {
+            if (ReferenceEquals(other, this)) return true;
+            if (other is null) return false;
+            if (RefCount != other.RefCount) return false;
+            return _value == other._value;
         }
 
         public static VMInteger operator +(VMInteger a, VMInteger b)
@@ -155,8 +164,7 @@ namespace Neo.VM.Types
         public static bool operator ==(VMInteger a, VMInteger b)
         {
             if (ReferenceEquals(a, b)) return true;
-            if (a is null || b is null) return false;
-            return a._value == b._value;
+            return a.Equals(b);
         }
 
         public static bool operator !=(VMInteger a, VMInteger b) =>

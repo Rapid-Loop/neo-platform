@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ using System.Numerics;
 
 namespace Neo.VM.Types
 {
-    public class VMMap : VMObject, IDictionary<VMObject, VMObject>, IReadOnlyDictionary<VMObject, VMObject>
+    public class VMMap : VMObject, IEquatable<VMMap>, IDictionary<VMObject, VMObject>, IReadOnlyDictionary<VMObject, VMObject>
     {
         public const int MaxKeySize = 64;
 
@@ -93,16 +94,20 @@ namespace Neo.VM.Types
             base.Dispose(disposing);
         }
 
-        public override bool Equals(object? obj)
+        public bool Equals(VMMap? other)
         {
-            if (obj is VMMap other && other.Count == Count)
+            if (ReferenceEquals(other, this)) return true;
+            if (other is null) return false;
+            if (RefCount != other.RefCount) return false;
+
+            if (other.Count == Count)
             {
                 var children = GetChildren().ToArray();
                 var otherChildren = other.GetChildren().ToArray();
 
                 for (var i = 0; i < Count; i++)
                 {
-                    if (!Equals(children[i], otherChildren[i]))
+                    if (Equals(children[i], otherChildren[i]) == false)
                         return false;
                 }
 
@@ -112,11 +117,16 @@ namespace Neo.VM.Types
             return false;
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(obj, this)) return true;
+            if (obj is null) return false;
+            return Equals(obj as VMMap);
+        }
+
         public override int GetHashCode()
         {
-            return _map.ToArray().Aggregate(RefCount,
-                (hash, b) =>
-                        (hash * 31) + (b.Key.GetHashCode() ^ b.Value.GetHashCode()));
+            return ((IReadOnlyDictionary<VMObject, VMObject>)_map).ToHashCode(RefCount * 397);
         }
 
         public void Add(VMObject key, VMObject value)

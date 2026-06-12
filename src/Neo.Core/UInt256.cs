@@ -45,7 +45,7 @@ namespace Neo.Core
         /// <summary>
         /// Represents 0.
         /// </summary>
-        public static readonly UInt256 Zero = new();
+        public static UInt256 Zero => new();
 
         [FieldOffset(0)] private ulong _value1;
         [FieldOffset(8)] private ulong _value2;
@@ -69,6 +69,7 @@ namespace Neo.Core
                 throw new FormatException($"Invalid UInt256 length: expected {Length} bytes, but got {value.Length} bytes. UInt256 values must be exactly 32 bytes long.");
 
             var span = MemoryMarshal.CreateSpan(ref Unsafe.As<ulong, byte>(ref _value1), Length);
+
             value.CopyTo(span);
         }
 
@@ -90,7 +91,6 @@ namespace Neo.Core
             return _value1.CompareTo(other._value1);
         }
 
-        /// <inheritdoc/>
         public void Deserialize(Stream reader)
         {
             _value1 = reader.Read<ulong>();
@@ -116,7 +116,17 @@ namespace Neo.Core
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_value1, _value2, _value3, _value4);
+            unchecked
+            {
+                var hash = 397;   // ← Prime seed
+
+                hash *= 31 ^ _value1.GetHashCode();
+                hash *= 31 ^ _value2.GetHashCode();
+                hash *= 31 ^ _value3.GetHashCode();
+                hash *= 31 ^ _value4.GetHashCode();
+
+                return hash;
+            }
         }
 
         public void Serialize(Stream writer)

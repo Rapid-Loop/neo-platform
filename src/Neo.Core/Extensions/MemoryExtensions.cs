@@ -28,15 +28,15 @@ namespace Neo.Core.Extensions
 {
     public static class MemoryExtensions
     {
-        public static int GetByteCount<T>(this Memory<T> memory)
-            where T : unmanaged =>
+        public static int GetSerializedSize<TSource>(this Memory<TSource> memory)
+            where TSource : unmanaged =>
             memory.Length.GetCompactSize() +
-            (memory.Length * Unsafe.SizeOf<T>());
+            (memory.Length * Unsafe.SizeOf<TSource>());
 
-        public static int GetByteCount<T>(this ReadOnlyMemory<T> readOnlyMemory)
-            where T : unmanaged =>
+        public static int GetSerializedSize<TSource>(this ReadOnlyMemory<TSource> readOnlyMemory)
+            where TSource : unmanaged =>
             readOnlyMemory.Length.GetCompactSize() +
-            (readOnlyMemory.Length * Unsafe.SizeOf<T>());
+            (readOnlyMemory.Length * Unsafe.SizeOf<TSource>());
 
         /// <summary>
         /// Converts a byte array to an <see cref="INeoSerializable"/> object.
@@ -49,5 +49,45 @@ namespace Neo.Core.Extensions
             where T : class?, INeoSerializable? =>
             memory.ToArray()
                 .AsSerializable<T>(startIndex);
+
+        public static TAccumulate Aggregate<TSource, TAccumulate>(this Memory<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> func)
+        {
+            var val = seed;
+
+            ReadOnlySpan<TSource> readOnlySpan = source.Span;
+
+            for (var i = 0; i < readOnlySpan.Length; i++)
+            {
+                var arg = readOnlySpan[i];
+                val = func(val, arg);
+            }
+
+            return val;
+        }
+
+        public static TAccumulate Aggregate<TSource, TAccumulate>(this ReadOnlyMemory<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> func)
+        {
+            var val = seed;
+
+            for (var i = 0; i < source.Span.Length; i++)
+            {
+                var arg = source.Span[i];
+                val = func(val, arg);
+            }
+
+            return val;
+        }
+
+        public static int ToHashCode(this Memory<byte> data) =>
+            data.Aggregate(data.Length,
+                (hash, b) =>
+                        (hash * 31) ^ b
+                );
+
+        public static int ToHashCode(this ReadOnlyMemory<byte> data) =>
+            data.Aggregate(data.Length,
+                (hash, b) =>
+                        (hash * 31) ^ b
+                );
     }
 }

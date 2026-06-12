@@ -1,4 +1,5 @@
 # NEO Platform - C# Blockchain SDK
+![NEO Logo](/.images/logo.png)
 
 [![License](https://img.shields.io/github/license/Rapid-Loop/neo-platform)](https://github.com/Rapid-Loop/neo-platform/blob/master/LICENSE)
 [![Stars](https://img.shields.io/github/stars/Rapid-Loop/neo-platform)](https://github.com/Rapid-Loop/neo-platform/stargazers)
@@ -6,8 +7,6 @@
 [![Issues](https://img.shields.io/github/issues/Rapid-Loop/neo-platform)](https://github.com/Rapid-Loop/neo-platform/issues)
 [![Last Commit](https://img.shields.io/github/last-commit/Rapid-Loop/neo-platform)](https://github.com/Rapid-Loop/neo-platform/commits/master)
 [![Verify Pull Request](https://github.com/Rapid-Loop/neo-platform/actions/workflows/verify.yml/badge.svg)](https://github.com/Rapid-Loop/neo-platform/actions/workflows/verify.yml)
-
-![NEO Logo](/.images/logo.png)
 
 **Official Rapid Loop fork and enterprise-enhanced rebuild of the NEO Blockchain Smart Economy Platform.**
 

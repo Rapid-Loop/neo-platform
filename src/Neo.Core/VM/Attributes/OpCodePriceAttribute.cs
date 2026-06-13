@@ -22,22 +22,16 @@
 
 using System;
 
-namespace Neo.Core.VM
+namespace Neo.Core.VM.Attributes
 {
     /// <summary>
-    /// Indicates the operand length of an <see cref="OpCode"/>.
+    /// Indicates the price of an <see cref="OpCode"/>.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
-    public class OperandSizeAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
+    public class OpCodePriceAttribute : Attribute
     {
-        /// <summary>
-        /// When it is greater than 0, indicates the size of the operand.
-        /// </summary>
-        public int Size { get; set; }
+        public HardFork HardFork { get; set; }
 
-        /// <summary>
-        /// When it is greater than 0, indicates the size prefix of the operand.
-        /// </summary>
-        public int SizePrefix { get; set; }
+        public long Cost { get; set; }
     }
 }

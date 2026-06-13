@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.VM.Attributes;
 using System;
 using System.Buffers.Binary;
 using System.Collections;
@@ -89,6 +90,8 @@ namespace Neo.Core.VM
         {
             foreach (var field in typeof(OpCode).GetFields(BindingFlags.Public | BindingFlags.Static))
             {
+                if (field.IsLiteral == false) continue; // Skip non-enum values
+
                 var attr = field.GetCustomAttribute<OperandSizeAttribute>();
                 if (attr == null) continue;
 

@@ -75,19 +75,29 @@ namespace Neo.VM.Core
         /// </summary>
         public Dictionary<Type, object> State { get; } = [];
 
+        public HardFork HardFork => _fork;
+
+        public uint BlockHeight => _blockHeight;
+
         /// <summary>
         /// Invocation stack depth
         /// </summary>
         public int Depth { get; }
 
         private readonly ReadOnlyMemory<byte> _script;
+        private readonly uint _blockHeight;
+        private readonly HardFork _fork;
 
-        public ExecutionContext(byte[] script, long initialGas = 1_000000L, int depth = 0, ExecutionContext? parent = null)
+        public ExecutionContext(byte[] script, HardFork fork = HardFork.Genesis, uint blockHeight = 0, long initialGas = 1_000000L, int depth = 0, ExecutionContext? parent = null)
         {
             _script = script.Clone() as byte[] ?? throw new ArgumentNullException(nameof(script));
+            _blockHeight = blockHeight;
+            _fork = fork;
+
             Gas = initialGas;
             Depth = depth;
             Parent = parent;
+
             Frame = new StackFrame(-1, null);
         }
 

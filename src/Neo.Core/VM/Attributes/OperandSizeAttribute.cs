@@ -20,13 +20,24 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core.Interfaces;
+using System;
 
-namespace Neo.Wallet.Json
+namespace Neo.Core.VM.Attributes
 {
-    public class DevWalletModel : WalletModel<object, DevWalletAccountModel>, IMap<DevWallet>
+    /// <summary>
+    /// Indicates the operand length of an <see cref="OpCode"/>.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    public class OperandSizeAttribute : Attribute
     {
-        public DevWallet ToObject() =>
-            new(this);
+        /// <summary>
+        /// When it is greater than 0, indicates the size of the operand.
+        /// </summary>
+        public int Size { get; set; }
+
+        /// <summary>
+        /// When it is greater than 0, indicates the size prefix of the operand.
+        /// </summary>
+        public int SizePrefix { get; set; }
     }
 }

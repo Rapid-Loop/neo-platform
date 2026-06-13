@@ -20,13 +20,27 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core.Interfaces;
+using Neo.Core.VM;
+using Neo.Core.VM.Specs;
 
-namespace Neo.Wallet.Json
+namespace Neo.Core.Tests.VM
 {
-    public class DevWalletModel : WalletModel<object, DevWalletAccountModel>, IMap<DevWallet>
+    [TestClass]
+    public class UT_GasTable
     {
-        public DevWallet ToObject() =>
-            new(this);
+        [TestMethod]
+        public void TestOpCodePriceAttribute()
+        {
+            var actualCallTGenesisGasPrice = GasTable.GetGasCost(OpCode.CALLT, HardFork.Genesis);
+
+            // This fallbacks to Genesis Gas Price if Hard Fork Price isn't set
+            var actualCallTCockatriceGasPrice = GasTable.GetGasCost(OpCode.CALLT, HardFork.Cockatrice);
+            var actualAllGasPrices = GasTable.GetAllCosts(HardFork.Gorgon);
+
+            Assert.AreEqual(32768L, actualAllGasPrices[OpCode.CALLT]);
+            Assert.AreEqual(32768L, actualCallTGenesisGasPrice);
+            Assert.AreEqual(32768L, actualCallTCockatriceGasPrice);
+            Assert.AreEqual(actualCallTGenesisGasPrice, actualCallTCockatriceGasPrice);
+        }
     }
 }

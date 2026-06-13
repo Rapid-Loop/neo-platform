@@ -20,11 +20,10 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration;
-using Neo.Configuration.Interfaces;
 using Neo.Core;
 using Neo.Core.Cryptography.ECC;
 using Neo.Core.Extensions;
+using Neo.Core.Interfaces;
 using Neo.Core.SmartContract;
 using Neo.Wallet.Cryptography;
 using Neo.Wallet.Json;

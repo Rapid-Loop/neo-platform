@@ -26,12 +26,12 @@ using System.IO;
 
 namespace Neo.Core.Blockchain
 {
-    public class ChainWitness : INeoSerializable
+    public class Witness : INeoSerializable
     {
         public const int MaxInvocationScript = 1024;
         public const int MaxVerificationScript = 1024;
 
-        public static ChainWitness Empty => new();
+        public static Witness Empty => new();
 
         /// <summary>
         /// The invocation script of the witness. Used to pass arguments for <see cref="VerificationScript"/>.

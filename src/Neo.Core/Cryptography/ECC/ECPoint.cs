@@ -54,6 +54,8 @@ namespace Neo.Core.Cryptography.ECC
         private byte[] _uncompressed;
         private BigInteger _x, _y;
 
+        private ECPoint() : this(BigInteger.Zero, BigInteger.Zero, ECCurve.SecP256r1) { }
+
         private ECPoint(BigInteger x, BigInteger y, ECCurve curve)
         {
             _x = x;

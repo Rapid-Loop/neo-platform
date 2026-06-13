@@ -28,7 +28,7 @@ using System.Runtime.CompilerServices;
 
 namespace Neo.Core.Blockchain
 {
-    public class ChainWitnessRule : IEquatable<ChainWitnessRule>, INeoSerializable
+    public class WitnessRule : IEquatable<WitnessRule>, INeoSerializable
     {
         /// <summary>
         /// Indicates the action to be taken if the current context meets with the rule.
@@ -38,7 +38,7 @@ namespace Neo.Core.Blockchain
         /// <summary>
         /// The condition of the rule.
         /// </summary>
-        public ChainWitnessCondition Condition { get; set; } = default!;
+        public WitnessCondition Condition { get; set; } = default!;
 
         public int Size =>
             Unsafe.SizeOf<WitnessRuleAction>() +
@@ -61,10 +61,10 @@ namespace Neo.Core.Blockchain
         {
             if (ReferenceEquals(obj, this)) return true;
             if (obj is null) return false;
-            return Equals(obj as ChainWitnessRule);
+            return Equals(obj as WitnessRule);
         }
 
-        public bool Equals(ChainWitnessRule? other)
+        public bool Equals(WitnessRule? other)
         {
             if (ReferenceEquals(other, this)) return true;
             if (other is null) return false;

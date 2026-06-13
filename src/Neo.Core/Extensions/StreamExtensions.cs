@@ -272,8 +272,11 @@ namespace Neo.Core.Extensions
             var length = stream.ReadCompact<int>();
             var results = new T[length];
 
-            foreach (var t in results)
-                t.Deserialize(stream);
+            for (var i = 0; i < length; i++)
+            {
+                results[i] = (T)typeof(T).CreateInitializedObject();
+                results[i].Deserialize(stream);
+            }
 
             return results;
         }

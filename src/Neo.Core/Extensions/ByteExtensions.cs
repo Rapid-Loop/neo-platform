@@ -25,7 +25,6 @@ using Neo.Core.Serialization;
 using System;
 using System.IO;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
 namespace Neo.Core.Extensions
@@ -80,8 +79,8 @@ namespace Neo.Core.Extensions
             using var ms = new MemoryStream(data, false);
             ms.Seek(startIndex, SeekOrigin.Begin);
 
-            var newObject = RuntimeHelpers.GetUninitializedObject(typeof(T)) as T;
-            newObject?.Deserialize(ms);
+            var newObject = (T)typeof(T).CreateInitializedObject();
+            newObject.Deserialize(ms);
 
             return newObject;
         }

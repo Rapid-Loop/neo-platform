@@ -20,18 +20,27 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.Core.Blockchain.Interface
-{
-    public interface IVerifiable
-    {
-        /// <summary>
-        /// The hash of the <see cref="IVerifiable"/> object.
-        /// </summary>
-        UInt256 Hash { get; }
+using System;
+using System.Reflection;
 
-        /// <summary>
-        /// The witnesses of the <see cref="IVerifiable"/> object.
-        /// </summary>
-        Witness[] Witnesses { get; }
+namespace Neo.Core.Extensions
+{
+    public static class TypeExtensions
+    {
+        public static object CreateInitializedObject(this Type source)
+        {
+            // Try to get the private parameterless constructor
+            var ctor = source.GetConstructor(
+                BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance,
+                null,
+                Type.EmptyTypes,   // No parameters
+                null);
+
+            if (ctor is null)
+                // Fallback: if no parameterless ctor exists at all
+                throw new InvalidOperationException($"Type {source.FullName} does not have a parameterless constructor (public or private).");
+
+            return ctor.Invoke(null);
+        }
     }
 }

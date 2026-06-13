@@ -28,10 +28,10 @@ using System.Runtime.CompilerServices;
 
 namespace Neo.Core.Blockchain
 {
-    public abstract class ChainWitnessCondition : INeoSerializable
+    public abstract class WitnessCondition : INeoSerializable
     {
         /// <summary>
-        /// The type of the <see cref="ChainWitnessCondition"/>.
+        /// The type of the <see cref="WitnessCondition"/>.
         /// </summary>
         public abstract WitnessConditionType Type { get; }
 
@@ -42,7 +42,7 @@ namespace Neo.Core.Blockchain
             var type = reader.Read<WitnessConditionType>();
 
             if (type != Type)
-                throw new FormatException($"[{nameof(ChainWitnessCondition)}] Value \'{type}\' does not match \'{Type}\'.");
+                throw new FormatException($"[{nameof(WitnessCondition)}::{nameof(Type)}] Value \'{type}\' does not match \'{Type}\'.");
         }
 
         public void Serialize(Stream writer)

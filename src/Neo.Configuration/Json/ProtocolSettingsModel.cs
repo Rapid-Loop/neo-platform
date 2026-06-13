@@ -20,8 +20,10 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration.Interfaces;
+using Neo.Core;
 using Neo.Core.Cryptography.ECC;
+using Neo.Core.Interfaces;
+using Neo.Core.VM;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -48,7 +50,7 @@ namespace Neo.Configuration.Json
 
         public string[]? SeedList { get; set; }
 
-        public IDictionary<Hardfork, uint>? HardForks { get; set; }
+        public IDictionary<HardFork, uint>? HardForks { get; set; }
 
         public ECPoint[]? StandbyCommittee { get; set; }
 

@@ -32,6 +32,8 @@ namespace Neo.VM
     /// </summary>
     public sealed class ExecutionEngineLimits
     {
+        public const long MaxGas = 20_00000000;
+
         /// <summary>
         /// The default strategy.
         /// </summary>

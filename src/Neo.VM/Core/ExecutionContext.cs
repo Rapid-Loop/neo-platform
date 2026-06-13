@@ -21,10 +21,10 @@
 // SERVICES
 
 using Neo.Core.VM;
+using Neo.Core.VM.Specs;
 using Neo.VM.Types;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace Neo.VM.Core
 {
@@ -58,7 +58,7 @@ namespace Neo.VM.Core
         /// <summary>
         /// Gas remaining for this execution
         /// </summary>
-        public BigInteger Gas { get; set; }
+        public long GasLeft { get; set; }
 
         /// <summary>
         /// Whether this context is currently executing
@@ -75,19 +75,29 @@ namespace Neo.VM.Core
         /// </summary>
         public Dictionary<Type, object> State { get; } = [];
 
+        public HardFork HardFork => _fork;
+
+        public uint BlockHeight => _blockHeight;
+
         /// <summary>
         /// Invocation stack depth
         /// </summary>
         public int Depth { get; }
 
         private readonly ReadOnlyMemory<byte> _script;
+        private readonly uint _blockHeight;
+        private readonly HardFork _fork;
 
-        public ExecutionContext(byte[] script, long initialGas = 1_000000L, int depth = 0, ExecutionContext? parent = null)
+        public ExecutionContext(byte[] script, HardFork fork = HardFork.Genesis, uint blockHeight = 0, long initialGas = 1_000000L, int depth = 0, ExecutionContext? parent = null)
         {
             _script = script.Clone() as byte[] ?? throw new ArgumentNullException(nameof(script));
-            Gas = initialGas;
+            _blockHeight = blockHeight;
+            _fork = fork;
+
+            GasLeft = initialGas;
             Depth = depth;
             Parent = parent;
+
             Frame = new StackFrame(-1, null);
         }
 
@@ -96,22 +106,23 @@ namespace Neo.VM.Core
         /// </summary>
         public bool ShouldContinue()
         {
-            return IsExecuting && InstructionPointer < Script.Length && Gas > 0;
+            return IsExecuting && InstructionPointer < Script.Length && GasLeft > 0;
         }
 
         /// <summary>
         /// Consume gas for an operation
         /// </summary>
-        public bool ConsumeGas(long amount)
+        public bool ConsumeGas(OpCode opcode)
         {
-            if (Gas < amount)
+            var cost = GasTable.GetGasCost(opcode, HardFork);
+
+            if (GasLeft < cost)
             {
-                Gas = 0;
                 IsExecuting = false;
                 return false;
             }
 
-            Gas -= amount;
+            GasLeft -= cost;
             return true;
         }
 

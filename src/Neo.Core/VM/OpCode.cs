@@ -20,6 +20,8 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.VM.Attributes;
+
 namespace Neo.Core.VM
 {
     /// <summary>
@@ -37,6 +39,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         PUSHINT8 = 0x00,
 
@@ -48,6 +51,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 2)]
         PUSHINT16 = 0x01,
 
@@ -59,6 +63,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         PUSHINT32 = 0x02,
 
@@ -70,6 +75,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 8)]
         PUSHINT64 = 0x03,
 
@@ -81,6 +87,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 16)]
         PUSHINT128 = 0x04,
 
@@ -92,6 +99,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 32)]
         PUSHINT256 = 0x05,
 
@@ -103,6 +111,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSHT = 0x08,
 
         /// <summary>
@@ -113,6 +122,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSHF = 0x09,
 
         /// <summary>
@@ -125,6 +135,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         PUSHA = 0x0A,
 
@@ -136,6 +147,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSHNULL = 0x0B,
 
         /// <summary>
@@ -146,6 +158,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         [OperandSize(SizePrefix = 1)]
         PUSHDATA1 = 0x0C,
 
@@ -157,6 +170,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 512, HardFork = HardFork.Genesis)]
         [OperandSize(SizePrefix = 2)]
         PUSHDATA2 = 0x0D,
 
@@ -171,6 +185,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4096, HardFork = HardFork.Genesis)]
         [OperandSize(SizePrefix = 4)]
         PUSHDATA4 = 0x0E,
 
@@ -182,6 +197,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSHM1 = 0x0F,
 
         /// <summary>
@@ -192,6 +208,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH0 = 0x10,
 
         /// <summary>
@@ -202,6 +219,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH1 = 0x11,
 
         /// <summary>
@@ -212,6 +230,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH2 = 0x12,
 
         /// <summary>
@@ -222,6 +241,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH3 = 0x13,
 
         /// <summary>
@@ -232,6 +252,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH4 = 0x14,
 
         /// <summary>
@@ -242,6 +263,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH5 = 0x15,
 
         /// <summary>
@@ -252,6 +274,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH6 = 0x16,
 
         /// <summary>
@@ -262,6 +285,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH7 = 0x17,
 
         /// <summary>
@@ -272,6 +296,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH8 = 0x18,
 
         /// <summary>
@@ -282,6 +307,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH9 = 0x19,
 
         /// <summary>
@@ -292,6 +318,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH10 = 0x1A,
 
         /// <summary>
@@ -302,6 +329,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH11 = 0x1B,
 
         /// <summary>
@@ -312,6 +340,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH12 = 0x1C,
 
         /// <summary>
@@ -322,6 +351,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH13 = 0x1D,
 
         /// <summary>
@@ -332,6 +362,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH14 = 0x1E,
 
         /// <summary>
@@ -342,6 +373,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH15 = 0x1F,
 
         /// <summary>
@@ -352,6 +384,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         PUSH16 = 0x20,
 
         #endregion
@@ -366,6 +399,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         NOP = 0x21,
 
         /// <summary>
@@ -379,6 +413,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         JMP = 0x22,
 
@@ -393,6 +428,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         JMP_L = 0x23,
 
@@ -407,6 +443,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         JMPIF = 0x24,
 
@@ -421,6 +458,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         JMPIF_L = 0x25,
 
@@ -435,6 +473,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         JMPIFNOT = 0x26,
 
@@ -449,6 +488,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         JMPIFNOT_L = 0x27,
 
@@ -467,6 +507,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         JMPEQ = 0x28,
 
@@ -485,6 +526,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         JMPEQ_L = 0x29,
 
@@ -503,6 +545,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         JMPNE = 0x2A,
 
@@ -521,6 +564,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         JMPNE_L = 0x2B,
 
@@ -539,6 +583,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         JMPGT = 0x2C,
 
@@ -557,6 +602,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         JMPGT_L = 0x2D,
 
@@ -575,6 +621,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         JMPGE = 0x2E,
 
@@ -593,6 +640,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         JMPGE_L = 0x2F,
 
@@ -611,6 +659,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         JMPLT = 0x30,
 
@@ -629,6 +678,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         JMPLT_L = 0x31,
 
@@ -647,6 +697,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         JMPLE = 0x32,
 
@@ -665,6 +716,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         JMPLE_L = 0x33,
 
@@ -675,6 +727,7 @@ namespace Neo.Core.VM
         /// The execution will be faulted if the target address is out of script range[0, script.Length).
         /// </para>
         /// </summary>
+        [OpCodePrice(Cost = 512, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         CALL = 0x34,
 
@@ -685,6 +738,7 @@ namespace Neo.Core.VM
         /// The execution will be faulted if the target address is out of script range[0, script.Length).
         /// </para>
         /// </summary>
+        [OpCodePrice(Cost = 512, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         CALL_L = 0x35,
 
@@ -695,11 +749,13 @@ namespace Neo.Core.VM
         /// The execution will be faulted if the pointer is not from the current script or not a valid pointer.
         /// </para>
         /// </summary>
+        [OpCodePrice(Cost = 512, HardFork = HardFork.Genesis)]
         CALLA = 0x36,
 
         /// <summary>
         /// Calls the function which is described by the token.
         /// </summary>
+        [OpCodePrice(Cost = 32768, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 2)]
         CALLT = 0x37,
 
@@ -711,6 +767,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 0, HardFork = HardFork.Genesis)]
         ABORT = 0x38,
 
         /// <summary>
@@ -721,6 +778,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         ASSERT = 0x39,
 
         /// <summary>
@@ -731,6 +789,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 512, HardFork = HardFork.Genesis)]
         THROW = 0x3A,
 
         /// <summary>
@@ -742,6 +801,7 @@ namespace Neo.Core.VM
         ///  3. the `catch` or `finally` offset is out of script range[0, script.Length).
         /// </para>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 2)]
         TRY = 0x3B,
 
@@ -754,6 +814,7 @@ namespace Neo.Core.VM
         ///  3. the `catch` or `finally` offset is out of script range[0, script.Length).
         /// </para>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 8)]
         TRY_L = 0x3C,
 
@@ -767,6 +828,7 @@ namespace Neo.Core.VM
         ///  2. the end offset is out of script range[0, script.Length).
         /// </para>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         ENDTRY = 0x3D,
 
@@ -780,6 +842,7 @@ namespace Neo.Core.VM
         ///  2. the end offset is out of script range[0, script.Length).
         /// </para>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         ENDTRY_L = 0x3E,
 
@@ -790,16 +853,19 @@ namespace Neo.Core.VM
         /// The execution will be faulted if the corresponding `try` is not provided.
         /// </para>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         ENDFINALLY = 0x3F,
 
         /// <summary>
         /// Returns from the current method.
         /// </summary>
+        [OpCodePrice(Cost = 0, HardFork = HardFork.Genesis)]
         RET = 0x40,
 
         /// <summary>
         /// Calls to an interop service.
         /// </summary>
+        [OpCodePrice(Cost = 0, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 4)]
         SYSCALL = 0x41,
 
@@ -815,6 +881,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         DEPTH = 0x43,
 
         /// <summary>
@@ -829,6 +896,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         DROP = 0x45,
 
         /// <summary>
@@ -843,6 +911,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         NIP = 0x46,
 
         /// <summary>
@@ -859,11 +928,13 @@ namespace Neo.Core.VM
         ///     Pop: n+1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 16, HardFork = HardFork.Genesis)]
         XDROP = 0x48,
 
         /// <summary>
         /// Clear the stack
         /// </summary>
+        [OpCodePrice(Cost = 16, HardFork = HardFork.Genesis)]
         CLEAR = 0x49,
 
         /// <summary>
@@ -878,6 +949,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         DUP = 0x4A,
 
         /// <summary>
@@ -892,6 +964,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         OVER = 0x4B,
 
         /// <summary>
@@ -911,6 +984,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         PICK = 0x4D,
 
         /// <summary>
@@ -925,6 +999,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         TUCK = 0x4E,
 
         /// <summary>
@@ -939,6 +1014,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         SWAP = 0x50,
 
         /// <summary>
@@ -953,6 +1029,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         ROT = 0x51,
 
         /// <summary>
@@ -972,6 +1049,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 16, HardFork = HardFork.Genesis)]
         ROLL = 0x52,
 
         /// <summary>
@@ -986,6 +1064,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         REVERSE3 = 0x53,
 
         /// <summary>
@@ -1000,6 +1079,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         REVERSE4 = 0x54,
 
         /// <summary>
@@ -1017,6 +1097,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 16, HardFork = HardFork.Genesis)]
         REVERSEN = 0x55,
 
         #endregion
@@ -1036,6 +1117,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 16, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         INITSSLOT = 0x56,
 
@@ -1050,6 +1132,7 @@ namespace Neo.Core.VM
         ///  2. Two operands are both 0.
         /// </para>
         /// </summary>
+        [OpCodePrice(Cost = 64, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 2)]
         INITSLOT = 0x57,
 
@@ -1061,6 +1144,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDSFLD0 = 0x58,
 
         /// <summary>
@@ -1071,6 +1155,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDSFLD1 = 0x59,
 
         /// <summary>
@@ -1081,6 +1166,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDSFLD2 = 0x5A,
 
         /// <summary>
@@ -1091,6 +1177,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDSFLD3 = 0x5B,
 
         /// <summary>
@@ -1101,6 +1188,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDSFLD4 = 0x5C,
 
         /// <summary>
@@ -1111,6 +1199,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDSFLD5 = 0x5D,
 
         /// <summary>
@@ -1121,6 +1210,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDSFLD6 = 0x5E,
 
         /// <summary>
@@ -1132,6 +1222,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         LDSFLD = 0x5F,
 
@@ -1143,6 +1234,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STSFLD0 = 0x60,
 
         /// <summary>
@@ -1153,6 +1245,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STSFLD1 = 0x61,
 
         /// <summary>
@@ -1163,6 +1256,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STSFLD2 = 0x62,
 
         /// <summary>
@@ -1173,6 +1267,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STSFLD3 = 0x63,
 
         /// <summary>
@@ -1183,6 +1278,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STSFLD4 = 0x64,
 
         /// <summary>
@@ -1193,6 +1289,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STSFLD5 = 0x65,
 
         /// <summary>
@@ -1203,6 +1300,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STSFLD6 = 0x66,
 
         /// <summary>
@@ -1214,6 +1312,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         STSFLD = 0x67,
 
@@ -1225,6 +1324,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDLOC0 = 0x68,
 
         /// <summary>
@@ -1235,6 +1335,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDLOC1 = 0x69,
 
         /// <summary>
@@ -1245,6 +1346,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDLOC2 = 0x6A,
 
         /// <summary>
@@ -1255,6 +1357,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDLOC3 = 0x6B,
 
         /// <summary>
@@ -1265,6 +1368,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDLOC4 = 0x6C,
 
         /// <summary>
@@ -1275,6 +1379,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDLOC5 = 0x6D,
 
         /// <summary>
@@ -1285,6 +1390,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDLOC6 = 0x6E,
 
         /// <summary>
@@ -1296,6 +1402,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         LDLOC = 0x6F,
 
@@ -1307,6 +1414,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STLOC0 = 0x70,
 
         /// <summary>
@@ -1317,6 +1425,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STLOC1 = 0x71,
 
         /// <summary>
@@ -1327,6 +1436,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STLOC2 = 0x72,
 
         /// <summary>
@@ -1337,6 +1447,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STLOC3 = 0x73,
 
         /// <summary>
@@ -1347,6 +1458,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STLOC4 = 0x74,
 
         /// <summary>
@@ -1357,6 +1469,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STLOC5 = 0x75,
 
         /// <summary>
@@ -1367,6 +1480,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STLOC6 = 0x76,
 
         /// <summary>
@@ -1378,6 +1492,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         STLOC = 0x77,
 
@@ -1389,6 +1504,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDARG0 = 0x78,
 
         /// <summary>
@@ -1399,6 +1515,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDARG1 = 0x79,
 
         /// <summary>
@@ -1409,6 +1526,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDARG2 = 0x7A,
 
         /// <summary>
@@ -1419,6 +1537,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDARG3 = 0x7B,
 
         /// <summary>
@@ -1429,6 +1548,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDARG4 = 0x7C,
 
         /// <summary>
@@ -1439,6 +1559,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDARG5 = 0x7D,
 
         /// <summary>
@@ -1449,6 +1570,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         LDARG6 = 0x7E,
 
         /// <summary>
@@ -1460,6 +1582,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         LDARG = 0x7F,
 
@@ -1471,6 +1594,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STARG0 = 0x80,
 
         /// <summary>
@@ -1481,6 +1605,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STARG1 = 0x81,
 
         /// <summary>
@@ -1491,6 +1616,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STARG2 = 0x82,
 
         /// <summary>
@@ -1501,6 +1627,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STARG3 = 0x83,
 
         /// <summary>
@@ -1511,6 +1638,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STARG4 = 0x84,
 
         /// <summary>
@@ -1521,6 +1649,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STARG5 = 0x85,
 
         /// <summary>
@@ -1531,6 +1660,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         STARG6 = 0x86,
 
         /// <summary>
@@ -1542,6 +1672,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         STARG = 0x87,
 
@@ -1564,6 +1695,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 256, HardFork = HardFork.Genesis)]
         NEWBUFFER = 0x88,
 
         /// <summary>
@@ -1589,6 +1721,7 @@ namespace Neo.Core.VM
         ///     Pop: 5 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2048, HardFork = HardFork.Genesis)]
         MEMCPY = 0x89,
 
         /// <summary>
@@ -1607,6 +1740,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2048, HardFork = HardFork.Genesis)]
         CAT = 0x8B,
 
         /// <summary>
@@ -1628,6 +1762,7 @@ namespace Neo.Core.VM
         ///     Pop: 3 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2048, HardFork = HardFork.Genesis)]
         SUBSTR = 0x8C,
 
         /// <summary>
@@ -1648,6 +1783,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2048, HardFork = HardFork.Genesis)]
         LEFT = 0x8D,
 
         /// <summary>
@@ -1668,6 +1804,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2048, HardFork = HardFork.Genesis)]
         RIGHT = 0x8E,
 
         #endregion
@@ -1687,6 +1824,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         INVERT = 0x90,
 
         /// <summary>
@@ -1702,6 +1840,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         AND = 0x91,
 
         /// <summary>
@@ -1717,6 +1856,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         OR = 0x92,
 
         /// <summary>
@@ -1732,6 +1872,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         XOR = 0x93,
 
         /// <summary>
@@ -1743,6 +1884,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 32, HardFork = HardFork.Genesis)]
         EQUAL = 0x97,
 
         /// <summary>
@@ -1754,6 +1896,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 32, HardFork = HardFork.Genesis)]
         NOTEQUAL = 0x98,
 
         #endregion
@@ -1774,6 +1917,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         SIGN = 0x99,
 
         /// <summary>
@@ -1791,6 +1935,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         ABS = 0x9A,
 
         /// <summary>
@@ -1806,6 +1951,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         NEGATE = 0x9B,
 
         /// <summary>
@@ -1821,6 +1967,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         INC = 0x9C,
 
         /// <summary>
@@ -1836,6 +1983,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         DEC = 0x9D,
 
         /// <summary>
@@ -1851,6 +1999,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         ADD = 0x9E,
 
         /// <summary>
@@ -1866,6 +2015,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         SUB = 0x9F,
 
         /// <summary>
@@ -1881,6 +2031,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         MUL = 0xA0,
 
         /// <summary>
@@ -1899,6 +2050,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         DIV = 0xA1,
 
         /// <summary>
@@ -1917,6 +2069,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         MOD = 0xA2,
 
         /// <summary>
@@ -1933,6 +2086,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 64, HardFork = HardFork.Genesis)]
         POW = 0xA3,
 
         /// <summary>
@@ -1950,6 +2104,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 64, HardFork = HardFork.Genesis)]
         SQRT = 0xA4,
 
         /// <summary>
@@ -1968,6 +2123,7 @@ namespace Neo.Core.VM
         ///     Pop: 3 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 32, HardFork = HardFork.Genesis)]
         MODMUL = 0xA5,
 
         /// <summary>
@@ -1989,6 +2145,7 @@ namespace Neo.Core.VM
         ///     Pop: 3 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2048, HardFork = HardFork.Genesis)]
         MODPOW = 0xA6,
 
         /// <summary>
@@ -2006,6 +2163,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         SHL = 0xA8,
 
         /// <summary>
@@ -2023,6 +2181,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         SHR = 0xA9,
 
         /// <summary>
@@ -2035,6 +2194,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         NOT = 0xAA,
 
         /// <summary>
@@ -2047,6 +2207,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         BOOLAND = 0xAB,
 
         /// <summary>
@@ -2059,6 +2220,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         BOOLOR = 0xAC,
 
         /// <summary>
@@ -2074,6 +2236,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         NZ = 0xB1,
 
         /// <summary>
@@ -2089,6 +2252,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         NUMEQUAL = 0xB3,
 
         /// <summary>
@@ -2104,6 +2268,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         NUMNOTEQUAL = 0xB4,
 
         /// <summary>
@@ -2119,6 +2284,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         LT = 0xB5,
 
         /// <summary>
@@ -2134,6 +2300,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         LE = 0xB6,
 
         /// <summary>
@@ -2149,6 +2316,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         GT = 0xB7,
 
         /// <summary>
@@ -2164,6 +2332,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         GE = 0xB8,
 
         /// <summary>
@@ -2179,6 +2348,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         MIN = 0xB9,
 
         /// <summary>
@@ -2194,6 +2364,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         MAX = 0xBA,
 
         /// <summary>
@@ -2209,6 +2380,7 @@ namespace Neo.Core.VM
         ///     Pop: 3 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         WITHIN = 0xBB,
 
         #endregion
@@ -2232,6 +2404,7 @@ namespace Neo.Core.VM
         ///     Pop: 2n+1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2048, HardFork = HardFork.Genesis)]
         PACKMAP = 0xBE,
 
         /// <summary>
@@ -2247,6 +2420,7 @@ namespace Neo.Core.VM
         ///     Pop: n+1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2048, HardFork = HardFork.Genesis)]
         PACKSTRUCT = 0xBF,
 
         /// <summary>
@@ -2262,6 +2436,7 @@ namespace Neo.Core.VM
         ///     Pop: n+1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2048, HardFork = HardFork.Genesis)]
         PACK = 0xC0,
 
         /// <summary>
@@ -2273,6 +2448,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2048, HardFork = HardFork.Genesis)]
         UNPACK = 0xC1,
 
         /// <summary>
@@ -2283,6 +2459,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 16, HardFork = HardFork.Genesis)]
         NEWARRAY0 = 0xC2,
 
         /// <summary>
@@ -2293,6 +2470,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 512, HardFork = HardFork.Genesis)]
         NEWARRAY = 0xC3,
 
         /// <summary>
@@ -2309,6 +2487,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 512, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         NEWARRAY_T = 0xC4,
 
@@ -2320,6 +2499,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 16, HardFork = HardFork.Genesis)]
         NEWSTRUCT0 = 0xC5,
 
         /// <summary>
@@ -2334,6 +2514,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 512, HardFork = HardFork.Genesis)]
         NEWSTRUCT = 0xC6,
 
         /// <summary>
@@ -2344,6 +2525,7 @@ namespace Neo.Core.VM
         ///     Pop: 0 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8, HardFork = HardFork.Genesis)]
         NEWMAP = 0xC8,
 
         /// <summary>
@@ -2356,6 +2538,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 4, HardFork = HardFork.Genesis)]
         SIZE = 0xCA,
 
         /// <summary>
@@ -2375,6 +2558,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 64, HardFork = HardFork.Genesis)]
         HASKEY = 0xCB,
 
         /// <summary>
@@ -2385,6 +2569,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 16, HardFork = HardFork.Genesis)]
         KEYS = 0xCC,
 
         /// <summary>
@@ -2395,6 +2580,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8192, HardFork = HardFork.Genesis)]
         VALUES = 0xCD,
 
         /// <summary>
@@ -2414,6 +2600,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 64, HardFork = HardFork.Genesis)]
         PICKITEM = 0xCE,
 
         /// <summary>
@@ -2427,6 +2614,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8192, HardFork = HardFork.Genesis)]
         APPEND = 0xCF,
 
         /// <summary>
@@ -2442,6 +2630,7 @@ namespace Neo.Core.VM
         ///     Pop: 3 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8192, HardFork = HardFork.Genesis)]
         SETITEM = 0xD0,
 
         /// <summary>
@@ -2452,6 +2641,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8192, HardFork = HardFork.Genesis)]
         REVERSEITEMS = 0xD1,
 
         /// <summary>
@@ -2471,6 +2661,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 16, HardFork = HardFork.Genesis)]
         REMOVE = 0xD2,
 
         /// <summary>
@@ -2482,6 +2673,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 16, HardFork = HardFork.Genesis)]
         CLEARITEMS = 0xD3,
 
         /// <summary>
@@ -2493,6 +2685,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 16, HardFork = HardFork.Genesis)]
         POPITEM = 0xD4,
 
         #endregion
@@ -2507,6 +2700,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         ISNULL = 0xD8,
 
         /// <summary>
@@ -2520,6 +2714,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 2, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         ISTYPE = 0xD9,
 
@@ -2536,6 +2731,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 8192, HardFork = HardFork.Genesis)]
         [OperandSize(Size = 1)]
         CONVERT = 0xDB,
 
@@ -2554,6 +2750,7 @@ namespace Neo.Core.VM
         ///     Pop: 1 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 0, HardFork = HardFork.Genesis)]
         ABORTMSG = 0xE0,
 
         /// <summary>
@@ -2571,6 +2768,7 @@ namespace Neo.Core.VM
         ///     Pop: 2 item(s)
         /// </remarks>
         /// </summary>
+        [OpCodePrice(Cost = 1, HardFork = HardFork.Genesis)]
         ASSERTMSG = 0xE1
 
         #endregion

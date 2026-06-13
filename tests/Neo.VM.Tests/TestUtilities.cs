@@ -20,13 +20,17 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core.Interfaces;
+using Microsoft.Extensions.Logging;
 
-namespace Neo.Wallet.Json
+namespace Neo.VM.Tests
 {
-    public class DevWalletModel : WalletModel<object, DevWalletAccountModel>, IMap<DevWallet>
+    internal class TestUtilities
     {
-        public DevWallet ToObject() =>
-            new(this);
+        public static readonly ILoggerFactory TraceLoggerFactory = LoggerFactory.Create(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddDebug();
+            logging.SetMinimumLevel(LogLevel.Trace);
+        });
     }
 }

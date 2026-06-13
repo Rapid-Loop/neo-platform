@@ -20,13 +20,13 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core.Interfaces;
-
-namespace Neo.Wallet.Json
+namespace Neo.Configuration
 {
-    public class DevWalletModel : WalletModel<object, DevWalletAccountModel>, IMap<DevWallet>
+    /// <summary>
+    /// Category names for creating logger classes.
+    /// </summary>
+    public static class DefaultCategoryNames
     {
-        public DevWallet ToObject() =>
-            new(this);
+        public static readonly string VirtualMachineName = "VM";
     }
 }

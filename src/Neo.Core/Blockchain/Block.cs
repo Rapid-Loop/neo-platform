@@ -30,7 +30,7 @@ using System.Linq;
 
 namespace Neo.Core.Blockchain
 {
-    internal class Block : BlockHeader, IEquatable<Block>, INeoSerializable, IInventory, IVerifiable
+    public class Block : BlockHeader, IEquatable<Block>, INeoSerializable, IInventory, IVerifiable
     {
         public override UInt256 Hash => this.ToArray().ToTxHash();
 

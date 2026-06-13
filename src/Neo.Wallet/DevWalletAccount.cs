@@ -20,15 +20,15 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration;
-using Neo.Configuration.Interfaces;
 using Neo.Core;
 using Neo.Core.Cryptography;
 using Neo.Core.Cryptography.ECC;
 using Neo.Core.Extensions;
+using Neo.Core.Interfaces;
 using Neo.Core.SmartContract;
 using Neo.Wallet.Json;
 using System;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -139,7 +139,20 @@ namespace Neo.Wallet
                 Label = Label,
                 IsDefault = IsDefault,
                 Lock = IsLocked,
-                Extra = Extra.ToObject(),
+                Extra = new()
+                {
+                    Network = Extra.Network,
+                    AddressVersion = Extra.AddressVersion,
+                    MillisecondsPerBlock = Extra.MillisecondsPerBlock,
+                    MaxTransactionsPerBlock = Extra.MaxTransactionsPerBlock,
+                    MemoryPoolMaxTransactions = Extra.MemoryPoolMaxTransactions,
+                    MaxTraceableBlocks = Extra.MaxTraceableBlocks,
+                    InitialGasDistribution = Extra.InitialGasDistribution,
+                    ValidatorsCount = Extra.ValidatorsCount,
+                    SeedList = [.. Extra.SeedList],
+                    HardForks = Extra.HardForks.ToImmutableDictionary(),
+                    StandbyCommittee = [.. Extra.StandbyCommittee],
+                },
             };
     }
 }

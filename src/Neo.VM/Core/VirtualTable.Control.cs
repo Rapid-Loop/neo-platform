@@ -514,22 +514,19 @@ namespace Neo.VM.Core
         /// <param name="instruction">The current instruction.</param>
         public virtual void Ret(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            var context_pop = engine.InvocationStack.Pop();
-            var stack_eval = engine.InvocationStack.Count == 0 ?
+            var context = engine.InvocationStack.Pop();
+            var stackEval = engine.InvocationStack.Count == 0 ?
                     engine.ResultStack :
                     engine.InvocationStack.Peek().Frame.EvaluationStack;
 
-            if (context_pop.Frame.EvaluationStack != stack_eval)
+            if (context.Frame.EvaluationStack != stackEval)
             {
-                foreach (var item in context_pop.Frame.EvaluationStack)
-                    stack_eval.Push(item);
+                foreach (var item in context.Frame.EvaluationStack)
+                    stackEval.Push(item);
             }
 
             if (engine.InvocationStack.Count == 0)
                 engine.State = VMState.HALT;
-
-            engine.ContextUnloaded(context_pop);
-            engine.IsRunning = true;
         }
 
         /// <summary>
@@ -538,9 +535,9 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
-        public virtual void Syscall(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void SysCall(NeoVirtualMachine engine, VMInstruction instruction)
         {
-            throw new InvalidOperationException($"Syscall not found: {instruction.AsToken<uint>()}");
+            throw new InvalidOperationException($"SysCall not found: {instruction.AsToken<uint>()}");
         }
 
         #region Execute methods

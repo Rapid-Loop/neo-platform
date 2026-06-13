@@ -42,7 +42,7 @@ namespace Neo.VM.Tests
                 0x40         // RET
             ];
 
-            var vm = new NeoVirtualMachine();
+            var vm = new NeoVirtualMachine(loggerFactory: TestUtilities.TraceLoggerFactory);
             vm.LoadScript(script);
 
             var actualState = vm.Execute();

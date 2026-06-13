@@ -20,13 +20,14 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core.Interfaces;
+using Microsoft.Extensions.Logging;
+using Neo.Core.VM;
 
-namespace Neo.Wallet.Json
+namespace Neo.VM
 {
-    public class DevWalletModel : WalletModel<object, DevWalletAccountModel>, IMap<DevWallet>
+    public partial class NeoVirtualMachine
     {
-        public DevWallet ToObject() =>
-            new(this);
+        [LoggerMessage(LogLevel.Trace, Message = "Starting execution | HardFork: {Fork} | Gas: {Gas}")]
+        private partial void LogConfiguration(HardFork fork, long gas);
     }
 }

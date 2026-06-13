@@ -25,7 +25,7 @@ using System;
 namespace Neo.Core.Blockchain
 {
     /// <summary>
-    /// Represents the scope of a <see cref="ChainWitness"/>.
+    /// Represents the scope of a <see cref="Witness"/>.
     /// </summary>
     [Flags]
     public enum WitnessScope : byte

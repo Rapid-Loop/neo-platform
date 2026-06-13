@@ -1,0 +1,148 @@
+// BSD 2-Clause License
+//
+// Copyright (c) 2026, Rapid Loop
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+//
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation
+//    and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES
+
+using Neo.Core.Blockchain.Interface;
+using Neo.Core.Extensions;
+using Neo.Core.Serialization;
+using System;
+using System.IO;
+
+namespace Neo.Core.Blockchain
+{
+    public class BlockHeader : IEquatable<BlockHeader>, INeoSerializable, IVerifiable
+    {
+        /// <summary>
+        /// The version of the block.
+        /// </summary>
+        public uint Version { get; set; }
+
+        public virtual UInt256 Hash => this.ToArray().ToTxHash();
+
+        /// <summary>
+        /// The hash of the previous block.
+        /// </summary>
+        public UInt256 PrevHash { get; set; } = UInt256.Zero;
+
+        /// <summary>
+        /// The Merkle root of the transactions.
+        /// </summary>
+        public UInt256 MerkleRoot { get; set; } = UInt256.Zero;
+
+        /// <summary>
+        /// The timestamp of the block.
+        /// </summary>
+        public ulong Timestamp { get; set; }
+
+        /// <summary>
+        /// The first eight bytes of random number generated.
+        /// </summary>
+        public ulong Nonce { get; set; }
+
+        /// <summary>
+        /// The index of the block.
+        /// </summary>
+        public uint Index { get; set; }
+
+        /// <summary>
+        /// The primary index of the consensus node that generated this block.
+        /// </summary>
+        public byte PrimaryIndex { get; set; }
+
+        /// <summary>
+        /// The multi-signature address of the consensus nodes that generates the next block.
+        /// </summary>
+        public UInt160 NextConsensus { get; set; } = UInt160.Zero;
+
+        /// <summary>
+        /// The witness of the block.
+        /// </summary>
+        public Witness Witness { get; set; } = Witness.Empty;
+
+        /// <summary>
+        /// The witnesses of the block.
+        /// </summary>
+        public Witness[] Witnesses => [Witness];
+
+        public virtual int Size =>
+            sizeof(uint) +      // Version
+            UInt256.Length +    // PrevHash
+            UInt256.Length +    // MerkleRoot
+            sizeof(ulong) +     // Timestamp
+            sizeof(ulong) +     // Nonce
+            sizeof(uint) +      // Index
+            sizeof(byte) +      // PrimaryIndex
+            UInt160.Length +    // NextConsensus
+            Witnesses.GetSerializedSize();
+
+        public override int GetHashCode()
+        {
+            return Hash.GetHashCode();
+        }
+
+        public bool Equals(BlockHeader? other)
+        {
+            if (ReferenceEquals(other, this)) return true;
+            if (other is null) return false;
+            return Hash == other.Hash;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(obj, this)) return true;
+            if (obj is null) return false;
+            return Equals(obj as BlockHeader);
+        }
+
+        public virtual void Deserialize(Stream reader)
+        {
+            Version = reader.Read<uint>();
+            if (Version > 0)
+                throw new FormatException($"[{nameof(BlockHeader)}::{nameof(Version)}] Value \'{Version}\' does not match \'0\'.");
+
+            PrevHash.Deserialize(reader);
+            MerkleRoot.Deserialize(reader);
+            Timestamp = reader.Read<ulong>();
+            Nonce = reader.Read<ulong>();
+            Index = reader.Read<uint>();
+            PrimaryIndex = reader.Read<byte>();
+            NextConsensus.Deserialize(reader);
+
+            var witnesses = reader.ReadObjects<Witness>();
+            if (witnesses.Length != 1)
+                throw new FormatException($"[{nameof(BlockHeader)}::{nameof(Witnesses)}->Length] Value \'{witnesses.Length}\' does not match \'1\'.");
+            Witness = witnesses[0];
+        }
+
+        public virtual void Serialize(Stream writer)
+        {
+            writer.Write(Version);
+            PrevHash.Serialize(writer);
+            MerkleRoot.Serialize(writer);
+            writer.Write(Timestamp);
+            writer.Write(Nonce);
+            writer.Write(Index);
+            writer.Write(PrimaryIndex);
+            NextConsensus.Serialize(writer);
+            writer.WriteObjects(Witnesses);
+        }
+    }
+}

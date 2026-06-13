@@ -29,7 +29,7 @@ using System.Linq;
 
 namespace Neo.Core.Blockchain
 {
-    public class ChainTransaction : IEquatable<ChainTransaction>, IInventory, INeoSerializable, IVerifiable
+    public class Transaction : IEquatable<Transaction>, IInventory, INeoSerializable, IVerifiable
     {
         public const int MaxTransactionSize = 102400;
         public const int MaxTransactionAttributes = 16;
@@ -79,9 +79,9 @@ namespace Neo.Core.Blockchain
         /// <summary>
         /// The signers of the transaction.
         /// </summary>
-        public ChainSigner[] Signers { get; set; } = [];
+        public Signer[] Signers { get; set; } = [];
 
-        public ChainWitness[] Witnesses { get; set; } = [];
+        public Witness[] Witnesses { get; set; } = [];
 
         /// <summary>
         /// The sender is the first signer of the transaction, regardless of its <see cref="WitnessScope"/>.
@@ -111,10 +111,10 @@ namespace Neo.Core.Blockchain
         {
             if (ReferenceEquals(obj, this)) return true;
             if (obj is null) return false;
-            return Equals(obj as ChainTransaction);
+            return Equals(obj as Transaction);
         }
 
-        public bool Equals(ChainTransaction? other)
+        public bool Equals(Transaction? other)
         {
             if (ReferenceEquals(other, this)) return true;
             if (other is null) return false;
@@ -128,10 +128,10 @@ namespace Neo.Core.Blockchain
             SystemFee = reader.Read<long>();
             NetworkFee = reader.Read<long>();
             ValidUnitBlock = reader.Read<uint>();
-            Signers = reader.ReadObjects<ChainSigner>();
+            Signers = reader.ReadObjects<Signer>();
             Attributes = reader.ReadObjects<TransactionAttribute>();
             Script = reader.ReadDynamic<byte>();
-            Witnesses = reader.ReadObjects<ChainWitness>();
+            Witnesses = reader.ReadObjects<Witness>();
         }
 
         public void Serialize(Stream writer)

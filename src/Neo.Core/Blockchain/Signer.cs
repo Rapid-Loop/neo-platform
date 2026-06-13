@@ -29,7 +29,7 @@ using System.IO;
 
 namespace Neo.Core.Blockchain
 {
-    public class ChainSigner : INeoSerializable, IEquatable<ChainSigner>
+    public class Signer : INeoSerializable, IEquatable<Signer>
     {
         /// <summary>
         /// The account of the signer.
@@ -57,7 +57,7 @@ namespace Neo.Core.Blockchain
         /// The rules that the witness must meet.
         /// Only available when the <see cref="WitnessScope.WitnessRules"/> flag is set.
         /// </summary>
-        public ChainWitnessRule[] Rules { get; set; } = [];
+        public WitnessRule[] Rules { get; set; } = [];
 
         public int Size => throw new NotImplementedException();
 
@@ -71,7 +71,7 @@ namespace Neo.Core.Blockchain
                 hash *= 31 ^ Scopes.GetHashCode();
                 hash *= 31 ^ ((AllowedContracts as IReadOnlyList<UInt160>)?.ToHashCode() ?? 0);
                 hash *= 31 ^ ((AllowedGroups as IReadOnlyList<ECPoint>)?.ToHashCode() ?? 0);
-                hash *= 31 ^ ((Rules as IReadOnlyList<ChainWitnessRule>)?.ToHashCode() ?? 0);
+                hash *= 31 ^ ((Rules as IReadOnlyList<WitnessRule>)?.ToHashCode() ?? 0);
 
                 return hash;
             }
@@ -81,9 +81,9 @@ namespace Neo.Core.Blockchain
         {
             if (ReferenceEquals(obj, this)) return true;
             if (obj is null) return false;
-            return Equals(obj as ChainSigner);
+            return Equals(obj as Signer);
         }
-        public bool Equals(ChainSigner? other)
+        public bool Equals(Signer? other)
         {
             if (ReferenceEquals(other, this)) return true;
             if (other is null) return false;
@@ -111,7 +111,7 @@ namespace Neo.Core.Blockchain
             Scopes = reader.Read<WitnessScope>();
 
             if (Scopes.HasFlag(WitnessScope.Global) && Scopes != WitnessScope.Global)
-                throw new FormatException($"[{nameof(WitnessScope)}] Value {Scopes} in {nameof(ChainSigner)} is not valid.");
+                throw new FormatException($"[{nameof(WitnessScope)}] Value {Scopes} in {nameof(Signer)} is not valid.");
 
             if (Scopes.HasFlag(WitnessScope.CustomContracts))
                 AllowedContracts = reader.ReadObjects<UInt160>();
@@ -120,7 +120,7 @@ namespace Neo.Core.Blockchain
                 AllowedGroups = reader.ReadObjects<ECPoint>();
 
             if (Scopes.HasFlag(WitnessScope.WitnessRules))
-                Rules = reader.ReadObjects<ChainWitnessRule>();
+                Rules = reader.ReadObjects<WitnessRule>();
         }
 
         public void Serialize(Stream writer)

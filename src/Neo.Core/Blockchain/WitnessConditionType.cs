@@ -23,7 +23,7 @@
 namespace Neo.Core.Blockchain
 {
     /// <summary>
-    /// Represents the type of <see cref="ChainWitnessCondition"/>.
+    /// Represents the type of <see cref="WitnessCondition"/>.
     /// </summary>
     public enum WitnessConditionType : byte
     {

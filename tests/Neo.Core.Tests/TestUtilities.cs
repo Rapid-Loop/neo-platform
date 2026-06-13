@@ -20,18 +20,28 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.Core.Blockchain.Interface
-{
-    public interface IVerifiable
-    {
-        /// <summary>
-        /// The hash of the <see cref="IVerifiable"/> object.
-        /// </summary>
-        UInt256 Hash { get; }
+using Neo.Core.Blockchain;
+using Neo.Core.VM;
+using System;
 
-        /// <summary>
-        /// The witnesses of the <see cref="IVerifiable"/> object.
-        /// </summary>
-        Witness[] Witnesses { get; }
+namespace Neo.Core.Tests
+{
+    internal class TestUtilities
+    {
+        public static BlockHeader CreateBlockHeader(uint index, UInt256 prevHash) =>
+            new()
+            {
+                PrevHash = prevHash,
+                MerkleRoot = UInt256.Parse("0x6226416a0e5aca42b5566f5a19ab467692688ba9d47986f6981a7f747bba2772"),
+                Timestamp = (ulong)((DateTimeOffset)new DateTime(2024, 06, 05, 0, 33, 1, 001, DateTimeKind.Utc)).ToUnixTimeMilliseconds(),
+                Index = index,
+                Nonce = 0,
+                NextConsensus = UInt160.Zero,
+                Witness = new Witness
+                {
+                    InvocationScript = [],
+                    VerificationScript = [(byte)OpCode.PUSH1],
+                }
+            };
     }
 }

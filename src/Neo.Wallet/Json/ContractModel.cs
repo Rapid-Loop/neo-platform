@@ -20,9 +20,9 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration.Interfaces;
 using Neo.Configuration.Json;
 using Neo.Configuration.Json.Converters;
+using Neo.Core.Interfaces;
 using Neo.Core.SmartContract;
 using System.Linq;
 using System.Text.Json.Serialization;

@@ -20,17 +20,16 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration.Interfaces;
-using Neo.Configuration.Json;
 using Neo.Core.Cryptography.ECC;
+using Neo.Core.VM;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace Neo.Configuration
+namespace Neo.Core
 {
-    public class ProtocolSettings : IMap<ProtocolSettingsModel>
+    public class ProtocolSettings
     {
         /// <summary>
         /// The magic number of the NEO network.
@@ -95,7 +94,7 @@ namespace Neo.Configuration
         /// <summary>
         /// Sets the block height from which a hard fork is activated.
         /// </summary>
-        public IReadOnlyDictionary<Hardfork, uint> HardForks { get; init; } = Enum.GetValues<Hardfork>().ToImmutableDictionary(k => k, v => 0u);
+        public IReadOnlyDictionary<HardFork, uint> HardForks { get; init; } = Enum.GetValues<HardFork>().ToImmutableDictionary(k => k, v => 0u);
 
         /// <summary>
         /// Indicates the amount of gas to distribute during initialization.
@@ -125,21 +124,5 @@ namespace Neo.Configuration
             MaxTraceableBlocks = 2_102_400u,
             InitialGasDistribution = 52_000_000_00000000ul,
         };
-
-        public ProtocolSettingsModel ToObject() =>
-            new()
-            {
-                Network = Network,
-                AddressVersion = AddressVersion,
-                StandbyCommittee = [.. StandbyCommittee],
-                ValidatorsCount = ValidatorsCount,
-                SeedList = [.. SeedList],
-                MillisecondsPerBlock = MillisecondsPerBlock,
-                MaxTransactionsPerBlock = MaxTransactionsPerBlock,
-                MemoryPoolMaxTransactions = MemoryPoolMaxTransactions,
-                MaxTraceableBlocks = MaxTraceableBlocks,
-                InitialGasDistribution = InitialGasDistribution,
-                HardForks = HardForks.ToDictionary(),
-            };
     }
 }

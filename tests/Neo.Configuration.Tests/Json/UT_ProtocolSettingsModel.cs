@@ -22,6 +22,7 @@
 
 using Neo.Configuration.Json;
 using Neo.Core.Cryptography.ECC;
+using Neo.Core.VM;
 
 namespace Neo.Configuration.Tests.Json
 {
@@ -31,7 +32,7 @@ namespace Neo.Configuration.Tests.Json
         [TestMethod]
         public void TestPropertyValues()
         {
-            var jsonTestString = "{\"network\":810960196,\"addressVersion\":53,\"millisecondsPerBlock\":1000,\"maxTransactionsPerBlock\":512,\"memoryPoolMaxTransactions\":50000,\"maxTraceableBlocks\":2102400,\"hardforks\":{\"HF_Aspidochelone\":666},\"initialGasDistribution\":5200000000000000,\"validatorsCount\":1,\"standbyCommittee\":[\"03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c\"],\"seedList\":[\"seed1.neo.org:10333\"]}";
+            var jsonTestString = "{\"network\":810960196,\"addressVersion\":53,\"millisecondsPerBlock\":1000,\"maxTransactionsPerBlock\":512,\"memoryPoolMaxTransactions\":50000,\"maxTraceableBlocks\":2102400,\"hardforks\":{\"Aspidochelone\":666},\"initialGasDistribution\":5200000000000000,\"validatorsCount\":1,\"standbyCommittee\":[\"03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c\"],\"seedList\":[\"seed1.neo.org:10333\"]}";
             var actualProtocolOptionsModel = JsonModel.FromJson<ProtocolSettingsModel>(jsonTestString, TestDefaults.JsonDefaultSerializerOptions);
 
             Assert.IsNotNull(actualProtocolOptionsModel);
@@ -46,7 +47,7 @@ namespace Neo.Configuration.Tests.Json
             Assert.AreEqual(1, actualProtocolOptionsModel.ValidatorsCount);
 
             Assert.IsNotNull(actualProtocolOptionsModel.HardForks);
-            Assert.AreEqual(666u, actualProtocolOptionsModel.HardForks[Hardfork.HF_Aspidochelone]);
+            Assert.AreEqual(666u, actualProtocolOptionsModel.HardForks[HardFork.Aspidochelone]);
 
             Assert.IsNotNull(actualProtocolOptionsModel.StandbyCommittee);
             Assert.AreEqual(ECPoint.Parse("03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c", ECCurve.SecP256r1), actualProtocolOptionsModel.StandbyCommittee[0]);
@@ -58,7 +59,7 @@ namespace Neo.Configuration.Tests.Json
         [TestMethod]
         public void TestObjectToProtocolSettings()
         {
-            var jsonTestString = "{\"network\":810960196,\"addressVersion\":53,\"millisecondsPerBlock\":1000,\"maxTransactionsPerBlock\":512,\"memoryPoolMaxTransactions\":50000,\"maxTraceableBlocks\":2102400,\"hardforks\":{\"HF_Aspidochelone\":666},\"initialGasDistribution\":5200000000000000,\"validatorsCount\":1,\"standbyCommittee\":[\"03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c\"],\"seedList\":[\"seed1.neo.org:10333\"]}";
+            var jsonTestString = "{\"network\":810960196,\"addressVersion\":53,\"millisecondsPerBlock\":1000,\"maxTransactionsPerBlock\":512,\"memoryPoolMaxTransactions\":50000,\"maxTraceableBlocks\":2102400,\"hardforks\":{\"Aspidochelone\":666},\"initialGasDistribution\":5200000000000000,\"validatorsCount\":1,\"standbyCommittee\":[\"03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c\"],\"seedList\":[\"seed1.neo.org:10333\"]}";
             var actualProtocolOptionsModel = JsonModel.FromJson<ProtocolSettingsModel>(jsonTestString, TestDefaults.JsonDefaultSerializerOptions);
 
             Assert.IsNotNull(actualProtocolOptionsModel);
@@ -75,7 +76,7 @@ namespace Neo.Configuration.Tests.Json
             Assert.AreEqual(1, actualProtocolSettings.ValidatorsCount);
 
             Assert.IsNotNull(actualProtocolSettings.HardForks);
-            Assert.AreEqual(666u, actualProtocolSettings.HardForks[Hardfork.HF_Aspidochelone]);
+            Assert.AreEqual(666u, actualProtocolSettings.HardForks[HardFork.Aspidochelone]);
 
             Assert.IsNotNull(actualProtocolSettings.StandbyCommittee);
             Assert.AreEqual(ECPoint.Parse("03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c", ECCurve.SecP256r1), actualProtocolSettings.StandbyCommittee[0]);

@@ -20,7 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration;
+using Neo.Core;
 using System;
 
 namespace Neo.Wallet.Tests

@@ -20,11 +20,17 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.Configuration.Interfaces
+namespace Neo.Core.VM
 {
-    public interface IMap<TDestination>
-        where TDestination : notnull
+    public enum HardFork : byte
     {
-        TDestination ToObject();
+        Genesis = 0,
+        Aspidochelone,
+        Basilisk,
+        Cockatrice,
+        Domovoi,
+        Echidna,
+        Faun,
+        Gorgon,
     }
 }

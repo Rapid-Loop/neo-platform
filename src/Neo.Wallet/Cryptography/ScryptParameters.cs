@@ -20,7 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration.Interfaces;
+using Neo.Core.Interfaces;
 using Neo.Wallet.Json;
 
 namespace Neo.Wallet.Cryptography

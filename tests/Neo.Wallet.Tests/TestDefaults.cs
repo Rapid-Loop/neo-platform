@@ -20,11 +20,12 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration;
 using Neo.Configuration.Json.Converters;
+using Neo.Core;
 using Neo.Core.SmartContract;
 using Neo.Wallet.Json;
 using System;
+using System.Collections.Immutable;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -80,7 +81,20 @@ namespace Neo.Wallet.Tests
                             },
                         ],
                     },
-                    Extra = ProtocolSettings.Default.ToObject(),
+                    Extra = new()
+                    {
+                        Network = ProtocolSettings.Default.Network,
+                        AddressVersion = ProtocolSettings.Default.AddressVersion,
+                        MillisecondsPerBlock = ProtocolSettings.Default.MillisecondsPerBlock,
+                        MaxTransactionsPerBlock = ProtocolSettings.Default.MaxTransactionsPerBlock,
+                        MemoryPoolMaxTransactions = ProtocolSettings.Default.MemoryPoolMaxTransactions,
+                        MaxTraceableBlocks = ProtocolSettings.Default.MaxTraceableBlocks,
+                        InitialGasDistribution = ProtocolSettings.Default.InitialGasDistribution,
+                        ValidatorsCount = ProtocolSettings.Default.ValidatorsCount,
+                        SeedList = [.. ProtocolSettings.Default.SeedList],
+                        HardForks = ProtocolSettings.Default.HardForks.ToImmutableDictionary(),
+                        StandbyCommittee = [.. ProtocolSettings.Default.StandbyCommittee],
+                    },
                 },
             ],
             Extra = null,
@@ -111,7 +125,20 @@ namespace Neo.Wallet.Tests
                             },
                         ],
                     },
-                    Extra = ProtocolSettings.Default.ToObject(),
+                    Extra = new()
+                    {
+                        Network = ProtocolSettings.Default.Network,
+                        AddressVersion = ProtocolSettings.Default.AddressVersion,
+                        MillisecondsPerBlock = ProtocolSettings.Default.MillisecondsPerBlock,
+                        MaxTransactionsPerBlock = ProtocolSettings.Default.MaxTransactionsPerBlock,
+                        MemoryPoolMaxTransactions = ProtocolSettings.Default.MemoryPoolMaxTransactions,
+                        MaxTraceableBlocks = ProtocolSettings.Default.MaxTraceableBlocks,
+                        InitialGasDistribution = ProtocolSettings.Default.InitialGasDistribution,
+                        ValidatorsCount = ProtocolSettings.Default.ValidatorsCount,
+                        SeedList = [.. ProtocolSettings.Default.SeedList],
+                        HardForks = ProtocolSettings.Default.HardForks.ToImmutableDictionary(),
+                        StandbyCommittee = [.. ProtocolSettings.Default.StandbyCommittee],
+                    },
                 },
             ],
             Extra = null,

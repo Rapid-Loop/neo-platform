@@ -76,7 +76,7 @@ namespace Neo.VM
 
         public ExecutionContext LoadScript(byte[] script, int initialPosition = 0)
         {
-            var rootContext = new ExecutionContext(script, 1_00000000);
+            var rootContext = new ExecutionContext(script); // TODO: Pass parameters for Transaction Class
 
             LoadContext(rootContext);
             return rootContext;

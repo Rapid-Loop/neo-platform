@@ -22,12 +22,18 @@
 
 using Microsoft.Extensions.Logging;
 using Neo.Core.VM;
+using Neo.VM.Logging;
 
 namespace Neo.VM
 {
     public partial class NeoVirtualMachine
     {
-        [LoggerMessage(LogLevel.Trace, Message = "Starting execution | HardFork: {Fork} | Gas: {Gas}")]
+        [LoggerMessage(
+            Level = LogLevel.Trace,
+            EventId = LoggerEvents.Execute,
+            EventName = nameof(LoggerEvents.Execute),
+            Message = "Starting execution | HardFork: {Fork} | Gas: {Gas}"
+        )]
         private partial void LogConfiguration(HardFork fork, long gas);
     }
 }

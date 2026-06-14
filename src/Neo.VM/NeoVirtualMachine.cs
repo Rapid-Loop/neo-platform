@@ -22,7 +22,6 @@
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Neo.Configuration;
 using Neo.Core;
 using Neo.Core.Blockchain;
 using Neo.Core.Blockchain.Interface;
@@ -101,7 +100,7 @@ namespace Neo.VM
             _defaultOpCodeTable = opCodeTable ?? VirtualTable.Default;
             _limits = limits ?? ExecutionEngineLimits.Default;
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-            _logger = _loggerFactory.CreateLogger(DefaultCategoryNames.VirtualMachineName);
+            _logger = _loggerFactory.CreateLogger<NeoVirtualMachine>();
         }
 
         public void Dispose()

@@ -30,6 +30,7 @@ namespace Neo.VM.Tests
         {
             logging.ClearProviders();
             logging.AddDebug();
+            logging.AddSimpleConsole();
             logging.SetMinimumLevel(LogLevel.Trace);
         });
     }

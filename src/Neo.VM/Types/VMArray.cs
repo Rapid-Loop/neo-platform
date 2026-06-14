@@ -85,7 +85,7 @@ namespace Neo.VM.Types
             return ((IReadOnlyList<VMObject>)Array).ToHashCode(RefCount ^ 397);
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals([NotNullWhen(true)] object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
             if (obj is null) return false;

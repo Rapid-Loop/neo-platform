@@ -20,18 +20,17 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Microsoft.Extensions.Logging;
-using Neo.VM.Tests.Extensions;
+using Microsoft.Extensions.Localization;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Neo.VM.Tests
+namespace Neo.Localization.VM
 {
-    internal class TestUtilities
+    public static class NeoVirtualMachineMessages
     {
-        public static readonly ILoggerFactory TraceLoggerFactory = LoggerFactory.Create(logging =>
-        {
-            logging.ClearProviders();
-            logging.AddTraceExecution();
-            logging.SetMinimumLevel(LogLevel.Trace);
-        });
+        private static readonly IStringLocalizer s_localizer = ResourceFactory.Instance.Create(typeof(NeoVirtualMachineMessages));
+
+        [return: NotNullIfNotNull(nameof(s_localizer))]
+        public static string GetMessage(string messageName, params object[] args) =>
+            s_localizer[messageName, args];
     }
 }

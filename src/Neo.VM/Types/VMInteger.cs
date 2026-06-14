@@ -21,6 +21,7 @@
 // SERVICES
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Neo.VM.Types
@@ -45,7 +46,7 @@ namespace Neo.VM.Types
             base.Dispose(disposing);
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals([NotNullWhen(true)] object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
             if (obj is null) return false;
@@ -81,7 +82,7 @@ namespace Neo.VM.Types
             return _value.ToByteArray();
         }
 
-        public bool Equals(VMInteger? other)
+        public bool Equals([NotNullWhen(true)] VMInteger? other)
         {
             if (ReferenceEquals(other, this)) return true;
             if (other is null) return false;

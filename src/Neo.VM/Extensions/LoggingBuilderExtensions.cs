@@ -20,20 +20,33 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using Neo.Core.VM;
+using Microsoft.Extensions.Logging.Configuration;
 using Neo.VM.Logging;
+using System;
 
-namespace Neo.VM
+namespace Neo.VM.Tests.Extensions
 {
-    public partial class NeoVirtualMachine
+    internal static class LoggingBuilderExtensions
     {
-        [LoggerMessage(
-            Level = LogLevel.Trace,
-            EventId = LoggerEvents.Execute,
-            EventName = nameof(LoggerEvents.Execute),
-            Message = "Starting execution | HardFork: {Fork} | Gas: {Gas}"
-        )]
-        private partial void LogConfiguration(HardFork fork, long gas);
+        public static ILoggingBuilder AddTraceExecution(this ILoggingBuilder builder)
+        {
+            builder.AddConfiguration();
+
+            builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, TraceExecutionLoggerProvider>());
+
+            LoggerProviderOptions.RegisterProviderOptions<TraceExecutionLoggerOptions, TraceExecutionLoggerProvider>(builder.Services);
+
+            return builder;
+        }
+
+        public static ILoggingBuilder AddTraceExecution(this ILoggingBuilder builder, Action<TraceExecutionLoggerOptions> configure)
+        {
+            builder.AddTraceExecution();
+            builder.Services.Configure(configure);
+            return builder;
+        }
     }
 }

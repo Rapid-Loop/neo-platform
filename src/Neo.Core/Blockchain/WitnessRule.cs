@@ -23,6 +23,7 @@
 using Neo.Core.Extensions;
 using Neo.Core.Serialization;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.CompilerServices;
 
@@ -57,14 +58,14 @@ namespace Neo.Core.Blockchain
             }
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals([NotNullWhen(true)] object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
             if (obj is null) return false;
             return Equals(obj as WitnessRule);
         }
 
-        public bool Equals(WitnessRule? other)
+        public bool Equals([NotNullWhen(true)] WitnessRule? other)
         {
             if (ReferenceEquals(other, this)) return true;
             if (other is null) return false;

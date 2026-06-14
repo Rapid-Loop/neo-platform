@@ -20,18 +20,12 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Microsoft.Extensions.Logging;
-using Neo.VM.Tests.Extensions;
-
-namespace Neo.VM.Tests
+namespace Neo.Localization.VM
 {
-    internal class TestUtilities
+    public static class NeoVirtualMachineMessageNames
     {
-        public static readonly ILoggerFactory TraceLoggerFactory = LoggerFactory.Create(logging =>
-        {
-            logging.ClearProviders();
-            logging.AddTraceExecution();
-            logging.SetMinimumLevel(LogLevel.Trace);
-        });
+        private const string MessageSuffixString = "Message";
+
+        public const string StartupExecute = nameof(StartupExecute) + MessageSuffixString;
     }
 }

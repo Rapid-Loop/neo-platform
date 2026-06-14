@@ -99,7 +99,7 @@ namespace Neo.Core
             _value4 = reader.Read<ulong>();
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals([NotNullWhen(true)] object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
             return Equals(obj as UInt256);

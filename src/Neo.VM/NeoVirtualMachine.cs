@@ -26,6 +26,7 @@ using Neo.Core;
 using Neo.Core.Blockchain;
 using Neo.Core.Blockchain.Interface;
 using Neo.VM.Core;
+using Neo.VM.Extensions;
 using Neo.VM.Types;
 using System;
 using System.Collections.Generic;
@@ -130,7 +131,7 @@ namespace Neo.VM
         internal virtual void LoadContext(ExecutionContext context)
         {
             if (_invocationStack.Count >= Limits.MaxInvocationStackSize)
-                throw new InvalidOperationException($"MaxInvocationStackSize exceed: {InvocationStack.Count}");
+                throw new InvalidOperationException($"{nameof(Limits.MaxInvocationStackSize)} exceed: {InvocationStack.Count}");
 
             _entryContext ??= context;
             _currentContext = context;
@@ -161,9 +162,10 @@ namespace Neo.VM
         {
             _maxGasConsumed = 0;
 
-            LogConfiguration(
-                _protocolSettings.GetActiveHardFork(_persistingBlock.Index),
-                _maxGasLimit
+            _logger.LogExecuteStartupMessage(
+                LogLevel.Trace,
+                 _protocolSettings.GetActiveHardFork(_persistingBlock.Index),
+                 _maxGasLimit
             );
 
             if (State == VMState.BREAK)

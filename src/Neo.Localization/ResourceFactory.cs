@@ -20,36 +20,24 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.VM.Logging
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
+using System;
+
+namespace Neo.Localization
 {
-    public sealed class LoggerEvents
+    public static class ResourceFactory
     {
-        public const int Fault = 100;
+        public static readonly ResourceManagerStringLocalizerFactory Instance = Create(config => config.ResourcesPath = "Resources");
 
-        public const int Create = 200;
-        public const int Load = 201;
-        public const int PrePost = 202;
-        public const int Post = 203;
-        public const int Break = 204;
-        public const int Execute = 205;
+        private static ResourceManagerStringLocalizerFactory Create(Action<LocalizationOptions> configure)
+        {
+            var localizedOptions = new LocalizationOptions();
 
-        public const int Burn = 300;
-        public const int Call = 301;
-        public const int Notify = 302;
-        public const int Log = 303;
+            configure?.Invoke(localizedOptions);
 
-        public const int Persist = 400;
-        public const int PostPersist = 401;
-
-        public const int StoragePut = 500;
-        public const int StorageGet = 501;
-        public const int StorageFind = 502;
-        public const int StorageDelete = 503;
-
-        public const int IteratorNext = 600;
-        public const int IteratorGet = 601;
-
-        public const int ReadStorage = 700;
-        public const int UpdateStorage = 701;
+            return new(Options.Create(localizedOptions), NullLoggerFactory.Instance);
+        }
     }
 }

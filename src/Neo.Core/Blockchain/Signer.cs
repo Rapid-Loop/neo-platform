@@ -25,6 +25,7 @@ using Neo.Core.Extensions;
 using Neo.Core.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Neo.Core.Blockchain
@@ -77,13 +78,13 @@ namespace Neo.Core.Blockchain
             }
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals([NotNullWhen(true)] object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
             if (obj is null) return false;
             return Equals(obj as Signer);
         }
-        public bool Equals(Signer? other)
+        public bool Equals([NotNullWhen(true)] Signer? other)
         {
             if (ReferenceEquals(other, this)) return true;
             if (other is null) return false;

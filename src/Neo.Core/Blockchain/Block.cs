@@ -25,6 +25,7 @@ using Neo.Core.Cryptography;
 using Neo.Core.Extensions;
 using Neo.Core.Serialization;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 
@@ -50,14 +51,14 @@ namespace Neo.Core.Blockchain
             return Hash.GetHashCode();
         }
 
-        public bool Equals(Block? other)
+        public bool Equals([NotNullWhen(true)] Block? other)
         {
             if (ReferenceEquals(other, this)) return true;
             if (other is null) return false;
             return Hash == other.Hash;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals([NotNullWhen(true)] object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
             if (obj is null) return false;

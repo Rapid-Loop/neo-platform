@@ -21,6 +21,7 @@
 // SERVICES
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Neo.VM.Types
@@ -29,10 +30,10 @@ namespace Neo.VM.Types
     {
         public override VMObjectType Type => VMObjectType.Any;
 
-        public static VMNull Instance => _instance;
+        public static VMNull Instance => s_instance;
 
 
-        private static readonly VMNull _instance = new();
+        private static readonly VMNull s_instance = new();
 
         protected override void Dispose(bool disposing)
         {
@@ -40,14 +41,14 @@ namespace Neo.VM.Types
             base.Dispose(disposing);
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals([NotNullWhen(true)] object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
             if (obj is null) return true;
             return Equals(obj as VMNull);
         }
 
-        public bool Equals(VMNull? other)
+        public bool Equals([NotNullWhen(true)] VMNull? other)
         {
             return true;
         }

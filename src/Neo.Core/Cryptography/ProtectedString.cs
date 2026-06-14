@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -55,7 +56,7 @@ namespace Neo.Core.Cryptography
             GC.SuppressFinalize(this);
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals([NotNullWhen(true)] object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
             return Equals(obj as ProtectedString);
@@ -85,7 +86,7 @@ namespace Neo.Core.Cryptography
             return string.Compare(this, other);
         }
 
-        public bool Equals(ProtectedString? other)
+        public bool Equals([NotNullWhen(true)] ProtectedString? other)
         {
             if (other is null) return false;
             return string.Equals(this, other);

@@ -3,6 +3,7 @@
     <Project Path="src/Neo.Configuration/Neo.Configuration.csproj" Id="c4462615-3b84-448c-979e-2413261b5041" />
     <Project Path="src/Neo.Core/Neo.Core.csproj" />
     <Project Path="src/Neo.IO/Neo.IO.csproj" Id="476db0c1-403f-4d31-92f8-dc55985e81a4" />
+    <Project Path="src/Neo.Localization/Neo.Localization.csproj" Id="cf344ed8-cbf9-4f00-a5d4-d0c7bac43145" />
     <Project Path="src/Neo.VM/Neo.VM.csproj" Id="e38e01be-d9e4-4c1d-a0bc-b9a37250d446" />
     <Project Path="src/Neo.Wallet/Neo.Wallet.csproj" Id="49b273b6-b9a6-402e-8ea6-db4e23a3fe40" />
   </Folder>

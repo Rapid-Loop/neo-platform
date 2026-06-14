@@ -20,18 +20,36 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Microsoft.Extensions.Logging;
-using Neo.VM.Tests.Extensions;
-
-namespace Neo.VM.Tests
+namespace Neo.VM.Logging
 {
-    internal class TestUtilities
+    public static class VirtualMachineEventId
     {
-        public static readonly ILoggerFactory TraceLoggerFactory = LoggerFactory.Create(logging =>
-        {
-            logging.ClearProviders();
-            logging.AddTraceExecution();
-            logging.SetMinimumLevel(LogLevel.Trace);
-        });
+        public const int Fault = 100;
+
+        public const int Create = 200;
+        public const int Load = 201;
+        public const int PrePost = 202;
+        public const int Post = 203;
+        public const int Break = 204;
+        public const int Execute = 205;
+
+        public const int Burn = 300;
+        public const int Call = 301;
+        public const int Notify = 302;
+        public const int Log = 303;
+
+        public const int Persist = 400;
+        public const int PostPersist = 401;
+
+        public const int StoragePut = 500;
+        public const int StorageGet = 501;
+        public const int StorageFind = 502;
+        public const int StorageDelete = 503;
+
+        public const int IteratorNext = 600;
+        public const int IteratorGet = 601;
+
+        public const int ReadStorage = 700;
+        public const int UpdateStorage = 701;
     }
 }

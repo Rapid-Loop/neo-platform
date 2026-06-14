@@ -57,7 +57,7 @@ namespace Neo.VM.Types
                 string.Equals(_interfaceName, other._interfaceName);
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals([NotNullWhen(true)] object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
             if (obj is null) return false;

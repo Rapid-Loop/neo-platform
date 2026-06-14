@@ -94,7 +94,7 @@ namespace Neo.Core
             _value3 = reader.Read<uint>();
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals([NotNullWhen(true)] object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
             return Equals(obj as UInt160);

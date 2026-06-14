@@ -75,7 +75,7 @@ namespace Neo.VM.Tests
 
             var script = sb.ToArray();
 
-            var vm = new NeoVirtualMachine();
+            var vm = new NeoVirtualMachine(loggerFactory: TestUtilities.TraceLoggerFactory);
             vm.LoadScript(script);
 
             var actualState = vm.Execute();

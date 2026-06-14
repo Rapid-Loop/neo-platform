@@ -24,6 +24,7 @@ using Neo.Core.Blockchain.Interface;
 using Neo.Core.Extensions;
 using Neo.Core.Serialization;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 
@@ -107,14 +108,14 @@ namespace Neo.Core.Blockchain
             return Hash.GetHashCode();
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals([NotNullWhen(true)] object? obj)
         {
             if (ReferenceEquals(obj, this)) return true;
             if (obj is null) return false;
             return Equals(obj as Transaction);
         }
 
-        public bool Equals(Transaction? other)
+        public bool Equals([NotNullWhen(true)] Transaction? other)
         {
             if (ReferenceEquals(other, this)) return true;
             if (other is null) return false;

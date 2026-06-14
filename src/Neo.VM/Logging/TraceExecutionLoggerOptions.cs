@@ -20,18 +20,19 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Microsoft.Extensions.Logging;
-using Neo.VM.Tests.Extensions;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Neo.VM.Tests
+namespace Neo.VM.Logging
 {
-    internal class TestUtilities
+    internal sealed class TraceExecutionLoggerOptions
     {
-        public static readonly ILoggerFactory TraceLoggerFactory = LoggerFactory.Create(logging =>
-        {
-            logging.ClearProviders();
-            logging.AddTraceExecution();
-            logging.SetMinimumLevel(LogLevel.Trace);
-        });
+        public const string DefaultDateTimeFormatString = "yyyy-MM-dd HH:mm:ss.ffff";
+
+        public bool UseUtcTimestamp { get; set; } = true;
+
+        [StringSyntax(StringSyntaxAttribute.DateTimeFormat)]
+        public string TimestampFormat { get; set; } = DefaultDateTimeFormatString;
+
+        public bool ShowExceptionStackTrace { get; set; } = true;
     }
 }

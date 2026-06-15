@@ -35,7 +35,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 0, Push 1</remarks>
-        public virtual void Depth(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Depth(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(engine.CurrentContext!.Frame.EvaluationStack.Count);
         }
@@ -47,7 +47,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void Drop(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Drop(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Pop();
         }
@@ -58,7 +58,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Nip(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Nip(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.RemoveAt(1);
         }
@@ -70,7 +70,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void XDrop(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void XDrop(VirtualMachine engine, VMInstruction instruction)
         {
             var n = engine.CurrentContext!.Pop().GetInteger();
 
@@ -86,7 +86,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Clear(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Clear(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Clear();
         }
@@ -98,7 +98,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 0, Push 1</remarks>
-        public virtual void Dup(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Dup(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(engine.CurrentContext!.Peek());
         }
@@ -110,7 +110,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 0, Push 1</remarks>
-        public virtual void Over(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Over(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(engine.CurrentContext!.Peek(1));
         }
@@ -122,7 +122,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void Pick(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Pick(VirtualMachine engine, VMInstruction instruction)
         {
             var n = engine.CurrentContext!.Pop().GetInteger();
 
@@ -138,7 +138,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Tuck(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Tuck(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Insert(2, engine.CurrentContext!.Peek());
         }
@@ -150,7 +150,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 0, Push 0</remarks>
-        public virtual void Swap(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Swap(VirtualMachine engine, VMInstruction instruction)
         {
             if (engine.CurrentContext!.Frame.EvaluationStack.Count < 2)
                 throw new ArgumentOutOfRangeException($"Swap index is out of stack bounds: 1/{engine.CurrentContext!.Frame.EvaluationStack.Count}");
@@ -165,7 +165,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 0, Push 0</remarks>
-        public virtual void Rot(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Rot(VirtualMachine engine, VMInstruction instruction)
         {
             // ROT: [a, b, c] -> [b, c, a] (c is top)
             // Equivalent to: swap(1,2), swap(0,1)
@@ -184,7 +184,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void Roll(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Roll(VirtualMachine engine, VMInstruction instruction)
         {
             var n = engine.CurrentContext!.Pop().GetInteger();
 
@@ -204,7 +204,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Reverse3(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Reverse3(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Reverse(3);
         }
@@ -215,7 +215,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Reverse4(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Reverse4(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Reverse(4);
         }
@@ -227,7 +227,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void ReverseN(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void ReverseN(VirtualMachine engine, VMInstruction instruction)
         {
             var n = engine.CurrentContext!.Pop().GetInteger();
 

@@ -25,9 +25,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Neo.Localization.VM
 {
-    public static class NeoVirtualMachineMessages
+    public static class VirtualMachineLocalizer
     {
-        private static readonly IStringLocalizer s_localizer = ResourceFactory.Instance.Create(typeof(NeoVirtualMachineMessages));
+        private static readonly IStringLocalizer s_localizer = ResourceFactory.Instance.Create(typeof(VirtualMachineLocalizer));
 
         [return: NotNullIfNotNull(nameof(s_localizer))]
         public static string GetMessage(string messageName, params object[] args) =>

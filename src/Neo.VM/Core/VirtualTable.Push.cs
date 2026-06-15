@@ -34,7 +34,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushInt8(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushInt8(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(new BigInteger(instruction.Operand.Span));
         }
@@ -45,7 +45,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushInt16(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushInt16(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(new BigInteger(instruction.Operand.Span));
         }
@@ -56,7 +56,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushInt32(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushInt32(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(new BigInteger(instruction.Operand.Span));
         }
@@ -67,7 +67,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushInt64(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushInt64(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(new BigInteger(instruction.Operand.Span));
         }
@@ -78,7 +78,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushInt128(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushInt128(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(new BigInteger(instruction.Operand.Span));
         }
@@ -89,7 +89,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushInt256(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushInt256(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(new BigInteger(instruction.Operand.Span));
         }
@@ -100,7 +100,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushT(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushT(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(true);
         }
@@ -111,7 +111,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushF(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushF(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(false);
         }
@@ -122,7 +122,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushA(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushA(VirtualMachine engine, VMInstruction instruction)
         {
             // TODO: Add VMPointer to stack
         }
@@ -133,7 +133,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushNull(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushNull(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(VMNull.Instance);
         }
@@ -145,7 +145,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushData1(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushData1(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(instruction.Operand[instruction.OperandPrefixSize..].ToArray());
         }
@@ -157,7 +157,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushData2(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushData2(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(instruction.Operand[instruction.OperandPrefixSize..].ToArray());
         }
@@ -169,7 +169,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushData4(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushData4(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(instruction.Operand[instruction.OperandPrefixSize..].ToArray());
         }
@@ -180,7 +180,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void PushM1(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void PushM1(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(-1);
         }
@@ -191,7 +191,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push0(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push0(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(0);
         }
@@ -202,7 +202,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push1(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push1(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(1);
         }
@@ -213,7 +213,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push2(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push2(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(2);
         }
@@ -224,7 +224,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push3(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push3(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(3);
         }
@@ -235,7 +235,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push4(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push4(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(4);
         }
@@ -246,7 +246,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push5(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push5(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(5);
         }
@@ -257,7 +257,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push6(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push6(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(6);
         }
@@ -268,7 +268,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push7(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push7(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(7);
         }
@@ -279,7 +279,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push8(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push8(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(8);
         }
@@ -290,7 +290,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push9(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push9(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(9);
         }
@@ -301,7 +301,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push10(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push10(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(10);
         }
@@ -312,7 +312,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push11(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push11(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(11);
         }
@@ -323,7 +323,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push12(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push12(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(12);
         }
@@ -334,7 +334,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push13(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push13(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(13);
         }
@@ -345,7 +345,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push14(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push14(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(14);
         }
@@ -356,7 +356,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push15(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push15(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(15);
         }
@@ -367,7 +367,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Push16(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Push16(VirtualMachine engine, VMInstruction instruction)
         {
             engine.CurrentContext!.Push(16);
         }

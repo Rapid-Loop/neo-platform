@@ -35,7 +35,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void NewBuffer(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void NewBuffer(VirtualMachine engine, VMInstruction instruction)
         {
             var length = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
 
@@ -50,7 +50,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 5, Push 0</remarks>
-        public virtual void Memcpy(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Memcpy(VirtualMachine engine, VMInstruction instruction)
         {
             var count = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (count < 0)
@@ -83,7 +83,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void Cat(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Cat(VirtualMachine engine, VMInstruction instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetReadOnlySpan();
             var x1 = engine.CurrentContext!.Pop().GetReadOnlySpan();
@@ -102,7 +102,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 3, Push 1</remarks>
-        public virtual void SubStr(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void SubStr(VirtualMachine engine, VMInstruction instruction)
         {
             var count = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (count < 0)
@@ -127,7 +127,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void Left(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Left(VirtualMachine engine, VMInstruction instruction)
         {
             var count = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (count < 0)
@@ -148,7 +148,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void Right(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Right(VirtualMachine engine, VMInstruction instruction)
         {
             var count = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (count < 0)

@@ -123,4 +123,7 @@
   <data name="ExecuteStartupMessage" xml:space="preserve">
     <value>Starting execution | Hard Fork: {0:G} | Gas Limit: {1:N0}</value>
   </data>
+  <data name="ExecuteSuccessfullyMessage" xml:space="preserve">
+    <value>Execution completed successfully | Gas Consumed: {0:N0} | Gas Left: {1:N0} | State: {2:G}</value>
+  </data>
 </root>

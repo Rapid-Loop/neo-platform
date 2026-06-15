@@ -36,7 +36,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void IsNull(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void IsNull(VirtualMachine engine, VMInstruction instruction)
         {
             var x = engine.CurrentContext!.Pop();
 
@@ -50,7 +50,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void IsType(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void IsType(VirtualMachine engine, VMInstruction instruction)
         {
             var x = engine.CurrentContext!.Pop();
             var type = instruction.AsToken<VMObjectType>();
@@ -68,7 +68,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void Convert(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void Convert(VirtualMachine engine, VMInstruction instruction)
         {
             var x = engine.CurrentContext!.Pop();
 
@@ -98,7 +98,7 @@ namespace Neo.VM.Core
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 0</remarks>
         [DoesNotReturn]
-        public virtual void AbortMsg(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void AbortMsg(VirtualMachine engine, VMInstruction instruction)
         {
             var msg = engine.CurrentContext!.Pop().ToString();
 
@@ -112,7 +112,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void AssertMsg(NeoVirtualMachine engine, VMInstruction instruction)
+        public virtual void AssertMsg(VirtualMachine engine, VMInstruction instruction)
         {
             var msg = engine.CurrentContext!.Pop().ToString();
             var x = engine.CurrentContext!.Pop().GetBoolean();

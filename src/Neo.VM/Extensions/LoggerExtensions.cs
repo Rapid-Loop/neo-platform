@@ -21,8 +21,6 @@
 // SERVICES
 
 using Microsoft.Extensions.Logging;
-using Neo.Core.VM;
-using Neo.Localization.VM;
 using Neo.VM.Logging;
 
 namespace Neo.VM.Extensions
@@ -72,33 +70,5 @@ namespace Neo.VM.Extensions
             LogLevel logLevel,
             string message
         );
-
-        public static void LogExecuteStartupMessage(this ILogger logger, LogLevel logLevel, params object[] args)
-        {
-            if (logger.IsEnabled(logLevel))
-            {
-                var message = NeoVirtualMachineMessages.GetMessage(
-                    NeoVirtualMachineMessageNames.ExecuteStartup,
-                    args
-                );
-
-                logger.LogExecuteMessage(logLevel, message);
-            }
-        }
-
-        public static void LogExecuteOpCodeMessage(this ILogger logger, LogLevel logLevel, int ip, VMInstruction instruction)
-        {
-            if (logger.IsEnabled(logLevel))
-            {
-                var message = NeoVirtualMachineMessages.GetMessage(
-                    NeoVirtualMachineMessageNames.ExecuteOpCode,
-                    ip,
-                    instruction.OpCode,
-                    instruction.DecodeOperand()
-                );
-
-                logger.LogExecuteMessage(logLevel, message);
-            }
-        }
     }
 }

@@ -27,7 +27,6 @@ using Neo.Core.Blockchain;
 using Neo.Core.Blockchain.Interface;
 using Neo.Core.VM;
 using Neo.VM.Core;
-using Neo.VM.Extensions;
 using Neo.VM.Types;
 using System;
 using System.Collections.Generic;
@@ -38,7 +37,7 @@ namespace Neo.VM
     /// <summary>
     /// Represents the VM used to execute the script.
     /// </summary>
-    public partial class NeoVirtualMachine : IDisposable
+    public partial class VirtualMachine : IDisposable
     {
         public VMState State { get; internal set; }
 
@@ -86,7 +85,7 @@ namespace Neo.VM
 
         private long _maxGasConsumed;
 
-        public NeoVirtualMachine(
+        public VirtualMachine(
             ProtocolSettings? protocolSettings = default,
             Block? persistingBlock = default,
             IVerifiable? container = default,
@@ -102,7 +101,7 @@ namespace Neo.VM
             _defaultOpCodeTable = opCodeTable ?? VirtualTable.Default;
             _limits = limits ?? ExecutionEngineLimits.Default;
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-            _logger = _loggerFactory.CreateLogger<NeoVirtualMachine>();
+            _logger = _loggerFactory.CreateLogger<VirtualMachine>();
             _currentFork = _protocolSettings.GetActiveHardFork(_persistingBlock.Index);
         }
 
@@ -164,11 +163,7 @@ namespace Neo.VM
         {
             _maxGasConsumed = 0;
 
-            _logger.LogExecuteStartupMessage(
-                LogLevel.Trace,
-                _currentFork,
-                _maxGasLimit
-            );
+            LogExecuteStartupMessage();
 
             if (State == VMState.BREAK)
                 State = VMState.NONE;
@@ -182,11 +177,7 @@ namespace Neo.VM
 
                     var currentInst = _currentContext.CurrentInstruction;
 
-                    _logger.LogExecuteOpCodeMessage(
-                        LogLevel.Trace,
-                        _currentContext.InstructionPointer,
-                        currentInst
-                    );
+                    LogExecuteOpCodeMessage();
 
                     if (_currentContext.ConsumeGas(currentInst.OpCode))
                         _defaultOpCodeTable[currentInst.OpCode](this, currentInst);
@@ -205,6 +196,7 @@ namespace Neo.VM
             }
             finally
             {
+                LogExecuteSuccessfullyMessage();
                 Cleanup();
             }
 

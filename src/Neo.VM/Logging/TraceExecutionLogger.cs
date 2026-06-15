@@ -179,9 +179,9 @@ namespace Neo.VM.Logging
             ResetColor();
         }
 
-        private void DebugWrite(string? message)
+        private static void DebugWrite(string? message)
         {
-            if (Debugger.IsAttached) Debug.Write(message, _name);
+            if (Debugger.IsAttached) Debug.Write(message);
         }
 
         public static void SetTerminalForegroundColor(ConsoleColor consoleColor)

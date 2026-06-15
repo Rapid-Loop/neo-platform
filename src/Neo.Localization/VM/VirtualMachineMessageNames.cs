@@ -22,11 +22,12 @@
 
 namespace Neo.Localization.VM
 {
-    public static class NeoVirtualMachineMessageNames
+    public static class VirtualMachineMessageNames
     {
         private const string MessageSuffixString = "Message";
 
         public const string ExecuteStartup = nameof(ExecuteStartup) + MessageSuffixString;
         public const string ExecuteOpCode = nameof(ExecuteOpCode) + MessageSuffixString;
+        public const string ExecuteSuccessfully = nameof(ExecuteSuccessfully) + MessageSuffixString;
     }
 }

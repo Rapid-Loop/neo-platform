@@ -117,7 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="StartupExecuteMessage" xml:space="preserve">
+  <data name="ExecuteOpCodeMessage" xml:space="preserve">
+    <value>L{0:D4} {1,-11:G}{2}</value>
+  </data>
+  <data name="ExecuteStartupMessage" xml:space="preserve">
     <value>Starting execution | Hard Fork: {0:G} | Gas Limit: {1:N0}</value>
   </data>
 </root>

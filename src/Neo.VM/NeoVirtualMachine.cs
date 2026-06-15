@@ -25,6 +25,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Neo.Core;
 using Neo.Core.Blockchain;
 using Neo.Core.Blockchain.Interface;
+using Neo.Core.VM;
 using Neo.VM.Core;
 using Neo.VM.Extensions;
 using Neo.VM.Types;
@@ -70,7 +71,6 @@ namespace Neo.VM
 
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger _logger;
-
         private readonly Stack<ExecutionContext> _invocationStack = [];
         private readonly VirtualTable _defaultOpCodeTable;
         private readonly ExecutionEngineLimits _limits;
@@ -79,6 +79,7 @@ namespace Neo.VM
         private readonly ProtocolSettings _protocolSettings;
         private readonly Block _persistingBlock;
         private readonly IVerifiable _container;
+        private readonly HardFork _currentFork;
 
         private ExecutionContext? _currentContext;
         private ExecutionContext? _entryContext;
@@ -102,6 +103,7 @@ namespace Neo.VM
             _limits = limits ?? ExecutionEngineLimits.Default;
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<NeoVirtualMachine>();
+            _currentFork = _protocolSettings.GetActiveHardFork(_persistingBlock.Index);
         }
 
         public void Dispose()
@@ -164,8 +166,8 @@ namespace Neo.VM
 
             _logger.LogExecuteStartupMessage(
                 LogLevel.Trace,
-                 _protocolSettings.GetActiveHardFork(_persistingBlock.Index),
-                 _maxGasLimit
+                _currentFork,
+                _maxGasLimit
             );
 
             if (State == VMState.BREAK)
@@ -179,6 +181,12 @@ namespace Neo.VM
                     _currentContext = _invocationStack.Peek();
 
                     var currentInst = _currentContext.CurrentInstruction;
+
+                    _logger.LogExecuteOpCodeMessage(
+                        LogLevel.Trace,
+                        _currentContext.InstructionPointer,
+                        currentInst
+                    );
 
                     if (_currentContext.ConsumeGas(currentInst.OpCode))
                         _defaultOpCodeTable[currentInst.OpCode](this, currentInst);
@@ -210,6 +218,7 @@ namespace Neo.VM
         internal void OnFault(Exception ex)
         {
             State = VMState.FAULT;
+            _logger.LogError(ex, null);
         }
 
         private void Cleanup()

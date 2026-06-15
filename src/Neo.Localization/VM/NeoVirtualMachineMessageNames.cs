@@ -26,6 +26,7 @@ namespace Neo.Localization.VM
     {
         private const string MessageSuffixString = "Message";
 
-        public const string StartupExecute = nameof(StartupExecute) + MessageSuffixString;
+        public const string ExecuteStartup = nameof(ExecuteStartup) + MessageSuffixString;
+        public const string ExecuteOpCode = nameof(ExecuteOpCode) + MessageSuffixString;
     }
 }

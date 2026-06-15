@@ -138,8 +138,11 @@ namespace Neo.Core.VM
         public string DecodeOperand()
         {
             var operand = Operand[OperandPrefixSize..].ToArray();
-            var asStr = CoreUtilities.StrictUtf8Encoding.GetString(operand);
+            var asStr = Encoding.ASCII.GetString(operand);
             var readable = asStr.All(char.IsAsciiLetterOrDigit);
+
+            if (string.IsNullOrWhiteSpace(asStr))
+                asStr = "No Data";
 
             return OpCode switch
             {
@@ -185,8 +188,8 @@ namespace Neo.Core.VM
                 OpCode.SYSCALL => $"[{Unsafe.As<byte, uint>(ref operand[0])}]",
                 OpCode.PUSHDATA1 or
                 OpCode.PUSHDATA2 or
-                OpCode.PUSHDATA4 => readable ? $"{Convert.ToHexString(operand)} // {asStr}" : Convert.ToHexString(operand),
-                _ => readable ? $"\"{asStr}\"" : $"{Convert.ToHexString(operand)}",
+                OpCode.PUSHDATA4 => readable ? $"{Convert.ToHexString(operand)} /* {asStr} */" : Convert.ToHexString(operand),
+                _ => string.Empty,
             };
         }
     }

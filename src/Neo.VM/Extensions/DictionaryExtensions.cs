@@ -20,39 +20,21 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core;
-using Neo.Core.Blockchain;
-using Neo.Core.Cryptography;
+using Neo.VM.Types;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Neo.Wallet
+namespace Neo.VM.Extensions
 {
-    public interface IWalletAccount<TExtras>
-        where TExtras : class?, new()
+    public static class DictionaryExtensions
     {
-        ProtocolSettings ProtocolConfiguration { get; }
-
-        UInt160 ScriptHash { get; }
-
-        string Address { get; }
-
-        string? Label { get; }
-
-        bool IsDefault { get; }
-
-        bool IsLocked { get; }
-
-        bool HasKey { get; }
-
-        TExtras Extra { get; }
-
-        WitnessContract Contract { get; }
-
-        bool ChangePassword(ProtectedString oldPassword, ProtectedString newPassword);
-
-        bool VerifyPassword(ProtectedString password);
-
-        byte[] GetPrivateKey();
-
-        void SetLock();
+        public static VMMap ToStackItem<TKey, TValue>(this IDictionary<TKey, TValue> source) =>
+            new
+            (
+                (IList<VMObject>)source.Keys
+                    .Select(s => s.ToStackItem())
+                    .Zip(source.Values.Select(s => s.ToStackItem()))
+                    .ToList()
+            );
     }
 }

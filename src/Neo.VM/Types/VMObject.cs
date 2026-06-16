@@ -107,7 +107,7 @@ namespace Neo.VM.Types
 
             var newCount = Interlocked.Decrement(ref _refCount);
 
-            if (newCount <= 0)
+            if (newCount < 0)
                 Dispose(true);
 
         }
@@ -212,5 +212,47 @@ namespace Neo.VM.Types
 
         public static implicit operator VMObject(string value) =>
             new VMByteArray(CoreUtilities.StrictUtf8Encoding.GetBytes(value));
+
+        public static implicit operator byte(VMObject value) =>
+            (byte)value.GetInteger();
+
+        public static implicit operator sbyte(VMObject value) =>
+            (sbyte)value.GetInteger();
+
+        public static implicit operator short(VMObject value) =>
+            new VMInteger(value);
+
+        public static implicit operator ushort(VMObject value) =>
+            (ushort)value.GetInteger();
+
+        public static implicit operator int(VMObject value) =>
+            (int)value.GetInteger();
+
+        public static implicit operator uint(VMObject value) =>
+            (uint)value.GetInteger();
+
+        public static implicit operator long(VMObject value) =>
+            (long)value.GetInteger();
+
+        public static implicit operator ulong(VMObject value) =>
+            (ulong)value.GetInteger();
+
+        public static implicit operator Int128(VMObject value) =>
+            (Int128)value.GetInteger();
+
+        public static implicit operator UInt128(VMObject value) =>
+            (UInt128)value.GetInteger();
+
+        public static implicit operator BigInteger(VMObject value) =>
+            value.GetInteger();
+
+        public static implicit operator bool(VMObject value) =>
+            value.GetBoolean();
+
+        public static implicit operator byte[](VMObject value) =>
+            [.. value.GetReadOnlySpan()];
+
+        public static implicit operator string(VMObject value) =>
+            $"{value}";
     }
 }

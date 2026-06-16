@@ -23,10 +23,11 @@
 using Neo.Core.Cryptography.ECC;
 using Neo.Core.Extensions;
 using Neo.Core.VM;
+using Neo.Core.VM.SmartContract;
 using System;
 using System.Linq;
 
-namespace Neo.Core.SmartContract
+namespace Neo.Core.Blockchain
 {
     /// <summary>
     /// Represents a contract that can be invoked.
@@ -46,20 +47,20 @@ namespace Neo.Core.SmartContract
         /// <summary>
         /// The parameters of the contract.
         /// </summary>
-        public ContractParameterType[] ParameterList => _contractParameters;
+        public MethodParameterType[] ParameterList => _contractParameters;
 
-        private readonly ContractParameterType[] _contractParameters;
+        private readonly MethodParameterType[] _contractParameters;
         private readonly byte[] _redeemScriptBytes;
         private readonly UInt160 _scriptHash;
 
-        private WitnessContract(byte[] redeemScriptBytes, ContractParameterType[] contractParameters)
+        private WitnessContract(byte[] redeemScriptBytes, MethodParameterType[] contractParameters)
         {
             _redeemScriptBytes = redeemScriptBytes;
             _contractParameters = contractParameters;
             _scriptHash = _redeemScriptBytes.ToScriptHash();
         }
 
-        private WitnessContract(UInt160 scriptHash, ContractParameterType[] contractParameters)
+        private WitnessContract(UInt160 scriptHash, MethodParameterType[] contractParameters)
         {
             _scriptHash = scriptHash;
             _redeemScriptBytes = [];
@@ -72,7 +73,7 @@ namespace Neo.Core.SmartContract
         /// <param name="redeemScriptBytes">The script of the contract.</param>
         /// <param name="parameterList">The parameters of the contract.</param>
         /// <returns>The created contract.</returns>
-        public static WitnessContract Create(byte[] redeemScriptBytes, params ContractParameterType[] parameterList) =>
+        public static WitnessContract Create(byte[] redeemScriptBytes, params MethodParameterType[] parameterList) =>
             new(redeemScriptBytes, parameterList);
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace Neo.Core.SmartContract
         /// <param name="scriptHash">The hash of the contract.</param>
         /// <param name="parameterList">The parameters of the contract.</param>
         /// <returns>The created contract.</returns>
-        public static WitnessContract Create(UInt160 scriptHash, params ContractParameterType[] parameterList) =>
+        public static WitnessContract Create(UInt160 scriptHash, params MethodParameterType[] parameterList) =>
             new(scriptHash, parameterList);
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace Neo.Core.SmartContract
         /// <param name="publicKeys">The public keys of the contract.</param>
         /// <returns>The created contract.</returns>
         public static WitnessContract CreateMultiSigContract(int m, params ECPoint[] publicKeys) =>
-            new(CreateMultiSigRedeemScript(m, publicKeys), [.. Enumerable.Repeat(ContractParameterType.Signature, m)]);
+            new(CreateMultiSigRedeemScript(m, publicKeys), [.. Enumerable.Repeat(MethodParameterType.Signature, m)]);
 
         /// <summary>
         /// Creates the script of multi-sig contract.
@@ -133,7 +134,7 @@ namespace Neo.Core.SmartContract
         /// <param name="publicKey">The public key of the contract.</param>
         /// <returns>The created contract.</returns>
         public static WitnessContract CreateSignatureContract(ECPoint publicKey) =>
-            new(CreateSignatureRedeemScript(publicKey), [ContractParameterType.Signature]);
+            new(CreateSignatureRedeemScript(publicKey), [MethodParameterType.Signature]);
 
         /// <summary>
         /// Creates the script of signature contract.

@@ -20,18 +20,39 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.VM.SmartContract;
 using System;
 
 namespace Neo.Core.VM.Attributes
 {
-    /// <summary>
-    /// Indicates the price of an <see cref="OpCode"/>.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
-    public class OpCodePriceAttribute : Attribute
+    [AttributeUsage(
+        AttributeTargets.Property | AttributeTargets.Method | AttributeTargets.Event,
+        AllowMultiple = true
+    )]
+    public class MethodDescriptorAttribute : Attribute
     {
-        public required HardFork HardFork { get; init; }
+        /// <summary>
+        /// The name of the interoperable service.
+        /// </summary>
+        public string? Name { get; init; }
 
-        public required long Cost { get; init; }
+        /// <summary>
+        /// The fixed price for calling the interoperable service. It can be 0 if the interoperable service has a variable price.
+        /// </summary>
+        public required long ExecutePrice { get; init; }
+
+        /// <summary>
+        /// Required hard fork to be active.
+        /// </summary>
+        public required HardFork Fork { get; init; }
+
+        /// <summary>
+        /// The required <see cref="SmartContract.CallFlags"/> for the interoperable service.
+        /// </summary>
+        public required CallFlags CallFlags { get; init; } = CallFlags.None;
+
+        public required bool Safe { get; init; }
+
+        public required MethodParameterType ReturnType { get; init; } = MethodParameterType.Any;
     }
 }

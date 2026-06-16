@@ -21,11 +21,12 @@
 // SERVICES
 
 using Neo.Core;
+using Neo.Core.Blockchain;
 using Neo.Core.Cryptography;
 using Neo.Core.Cryptography.ECC;
 using Neo.Core.Extensions;
 using Neo.Core.Interfaces;
-using Neo.Core.SmartContract;
+using Neo.Core.VM.SmartContract;
 using Neo.Wallet.Cryptography;
 using Neo.Wallet.Json;
 using System;
@@ -80,7 +81,7 @@ namespace Neo.Wallet
             _witnessContract = WitnessContract.CreateMultiSigContract(m, publicKeys);
         }
 
-        public Nep6WalletAccount(UInt160 contractHash, ProtocolSettings protocolSettings, ContractParameterType[]? contractParameters = default, byte[]? privateKeyBytes = default, ScryptParameters? scryptParameters = default)
+        public Nep6WalletAccount(UInt160 contractHash, ProtocolSettings protocolSettings, MethodParameterType[]? contractParameters = default, byte[]? privateKeyBytes = default, ScryptParameters? scryptParameters = default)
         {
             _scryptParameters = scryptParameters ?? ScryptParameters.Default;
             _protocolSettings = protocolSettings;

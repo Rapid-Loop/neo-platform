@@ -51,11 +51,6 @@ namespace Neo.VM.Core
         public Stack<VMObject> AltStack { get; } = [];
 
         /// <summary>
-        /// Address to return to after this frame completes
-        /// </summary>
-        public int ReturnAddress { get; }
-
-        /// <summary>
         /// Parent frame (for nested calls)
         /// </summary>
         public StackFrame? Parent { get; }
@@ -65,9 +60,8 @@ namespace Neo.VM.Core
         /// </summary>
         public bool IsActive { get; private set; } = true;
 
-        public StackFrame(int returnAddress = -1, StackFrame? parent = null)
+        public StackFrame(StackFrame? parent = default)
         {
-            ReturnAddress = returnAddress;
             Parent = parent;
         }
 

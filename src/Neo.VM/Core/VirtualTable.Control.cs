@@ -521,12 +521,14 @@ namespace Neo.VM.Core
 
             if (context.Frame.EvaluationStack != stackEval)
             {
-                foreach (var item in context.Frame.EvaluationStack)
-                    stackEval.Push(item);
+                while (context.Frame.EvaluationStack.Count > 0)
+                    stackEval.Push(context.Pop());
             }
 
             if (engine.InvocationStack.Count == 0)
                 engine.State = VMState.HALT;
+
+            engine.UnloadedContext(context);
         }
 
         /// <summary>

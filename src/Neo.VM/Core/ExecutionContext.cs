@@ -58,17 +58,17 @@ namespace Neo.VM.Core
         /// <summary>
         /// Gas remaining for this execution
         /// </summary>
-        public long GasLeft { get; set; }
+        public long GasConsumed => _maxGasConsumed;
 
         /// <summary>
         /// Whether this context is currently executing
         /// </summary>
-        public bool IsExecuting { get; set; } = true;
+        public bool IsExecuting { get; internal set; } = true;
 
         /// <summary>
         /// Parent context (for nested calls)
         /// </summary>
-        public ExecutionContext? Parent { get; set; }
+        public ExecutionContext? Parent => _parentContext;
 
         /// <summary>
         /// Custom state / context data (e.g., contract storage, runtime)
@@ -82,11 +82,17 @@ namespace Neo.VM.Core
         /// <summary>
         /// Invocation stack depth
         /// </summary>
-        public int Depth { get; }
+        public int Depth => _contextDepth;
 
         private readonly ReadOnlyMemory<byte> _script;
-        private readonly uint _blockHeight;
         private readonly HardFork _fork;
+        private readonly uint _blockHeight;
+
+        private readonly ExecutionContext? _parentContext;
+        private readonly int _contextDepth;
+
+        private long _initialGasLeft;
+        private long _maxGasConsumed;
 
         public ExecutionContext(byte[] script, HardFork fork = HardFork.Genesis, uint blockHeight = 0, long initialGas = 1_000000L, int depth = 0, ExecutionContext? parent = null)
         {
@@ -94,11 +100,11 @@ namespace Neo.VM.Core
             _blockHeight = blockHeight;
             _fork = fork;
 
-            GasLeft = initialGas;
-            Depth = depth;
-            Parent = parent;
+            _initialGasLeft = initialGas;
+            _contextDepth = depth;
+            _parentContext = parent;
 
-            Frame = new StackFrame(-1, null);
+            Frame = new(_parentContext?.Frame);
         }
 
         /// <summary>
@@ -106,7 +112,7 @@ namespace Neo.VM.Core
         /// </summary>
         public bool ShouldContinue()
         {
-            return IsExecuting && InstructionPointer < Script.Length && GasLeft > 0;
+            return IsExecuting && InstructionPointer < Script.Length && _initialGasLeft > 0;
         }
 
         /// <summary>
@@ -116,13 +122,14 @@ namespace Neo.VM.Core
         {
             var cost = GasTable.GetGasCost(opcode, HardFork);
 
-            if (GasLeft < cost)
+            if (_initialGasLeft < cost)
             {
                 IsExecuting = false;
                 return false;
             }
 
-            GasLeft -= cost;
+            _initialGasLeft -= cost;
+            _maxGasConsumed += cost;
             return true;
         }
 

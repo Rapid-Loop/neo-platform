@@ -150,8 +150,10 @@ namespace Neo.VM
         /// Called when a context is unloaded.
         /// </summary>
         /// <param name="context">The context being unloaded.</param>
-        internal virtual void ContextUnloaded(ExecutionContext context)
+        internal virtual void UnloadedContext(ExecutionContext context)
         {
+            _maxGasConsumed += context.GasConsumed;
+
             if (InvocationStack.Count > 0)
                 _currentContext = InvocationStack.Peek();
             else
@@ -161,7 +163,6 @@ namespace Neo.VM
             }
 
             context.Cleanup();
-            _maxGasConsumed += _maxGasLimit - context.GasLeft;
         }
 
         public VMState Execute()
@@ -187,13 +188,9 @@ namespace Neo.VM
                     if (_currentContext.ConsumeGas(currentInst.OpCode))
                         _defaultOpCodeTable[currentInst.OpCode](this, currentInst);
 
-                    if (_currentContext.ShouldContinue())
+                    if (_currentContext is not null && _currentContext.ShouldContinue())
                         _currentContext.InstructionPointer += currentInst.Size;
-                    else
-                        ContextUnloaded(_currentContext);
                 }
-
-                State = VMState.HALT;
             }
             catch (Exception ex)
             {

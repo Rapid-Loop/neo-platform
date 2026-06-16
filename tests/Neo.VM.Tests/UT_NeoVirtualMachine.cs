@@ -57,6 +57,7 @@ namespace Neo.VM.Tests
             var expectedTargetName = nameof(InternalRuntime.SayHello);
             var expectedTargetMethod = InternalRuntime.SayHello;
             var expectedTargetReturnValue = InternalRuntime.SayHello(expectedParamValue);
+            var expectedGasPrice = 1_00000000L;
 
             var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
 
@@ -75,6 +76,7 @@ namespace Neo.VM.Tests
             vm.LoadScript(sb.ToArray());
 
             var actualState = vm.Execute();
+            var actualGasPrice = vm.GasConsumed;
             var actualResults = vm.ResultStack;
 
             Assert.AreEqual(VMState.HALT, actualState);
@@ -83,6 +85,7 @@ namespace Neo.VM.Tests
             Assert.IsNotNull(actualTargetReturnValue);
             Assert.IsTrue(actualFoundSystemCall);
 
+            Assert.AreEqual(expectedGasPrice, actualGasPrice);
             Assert.AreEqual(expectedSystemCallAddress, actualSystemCallAddress);
             Assert.AreEqual(expectedSystemCallAddress, actualMethodDesc);
             Assert.AreEqual(actualSystemCallAddress, actualMethodDesc);

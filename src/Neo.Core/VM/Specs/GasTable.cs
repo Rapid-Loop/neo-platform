@@ -80,12 +80,16 @@ namespace Neo.Core.VM.Specs
         public static long GetGasCost(MethodDescriptor method, HardFork fork = HardFork.Genesis)
         {
             var attributes = method.TargetMethodInfo.GetCustomAttributes<MethodDescriptorAttribute>();
-            var attr = attributes.FirstOrDefault(s => s.Fork == fork);
+            var attr = default(MethodDescriptorAttribute);
 
-            if (attr is null)
-                return GetGasCost(OpCode.CALL, fork);
+            for (var current = fork; current >= HardFork.Genesis && Enum.IsDefined(current); current--)
+            {
+                attr = attributes.FirstOrDefault(s => s.Fork == current);
 
-            return attr.ExecutePrice;
+                if (attr is null) continue; else break;
+            }
+
+            return attr?.ExecutePrice ?? GetGasCost(OpCode.CALL, fork);
         }
 
         /// <summary>

@@ -24,6 +24,7 @@ using Neo.Core;
 using Neo.Core.VM;
 using Neo.Core.VM.Attributes;
 using Neo.Core.VM.SmartContract;
+using Neo.Core.VM.Specs;
 using Neo.VM.Types;
 using System;
 using System.Numerics;
@@ -57,7 +58,7 @@ namespace Neo.VM.Tests
             var expectedTargetName = nameof(InternalRuntime.SayHello);
             var expectedTargetMethod = InternalRuntime.SayHello;
             var expectedTargetReturnValue = InternalRuntime.SayHello(expectedParamValue);
-            var expectedGasPrice = 1_00000000L;
+            var expectedGasPrice = 1_00000000L + GasTable.GetGasCost(OpCode.PUSHDATA1, HardFork.Gorgon);
 
             var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
 

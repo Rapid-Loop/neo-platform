@@ -83,7 +83,7 @@ namespace Neo.VM.Types
         {
             foreach (var v in _memoryOwner.Memory[.._byteCount].Span)
             {
-                if (char.IsAsciiLetterOrDigit((char)v)) continue;
+                if (char.IsAscii((char)v)) continue;
                 return Convert.ToBase64String(_memoryOwner.Memory[.._byteCount].Span);
             }
 

@@ -22,7 +22,7 @@
 
 using Neo.Configuration.Json.Converters;
 using Neo.Core;
-using Neo.Core.SmartContract;
+using Neo.Core.VM.SmartContract;
 using Neo.Wallet.Json;
 using System;
 using System.Collections.Immutable;
@@ -77,7 +77,7 @@ namespace Neo.Wallet.Tests
                             new()
                             {
                                 Name = "Signature",
-                                Type = ContractParameterType.Signature,
+                                Type = MethodParameterType.Signature,
                             },
                         ],
                     },
@@ -121,7 +121,7 @@ namespace Neo.Wallet.Tests
                             new()
                             {
                                 Name = "Signature",
-                                Type = ContractParameterType.Signature,
+                                Type = MethodParameterType.Signature,
                             },
                         ],
                     },

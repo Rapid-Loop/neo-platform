@@ -26,9 +26,9 @@ using Neo.VM.Extensions;
 
 namespace Neo.VM
 {
-    public partial class VirtualMachine
+    public partial class VirtualMachineEngine
     {
-        public void LogExecuteStartupMessage(LogLevel logLevel = LogLevel.Information)
+        internal void LogExecuteStartupMessage(LogLevel logLevel = LogLevel.Information)
         {
             if (_logger.IsEnabled(logLevel))
             {
@@ -42,7 +42,7 @@ namespace Neo.VM
             }
         }
 
-        public void LogExecuteSuccessfullyMessage(LogLevel logLevel = LogLevel.Information)
+        internal void LogExecuteSuccessfullyMessage(LogLevel logLevel = LogLevel.Information)
         {
             if (_logger.IsEnabled(logLevel))
             {
@@ -57,7 +57,7 @@ namespace Neo.VM
             }
         }
 
-        public void LogExecuteOpCodeMessage(LogLevel logLevel = LogLevel.Trace)
+        internal void LogExecuteOpCodeMessage(LogLevel logLevel = LogLevel.Trace)
         {
             if (_logger.IsEnabled(logLevel) && _invocationStack.Count > 0)
             {

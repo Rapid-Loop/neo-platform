@@ -22,6 +22,8 @@
 
 using Neo.Core;
 using Neo.Core.VM;
+using Neo.Core.VM.Attributes;
+using Neo.Core.VM.SmartContract;
 using Neo.VM.Types;
 using System;
 using System.Numerics;
@@ -31,6 +33,69 @@ namespace Neo.VM.Tests
     [TestClass]
     public sealed class UT_NeoVirtualMachine
     {
+        private class InternalRuntime
+        {
+            [MethodDescriptor(
+                Safe = true,
+                Fork = HardFork.Genesis,
+                ExecutePrice = 1_00000000L,
+                CallFlags = CallFlags.None,
+                ReturnType = MethodParameterType.String
+            )]
+            public static string SayHello(string name)
+            {
+                return $"Hello, {name}";
+            }
+        }
+
+        [TestMethod]
+        public void TestSystemCall()
+        {
+            var expectedParamValue = "NEO";
+            var expectedSystemName = "System.Runtime.SayHello";
+            var expectedSystemCallAddress = MethodDescriptor.CreateCallAddress(expectedSystemName);
+            var expectedTargetName = nameof(InternalRuntime.SayHello);
+            var expectedTargetMethod = InternalRuntime.SayHello;
+            var expectedTargetReturnValue = InternalRuntime.SayHello(expectedParamValue);
+            var expectedGasPrice = 1_00000000L;
+
+            var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
+
+            var actualMethodDesc = vm.RegisterSystemCall<InternalRuntime>(
+                expectedSystemName,
+                nameof(InternalRuntime.SayHello)
+            );
+
+            var actualTargetReturnValue = actualMethodDesc.TargetMethod.DynamicInvoke(expectedParamValue);
+            var actualFoundSystemCall = vm.SystemCallTable.TryGetValue(expectedSystemName, out var actualSystemCallAddress);
+
+            using var sb = new ScriptBuilder();
+            sb.EmitSysCall(actualMethodDesc, expectedParamValue);
+            sb.EmitReturn();
+
+            vm.LoadScript(sb.ToArray());
+
+            var actualState = vm.Execute();
+            var actualGasPrice = vm.GasConsumed;
+            var actualResults = vm.ResultStack;
+
+            Assert.AreEqual(VMState.HALT, actualState);
+            Assert.HasCount(1, actualResults);
+
+            Assert.IsNotNull(actualTargetReturnValue);
+            Assert.IsTrue(actualFoundSystemCall);
+
+            Assert.AreEqual(expectedGasPrice, actualGasPrice);
+            Assert.AreEqual(expectedSystemCallAddress, actualSystemCallAddress);
+            Assert.AreEqual(expectedSystemCallAddress, actualMethodDesc);
+            Assert.AreEqual(actualSystemCallAddress, actualMethodDesc);
+            Assert.AreEqual(expectedSystemName, actualMethodDesc.SystemMethodName);
+            Assert.AreEqual(expectedTargetName, actualMethodDesc.TargetMethodInfo.Name);
+            Assert.AreEqual(expectedTargetMethod, actualMethodDesc.TargetMethod);
+            Assert.AreEqual(expectedTargetReturnValue, actualTargetReturnValue);
+            Assert.AreEqual(expectedTargetReturnValue, actualResults.Pop().ToString());
+        }
+
         [TestMethod]
         public void TestVMSimple()
         {
@@ -42,7 +107,7 @@ namespace Neo.VM.Tests
                 0x40         // RET
             ];
 
-            var vm = new VirtualMachine(loggerFactory: TestUtilities.TraceLoggerFactory);
+            var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
             vm.LoadScript(script);
 
             var actualState = vm.Execute();
@@ -75,7 +140,7 @@ namespace Neo.VM.Tests
 
             var script = sb.ToArray();
 
-            var vm = new VirtualMachine(loggerFactory: TestUtilities.TraceLoggerFactory);
+            var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
             vm.LoadScript(script);
 
             var actualState = vm.Execute();

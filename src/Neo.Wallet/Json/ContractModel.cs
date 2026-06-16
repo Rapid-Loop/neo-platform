@@ -22,8 +22,8 @@
 
 using Neo.Configuration.Json;
 using Neo.Configuration.Json.Converters;
+using Neo.Core.Blockchain;
 using Neo.Core.Interfaces;
-using Neo.Core.SmartContract;
 using System.Linq;
 using System.Text.Json.Serialization;
 

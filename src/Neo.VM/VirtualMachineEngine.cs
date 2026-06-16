@@ -30,18 +30,19 @@ using Neo.VM.Core;
 using Neo.VM.Types;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace Neo.VM
 {
     /// <summary>
     /// Represents the VM used to execute the script.
     /// </summary>
-    public partial class VirtualMachine : IDisposable
+    public partial class VirtualMachineEngine : IDisposable
     {
         public VMState State { get; internal set; }
 
-        public BigInteger TotalGasConsumed => _maxGasConsumed;
+        public long GasConsumed => _maxGasConsumed;
+
+        public long GasLeft => _maxGasLimit - _maxGasConsumed;
 
         /// <summary>
         /// Restrictions on the VM.
@@ -68,6 +69,9 @@ namespace Neo.VM
         /// </summary>
         public Stack<VMObject> ResultStack { get; } = [];
 
+        public HardFork ActiveFork => _currentFork;
+
+
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger _logger;
         private readonly Stack<ExecutionContext> _invocationStack = [];
@@ -85,7 +89,7 @@ namespace Neo.VM
 
         private long _maxGasConsumed;
 
-        public VirtualMachine(
+        public VirtualMachineEngine(
             ProtocolSettings? protocolSettings = default,
             Block? persistingBlock = default,
             IVerifiable? container = default,
@@ -101,7 +105,7 @@ namespace Neo.VM
             _defaultOpCodeTable = opCodeTable ?? VirtualTable.Default;
             _limits = limits ?? ExecutionEngineLimits.Default;
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-            _logger = _loggerFactory.CreateLogger<VirtualMachine>();
+            _logger = _loggerFactory.CreateLogger<VirtualMachineEngine>();
             _currentFork = _protocolSettings.GetActiveHardFork(_persistingBlock.Index);
         }
 
@@ -157,6 +161,7 @@ namespace Neo.VM
             }
 
             context.Cleanup();
+            _maxGasConsumed += _maxGasLimit - context.GasLeft;
         }
 
         public VMState Execute()
@@ -182,13 +187,13 @@ namespace Neo.VM
                     if (_currentContext.ConsumeGas(currentInst.OpCode))
                         _defaultOpCodeTable[currentInst.OpCode](this, currentInst);
 
-                    _maxGasConsumed += _maxGasLimit - _currentContext.GasLeft;
-
                     if (_currentContext.ShouldContinue())
                         _currentContext.InstructionPointer += currentInst.Size;
                     else
                         ContextUnloaded(_currentContext);
                 }
+
+                State = VMState.HALT;
             }
             catch (Exception ex)
             {
@@ -220,8 +225,6 @@ namespace Neo.VM
                 var context = _invocationStack.Pop();
                 context.Cleanup();
             }
-
-            State = VMState.HALT;
         }
     }
 }

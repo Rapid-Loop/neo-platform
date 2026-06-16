@@ -23,6 +23,7 @@
 using Neo.Core.VM.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Neo.Core.VM.Specs
@@ -64,7 +65,7 @@ namespace Neo.Core.VM.Specs
         /// </summary>
         public static long GetGasCost(OpCode opcode, HardFork fork = HardFork.Genesis)
         {
-            for (var current = fork; current >= HardFork.Genesis; current--)
+            for (var current = fork; current >= HardFork.Genesis && Enum.IsDefined(current); current--)
             {
                 if (s_gasCosts.TryGetValue(current, out var table) &&
                     table.TryGetValue(opcode, out var cost))
@@ -76,12 +77,27 @@ namespace Neo.Core.VM.Specs
             return s_gasCosts[HardFork.Genesis][opcode]; // fallback Genesis MUST exist
         }
 
+        public static long GetGasCost(MethodDescriptor method, HardFork fork = HardFork.Genesis)
+        {
+            var attributes = method.TargetMethodInfo.GetCustomAttributes<MethodDescriptorAttribute>();
+            var attr = default(MethodDescriptorAttribute);
+
+            for (var current = fork; current >= HardFork.Genesis && Enum.IsDefined(current); current--)
+            {
+                attr = attributes.FirstOrDefault(s => s.Fork == current);
+
+                if (attr is null) continue; else break;
+            }
+
+            return attr?.ExecutePrice ?? GetGasCost(OpCode.CALL, fork);
+        }
+
         /// <summary>
         /// Get all gas costs for a specific <see cref="HardFork"/> (useful for debugging).
         /// </summary>
         public static IReadOnlyDictionary<OpCode, long> GetAllCosts(HardFork fork = HardFork.Genesis)
         {
-            for (var current = fork; current >= HardFork.Genesis; current--)
+            for (var current = fork; current >= HardFork.Genesis && Enum.IsDefined(current); current--)
             {
                 if (s_gasCosts.TryGetValue(current, out var table))
                 {

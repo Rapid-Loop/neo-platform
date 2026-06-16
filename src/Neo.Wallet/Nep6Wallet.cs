@@ -21,10 +21,10 @@
 // SERVICES
 
 using Neo.Core;
+using Neo.Core.Blockchain;
 using Neo.Core.Cryptography.ECC;
 using Neo.Core.Extensions;
 using Neo.Core.Interfaces;
-using Neo.Core.SmartContract;
 using Neo.Wallet.Cryptography;
 using Neo.Wallet.Json;
 using System;

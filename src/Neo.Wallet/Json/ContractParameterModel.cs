@@ -22,17 +22,17 @@
 
 using Neo.Configuration.Json;
 using Neo.Core.Interfaces;
-using Neo.Core.SmartContract;
+using Neo.Core.VM.SmartContract;
 
 namespace Neo.Wallet.Json
 {
-    public class ContractParameterModel : JsonModel, IMap<ContractParameterType>
+    public class ContractParameterModel : JsonModel, IMap<MethodParameterType>
     {
         public string? Name { get; set; }
 
-        public ContractParameterType Type { get; set; }
+        public MethodParameterType Type { get; set; }
 
-        public ContractParameterType ToObject() =>
+        public MethodParameterType ToObject() =>
             Type;
     }
 }

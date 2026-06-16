@@ -139,7 +139,7 @@ namespace Neo.Core.VM
         {
             var operand = Operand[OperandPrefixSize..].ToArray();
             var asStr = Encoding.ASCII.GetString(operand);
-            var readable = asStr.All(char.IsAsciiLetterOrDigit);
+            var readable = asStr.All(char.IsAscii);
 
             if (string.IsNullOrWhiteSpace(asStr))
                 asStr = "No Data";

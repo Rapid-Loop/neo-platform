@@ -20,73 +20,54 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.Core.SmartContract
+using System;
+
+namespace Neo.Core.VM.SmartContract
 {
-    public enum ContractParameterType : byte
+    /// <summary>
+    /// Represents the operations allowed when a contract is called.
+    /// </summary>
+    [Flags]
+    public enum CallFlags : byte
     {
         /// <summary>
-        /// Indicates that the parameter can be of any type.
+        /// No flag is set.
         /// </summary>
-        Any = 0x00,
+        None = 0,
 
         /// <summary>
-        /// Indicates that the parameter is of Boolean type.
+        /// Indicates that the called contract is allowed to read states.
         /// </summary>
-        Boolean = 0x10,
+        ReadStates = 0b_00000001,
 
         /// <summary>
-        /// Indicates that the parameter is an integer.
+        /// Indicates that the called contract is allowed to write states.
         /// </summary>
-        Integer = 0x11,
+        WriteStates = 0b_00000010,
 
         /// <summary>
-        /// Indicates that the parameter is a byte array.
+        /// Indicates that the called contract is allowed to call another contract.
         /// </summary>
-        ByteArray = 0x12,
+        AllowCall = 0b_00000100,
 
         /// <summary>
-        /// Indicates that the parameter is a string.
+        /// Indicates that the called contract is allowed to send notifications.
         /// </summary>
-        String = 0x13,
+        AllowNotify = 0b_00001000,
 
         /// <summary>
-        /// Indicates that the parameter is a 160-bit hash.
+        /// Indicates that the called contract is allowed to read or write states.
         /// </summary>
-        Hash160 = 0x14,
+        States = ReadStates | WriteStates,
 
         /// <summary>
-        /// Indicates that the parameter is a 256-bit hash.
+        /// Indicates that the called contract is allowed to read states or call another contract.
         /// </summary>
-        Hash256 = 0x15,
+        ReadOnly = ReadStates | AllowCall,
 
         /// <summary>
-        /// Indicates that the parameter is a public key.
+        /// All flags are set.
         /// </summary>
-        PublicKey = 0x16,
-
-        /// <summary>
-        /// Indicates that the parameter is a signature.
-        /// </summary>
-        Signature = 0x17,
-
-        /// <summary>
-        /// Indicates that the parameter is an array.
-        /// </summary>
-        Array = 0x20,
-
-        /// <summary>
-        /// Indicates that the parameter is a map.
-        /// </summary>
-        Map = 0x22,
-
-        /// <summary>
-        /// Indicates that the parameter is an interoperable interface.
-        /// </summary>
-        InteropInterface = 0x30,
-
-        /// <summary>
-        /// It can be only used as the return type of a method, meaning that the method has no return value.
-        /// </summary>
-        Void = 0xff
+        All = States | AllowCall | AllowNotify
     }
 }

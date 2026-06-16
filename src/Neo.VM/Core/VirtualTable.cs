@@ -26,7 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Neo.VM.Core
 {
-    public delegate void VTableFunc(VirtualMachine engine, VMInstruction instruction);
+    public delegate void VTableFunc(VirtualMachineEngine engine, VMInstruction instruction);
 
     public partial class VirtualTable
     {
@@ -53,7 +53,7 @@ namespace Neo.VM.Core
 
 
         [DoesNotReturn]
-        public static void InvalidOpcode(VirtualMachine engine, VMInstruction instruction)
+        public static void InvalidOpcode(VirtualMachineEngine engine, VMInstruction instruction)
         {
             throw new InvalidOperationException($"Opcode {instruction.OpCode} is undefined.");
         }

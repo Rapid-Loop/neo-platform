@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,6 +28,16 @@ namespace Neo.Core.Extensions
 {
     public static class DictionaryExtensions
     {
+        public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TKey, TValue> valueFactory)
+        {
+            if (source.TryGetValue(key, out var value) == false)
+            {
+                value = valueFactory(key);
+                source[key] = value;
+            }
+            return value;
+        }
+
         public static int ToHashCode<TKey, TValue>(this IDictionary<TKey, TValue> source, int seed = 397) =>
             source.Aggregate(seed,
                 (hash, b) =>

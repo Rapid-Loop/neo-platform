@@ -70,9 +70,9 @@ namespace Neo.VM.Tests
             var actualTargetReturnValue = actualMethodDesc.TargetMethod.DynamicInvoke(expectedParamValue);
             var actualFoundSystemCall = vm.SystemCallTable.TryGetValue(expectedSystemName, out var actualSystemCallAddress);
 
-            using var sb = new ScriptBuilder();
-            sb.EmitSysCall(actualMethodDesc, expectedParamValue);
-            sb.EmitReturn();
+            using var sb = new ScriptBuilder()
+            .EmitSysCall(actualMethodDesc, expectedParamValue)
+            .EmitReturn();
 
             vm.LoadScript(sb.ToArray());
 
@@ -105,7 +105,7 @@ namespace Neo.VM.Tests
                 0x15,        // PUSH 5
                 0x16,        // PUSH 6
                 0x9e,        // ADD
-                0x40         // RET
+                0x40,        // RET
             ];
 
             var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
@@ -117,6 +117,31 @@ namespace Neo.VM.Tests
             Assert.AreEqual(VMState.HALT, actualState);
             Assert.HasCount(1, actualResults);
             Assert.AreEqual(11, actualResults.Pop().GetInteger());
+        }
+
+        [TestMethod]
+        public void TestVMArray()
+        {
+            using var sb = new ScriptBuilder()
+                .CreateArray([1, 2, 3,])
+                .EmitReturn();
+
+            var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
+            vm.LoadScript(sb.ToArray());
+
+            var actualState = vm.Execute();
+            var actualResults = vm.ResultStack;
+
+            Assert.AreEqual(VMState.HALT, actualState);
+            Assert.HasCount(1, actualResults);
+
+            var actualArray = actualResults.Pop() as VMArray;
+
+            Assert.IsNotNull(actualArray);
+            Assert.HasCount(3, actualArray);
+            Assert.AreEqual(1, actualArray[0].GetInteger());
+            Assert.AreEqual(2, actualArray[1].GetInteger());
+            Assert.AreEqual(3, actualArray[2].GetInteger());
         }
 
         [TestMethod]
@@ -151,7 +176,7 @@ namespace Neo.VM.Tests
             Assert.HasCount(14, actualResults);
 
             Assert.IsInstanceOfType<VMNull>(actualResults.Pop());
-            Assert.IsTrue(actualResults.Pop().GetReadOnlySpan().IsEmpty);
+            Assert.IsTrue(actualResults.Pop().AsSpan().IsEmpty);
             Assert.IsTrue(actualResults.Pop().GetBoolean());
             Assert.IsFalse(actualResults.Pop().GetBoolean());
             Assert.AreEqual(-1, actualResults.Pop().GetInteger());
@@ -162,7 +187,7 @@ namespace Neo.VM.Tests
             Assert.AreEqual(int.MaxValue, actualResults.Pop().GetInteger());
             Assert.AreEqual(long.MaxValue, actualResults.Pop().GetInteger());
             Assert.AreEqual(BigInteger.Pow(long.MaxValue, 2), actualResults.Pop().GetInteger());
-            Assert.IsTrue(new ReadOnlySpan<byte>(CoreUtilities.StrictUtf8Encoding.GetBytes("NEO")).SequenceEqual(actualResults.Pop().GetReadOnlySpan()));
+            Assert.IsTrue(new ReadOnlySpan<byte>(CoreUtilities.StrictUtf8Encoding.GetBytes("NEO")).SequenceEqual(actualResults.Pop().AsSpan()));
             Assert.AreEqual(0, actualResults.Pop().GetInteger());
         }
     }

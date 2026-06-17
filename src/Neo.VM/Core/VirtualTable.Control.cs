@@ -35,7 +35,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void Nop(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Nop(VirtualMachineEngine engine, OpCodeInst instruction)
         {
         }
 
@@ -46,7 +46,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
-        public virtual void Jmp(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Jmp(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteJumpOffset(engine, instruction.AsToken<sbyte>());
         }
@@ -58,7 +58,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
-        public virtual void Jmp_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Jmp_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteJumpOffset(engine, instruction.AsToken<int>());
         }
@@ -72,7 +72,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void JmpIf(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpIf(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             if (engine.CurrentContext!.Pop().GetBoolean())
                 ExecuteJumpOffset(engine, instruction.AsToken<sbyte>());
@@ -87,7 +87,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void JmpIf_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpIf_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             if (engine.CurrentContext!.Pop().GetBoolean())
                 ExecuteJumpOffset(engine, instruction.AsToken<int>());
@@ -102,7 +102,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void JmpIfNot(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpIfNot(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             if (!engine.CurrentContext!.Pop().GetBoolean())
                 ExecuteJumpOffset(engine, instruction.AsToken<sbyte>());
@@ -117,7 +117,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void JmpIfNot_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpIfNot_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             if (!engine.CurrentContext!.Pop().GetBoolean())
                 ExecuteJumpOffset(engine, instruction.AsToken<int>());
@@ -132,7 +132,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpEq(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpEq(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -150,7 +150,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpEq_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpEq_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -168,7 +168,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpNe(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpNe(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -186,7 +186,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpNe_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpNe_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -204,7 +204,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpGt(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpGt(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -222,7 +222,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpGt_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpGt_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -240,7 +240,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpGe(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpGe(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -258,7 +258,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpGe_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpGe_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -276,7 +276,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpLt(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpLt(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -294,7 +294,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpLt_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpLt_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -312,7 +312,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpLe(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpLe(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -330,7 +330,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void JmpLe_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void JmpLe_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -346,7 +346,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
-        public virtual void Call(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Call(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteCall(engine, checked(engine.CurrentContext!.InstructionPointer + instruction.AsToken<sbyte>()));
         }
@@ -358,7 +358,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction containing the offset as the first operand.</param>
-        public virtual void Call_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Call_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteCall(engine, checked(engine.CurrentContext!.InstructionPointer + instruction.AsToken<int>()));
         }
@@ -371,7 +371,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void CallA(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void CallA(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x = (VMPointer)engine.CurrentContext!.Pop();
 
@@ -387,7 +387,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
-        public virtual void CallT(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void CallT(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             throw new InvalidOperationException($"Token not found: {instruction.AsToken<ushort>()}");
         }
@@ -398,7 +398,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
-        public virtual void Abort(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Abort(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             throw new Exception($"{OpCode.ABORT} is executed.");
         }
@@ -410,7 +410,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void Assert(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Assert(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x = engine.CurrentContext!.Pop().GetBoolean();
             if (!x)
@@ -424,7 +424,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void Throw(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Throw(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteThrow(engine, engine.CurrentContext!.Pop());
         }
@@ -438,7 +438,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
-        public virtual void Try(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Try(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             int catchOffset = instruction.AsToken<sbyte>();
             int finallyOffset = instruction.AsToken<sbyte>(1);
@@ -455,7 +455,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
-        public virtual void Try_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Try_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var catchOffset = instruction.AsToken<int>();
             var finallyOffset = instruction.AsToken<int>(1);
@@ -471,7 +471,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
-        public virtual void EndTry(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void EndTry(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var endOffset = instruction.AsToken<sbyte>();
 
@@ -486,7 +486,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
-        public virtual void EndTry_L(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void EndTry_L(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var endOffset = instruction.AsToken<int>();
 
@@ -501,7 +501,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
-        public virtual void EndFinally(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void EndFinally(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             // TODO: Add this
         }
@@ -512,7 +512,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
-        public virtual void Ret(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Ret(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var context = engine.InvocationStack.Pop();
             var stackEval = engine.InvocationStack.Count == 0 ?
@@ -537,7 +537,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The current instruction.</param>
-        public virtual void SysCall(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void SysCall(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             engine.ExecuteSystemCall(instruction.AsToken<uint>());
         }

@@ -59,7 +59,7 @@ namespace Neo.Core.VM
         }
 
         /// <summary>
-        /// Emits an <see cref="VMInstruction"/> with the specified <see cref="OpCode"/> and operand.
+        /// Emits an <see cref="OpCodeInst"/> with the specified <see cref="OpCode"/> and operand.
         /// </summary>
         /// <param name="opcode">The <see cref="OpCode"/> to be emitted.</param>
         /// <param name="operand">The operand to be emitted.</param>
@@ -72,7 +72,7 @@ namespace Neo.Core.VM
         }
 
         /// <summary>
-        /// Emits a call <see cref="VMInstruction"/> with the specified offset.
+        /// Emits a call <see cref="OpCodeInst"/> with the specified offset.
         /// </summary>
         /// <param name="offset">The offset to be called.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
@@ -85,7 +85,7 @@ namespace Neo.Core.VM
         }
 
         /// <summary>
-        /// Emits a jump <see cref="VMInstruction"/> with the specified offset.
+        /// Emits a jump <see cref="OpCodeInst"/> with the specified offset.
         /// </summary>
         /// <param name="opcode">The <see cref="OpCode"/> to be emitted. It must be a jump <see cref="OpCode"/></param>
         /// <param name="offset">The offset to jump.</param>
@@ -105,7 +105,7 @@ namespace Neo.Core.VM
         }
 
         /// <summary>
-        /// Emits a push <see cref="VMInstruction"/> with the specified number.
+        /// Emits a push <see cref="OpCodeInst"/> with the specified number.
         /// </summary>
         /// <param name="value">The number to be pushed.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
@@ -131,7 +131,7 @@ namespace Neo.Core.VM
         }
 
         /// <summary>
-        /// Emits a push <see cref="VMInstruction"/> with the specified boolean value.
+        /// Emits a push <see cref="OpCodeInst"/> with the specified boolean value.
         /// </summary>
         /// <param name="value">The value to be pushed.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
@@ -141,7 +141,7 @@ namespace Neo.Core.VM
         }
 
         /// <summary>
-        /// Emits a push <see cref="VMInstruction"/> with the specified data.
+        /// Emits a push <see cref="OpCodeInst"/> with the specified data.
         /// </summary>
         /// <param name="data">The data to be pushed.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
@@ -170,7 +170,7 @@ namespace Neo.Core.VM
         }
 
         /// <summary>
-        /// Emits a push <see cref="VMInstruction"/> with the specified <see cref="string"/>.
+        /// Emits a push <see cref="OpCodeInst"/> with the specified <see cref="string"/>.
         /// </summary>
         /// <param name="data">The <see cref="string"/> to be pushed.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
@@ -191,7 +191,7 @@ namespace Neo.Core.VM
         }
 
         /// <summary>
-        /// Emits an <see cref="VMInstruction"/> with <see cref="OpCode.SYSCALL"/>.
+        /// Emits an <see cref="OpCodeInst"/> with <see cref="OpCode.SYSCALL"/>.
         /// </summary>
         /// <param name="api">The operand of <see cref="OpCode.SYSCALL"/>.</param>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>

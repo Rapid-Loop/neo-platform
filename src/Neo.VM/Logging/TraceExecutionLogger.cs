@@ -81,11 +81,7 @@ namespace Neo.VM.Logging
                 case LogLevel.Critical:
                     ErrorMessage("{0}", message);
                     if (exception != null)
-                    {
-                        WriteLine();
-                        WriteLine();
                         ErrorMessage(exception, ShowExceptionStackTrace);
-                    }
                     break;
                 default:
                     break;

@@ -35,7 +35,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void InitSSlot(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void InitSSlot(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             if (engine.CurrentContext!.Frame.StaticFields.Count != 0)
                 throw new InvalidOperationException($"{instruction.OpCode} cannot be executed twice.");
@@ -53,7 +53,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void InitSlot(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void InitSlot(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             if (engine.CurrentContext!.Frame.Locals.Count != 0 || engine.CurrentContext!.Frame.Arguments.Count != 0)
                 throw new InvalidOperationException($"{instruction.OpCode} cannot be executed twice.");
@@ -83,7 +83,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdSFld0(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdSFld0(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.StaticFields, 0);
         }
@@ -94,7 +94,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdSFld1(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdSFld1(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.StaticFields, 1);
         }
@@ -105,7 +105,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdSFld2(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdSFld2(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.StaticFields, 2);
         }
@@ -116,7 +116,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdSFld3(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdSFld3(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.StaticFields, 3);
         }
@@ -127,7 +127,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdSFld4(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdSFld4(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.StaticFields, 4);
         }
@@ -138,7 +138,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdSFld5(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdSFld5(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.StaticFields, 5);
         }
@@ -149,7 +149,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdSFld6(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdSFld6(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.StaticFields, 6);
         }
@@ -161,7 +161,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdSFld(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdSFld(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.StaticFields, instruction.AsToken<byte>());
         }
@@ -172,7 +172,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StSFld0(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StSFld0(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.StaticFields, 0);
         }
@@ -183,7 +183,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StSFld1(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StSFld1(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.StaticFields, 1);
         }
@@ -194,7 +194,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StSFld2(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StSFld2(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.StaticFields, 2);
         }
@@ -205,7 +205,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StSFld3(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StSFld3(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.StaticFields, 3);
         }
@@ -216,7 +216,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StSFld4(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StSFld4(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.StaticFields, 4);
         }
@@ -227,7 +227,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StSFld5(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StSFld5(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.StaticFields, 5);
         }
@@ -238,7 +238,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StSFld6(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StSFld6(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.StaticFields, 6);
         }
@@ -250,7 +250,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StSFld(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StSFld(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.StaticFields, instruction.AsToken<byte>());
         }
@@ -261,7 +261,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdLoc0(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdLoc0(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Locals, 0);
         }
@@ -272,7 +272,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdLoc1(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdLoc1(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Locals, 1);
         }
@@ -283,7 +283,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdLoc2(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdLoc2(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Locals, 2);
         }
@@ -294,7 +294,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdLoc3(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdLoc3(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Locals, 3);
         }
@@ -305,7 +305,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdLoc4(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdLoc4(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Locals, 4);
         }
@@ -316,7 +316,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdLoc5(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdLoc5(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Locals, 5);
         }
@@ -327,7 +327,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdLoc6(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdLoc6(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Locals, 6);
         }
@@ -339,7 +339,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdLoc(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdLoc(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Locals, instruction.AsToken<byte>());
         }
@@ -350,7 +350,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StLoc0(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StLoc0(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Locals, 0);
         }
@@ -361,7 +361,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StLoc1(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StLoc1(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Locals, 1);
         }
@@ -372,7 +372,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StLoc2(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StLoc2(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Locals, 2);
         }
@@ -383,7 +383,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StLoc3(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StLoc3(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Locals, 3);
         }
@@ -394,7 +394,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StLoc4(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StLoc4(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Locals, 4);
         }
@@ -405,7 +405,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StLoc5(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StLoc5(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Locals, 5);
         }
@@ -416,7 +416,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StLoc6(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StLoc6(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Locals, 6);
         }
@@ -428,7 +428,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StLoc(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StLoc(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Locals, instruction.AsToken<byte>());
         }
@@ -439,7 +439,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdArg0(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdArg0(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Arguments, 0);
         }
@@ -450,7 +450,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdArg1(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdArg1(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Arguments, 1);
         }
@@ -461,7 +461,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdArg2(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdArg2(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Arguments, 2);
         }
@@ -472,7 +472,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdArg3(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdArg3(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Arguments, 3);
         }
@@ -483,7 +483,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdArg4(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdArg4(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Arguments, 4);
         }
@@ -494,7 +494,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdArg5(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdArg5(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Arguments, 5);
         }
@@ -505,7 +505,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdArg6(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdArg6(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Arguments, 6);
         }
@@ -517,7 +517,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void LdArg(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void LdArg(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteLoadFromSlot(engine, engine.CurrentContext!.Frame.Arguments, instruction.AsToken<byte>());
         }
@@ -528,7 +528,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StArg0(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StArg0(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Arguments, 0);
         }
@@ -539,7 +539,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StArg1(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StArg1(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Arguments, 1);
         }
@@ -550,7 +550,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StArg2(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StArg2(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Arguments, 2);
         }
@@ -561,7 +561,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StArg3(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StArg3(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Arguments, 3);
         }
@@ -572,7 +572,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StArg4(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StArg4(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Arguments, 4);
         }
@@ -583,7 +583,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StArg5(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StArg5(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Arguments, 5);
         }
@@ -594,7 +594,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StArg6(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StArg6(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Arguments, 6);
         }
@@ -606,7 +606,7 @@ namespace Neo.VM.Core
         /// </summary>
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
-        public virtual void StArg(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void StArg(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             ExecuteStoreToSlot(engine, engine.CurrentContext!.Frame.Arguments, instruction.AsToken<byte>());
         }

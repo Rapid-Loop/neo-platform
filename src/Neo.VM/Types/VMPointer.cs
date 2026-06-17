@@ -23,6 +23,7 @@
 using Neo.Core.Extensions;
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
@@ -72,7 +73,7 @@ namespace Neo.VM.Types
             _ip = ip;
             _byteCount = script.Length;
             _memoryOwner = MemoryPool<byte>.Shared.Rent(_byteCount);
-            script.GetReadOnlySpan().TryCopyTo(_memoryOwner.Memory.Span);
+            script.AsSpan().TryCopyTo(_memoryOwner.Memory.Span);
         }
 
         public bool Equals(VMPointer? other)
@@ -105,8 +106,6 @@ namespace Neo.VM.Types
         {
             var clone = new VMPointer(_memoryOwner.Memory[.._byteCount].ToArray(), _ip);
 
-            clone.AddReference();
-
             return clone;
         }
 
@@ -121,7 +120,7 @@ namespace Neo.VM.Types
             throw new InvalidOperationException($"Cannot convert {Type} to integer");
         }
 
-        public override ReadOnlySpan<byte> GetReadOnlySpan()
+        protected override ReadOnlySpan<byte> ComputeSpan(HashSet<VMObject> visited)
         {
             return _memoryOwner.Memory[.._byteCount].Span;
         }

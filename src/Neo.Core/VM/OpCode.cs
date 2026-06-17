@@ -25,7 +25,7 @@ using Neo.Core.VM.Attributes;
 namespace Neo.Core.VM
 {
     /// <summary>
-    /// Represents the opcode of an <see cref="VMInstruction"/>.
+    /// Represents the opcode of an <see cref="OpCodeInst"/>.
     /// </summary>
     public enum OpCode : byte
     {

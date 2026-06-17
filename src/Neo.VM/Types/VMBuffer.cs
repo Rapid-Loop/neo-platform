@@ -24,6 +24,7 @@ using Neo.Core;
 using Neo.Core.Extensions;
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
@@ -57,7 +58,7 @@ namespace Neo.VM.Types
         {
             _byteCount = source.Length;
             _memoryOwner = MemoryPool<byte>.Shared.Rent(_byteCount);
-            source.GetReadOnlySpan().TryCopyTo(_memoryOwner.Memory.Span);
+            source.AsSpan().TryCopyTo(_memoryOwner.Memory.Span);
         }
 
         public VMBuffer(Memory<byte> source)
@@ -123,8 +124,6 @@ namespace Neo.VM.Types
         {
             var clone = new VMBuffer(_memoryOwner.Memory[.._byteCount].ToArray());
 
-            clone.AddReference();
-
             return clone;
         }
 
@@ -138,7 +137,7 @@ namespace Neo.VM.Types
             return new(_memoryOwner.Memory.Span[..VMInteger.MaxSize]);
         }
 
-        public override ReadOnlySpan<byte> GetReadOnlySpan()
+        protected override ReadOnlySpan<byte> ComputeSpan(HashSet<VMObject> visited)
         {
             return _memoryOwner.Memory[.._byteCount].Span;
         }

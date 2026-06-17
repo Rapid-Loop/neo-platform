@@ -21,6 +21,7 @@
 // SERVICES
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
@@ -62,8 +63,6 @@ namespace Neo.VM.Types
         {
             var clone = new VMInteger(_value);
 
-            clone.AddReference(); // Since we're cloning, we add a reference
-
             return clone;
         }
 
@@ -77,7 +76,7 @@ namespace Neo.VM.Types
             return _value;
         }
 
-        public override ReadOnlySpan<byte> GetReadOnlySpan()
+        protected override ReadOnlySpan<byte> ComputeSpan(HashSet<VMObject> visited)
         {
             return _value.ToByteArray();
         }
@@ -92,39 +91,21 @@ namespace Neo.VM.Types
 
         public static VMInteger operator +(VMInteger a, VMInteger b)
         {
-            a.AddReference();
-            b.AddReference();
-
             var result = new VMInteger(a._value + b._value);
-
-            a.Release();
-            b.Release();
 
             return result;
         }
 
         public static VMInteger operator -(VMInteger a, VMInteger b)
         {
-            a.AddReference();
-            b.AddReference();
-
             var result = new VMInteger(a._value - b._value);
-
-            a.Release();
-            b.Release();
 
             return result;
         }
 
         public static VMInteger operator *(VMInteger a, VMInteger b)
         {
-            a.AddReference();
-            b.AddReference();
-
             var result = new VMInteger(a._value * b._value);
-
-            a.Release();
-            b.Release();
 
             return result;
         }
@@ -134,26 +115,14 @@ namespace Neo.VM.Types
             if (b._value == BigInteger.Zero)
                 throw new DivideByZeroException("Division by zero in VMInteger");
 
-            a.AddReference();
-            b.AddReference();
-
             var result = new VMInteger(a._value / b._value);
-
-            a.Release();
-            b.Release();
 
             return result;
         }
 
         public static VMInteger operator %(VMInteger a, VMInteger b)
         {
-            a.AddReference();
-            b.AddReference();
-
             var result = new VMInteger(a._value % b._value);
-
-            a.Release();
-            b.Release();
 
             return result;
         }

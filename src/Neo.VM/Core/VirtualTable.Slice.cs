@@ -35,7 +35,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void NewBuffer(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void NewBuffer(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var length = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
 
@@ -50,7 +50,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 5, Push 0</remarks>
-        public virtual void Memcpy(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Memcpy(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var count = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (count < 0)
@@ -83,10 +83,10 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void Cat(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Cat(VirtualMachineEngine engine, OpCodeInst instruction)
         {
-            var x2 = engine.CurrentContext!.Pop().GetReadOnlySpan();
-            var x1 = engine.CurrentContext!.Pop().GetReadOnlySpan();
+            var x2 = engine.CurrentContext!.Pop().AsSpan();
+            var x1 = engine.CurrentContext!.Pop().AsSpan();
             var length = x1.Length + x2.Length;
 
             engine.Limits.AssertMaxItemSize(length);
@@ -102,7 +102,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 3, Push 1</remarks>
-        public virtual void SubStr(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void SubStr(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var count = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (count < 0)
@@ -112,7 +112,7 @@ namespace Neo.VM.Core
             if (index < 0)
                 throw new InvalidOperationException($"The index can not be negative for {nameof(OpCode.SUBSTR)}, index: {index}.");
 
-            var x = engine.CurrentContext!.Pop().GetReadOnlySpan();
+            var x = engine.CurrentContext!.Pop().AsSpan();
             if (checked(index + count) > x.Length)
                 throw new InvalidOperationException($"The index + count is out of range for {nameof(OpCode.SUBSTR)}, index: {index}, count: {count}, {index + count}/[0, {x.Length}].");
 
@@ -127,13 +127,13 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void Left(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Left(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var count = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (count < 0)
                 throw new InvalidOperationException($"The count can not be negative for {nameof(OpCode.LEFT)}, count: {count}.");
 
-            var x = engine.CurrentContext!.Pop().GetReadOnlySpan();
+            var x = engine.CurrentContext!.Pop().AsSpan();
             if (count > x.Length)
                 throw new InvalidOperationException($"The count is out of range for {nameof(OpCode.LEFT)}, {count}/[0, {x.Length}].");
 
@@ -148,13 +148,13 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void Right(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Right(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var count = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (count < 0)
                 throw new InvalidOperationException($"The count can not be negative for {nameof(OpCode.RIGHT)}, count: {count}.");
 
-            var x = engine.CurrentContext!.Pop().GetReadOnlySpan();
+            var x = engine.CurrentContext!.Pop().AsSpan();
             if (count > x.Length)
                 throw new InvalidOperationException($"The count is out of range for {nameof(OpCode.RIGHT)}, {count}/[0, {x.Length}].");
 

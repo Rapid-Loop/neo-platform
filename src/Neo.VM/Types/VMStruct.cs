@@ -30,36 +30,20 @@ namespace Neo.VM.Types
 
         public VMStruct() : this([]) { }
 
-        public override VMObject Clone()
+        protected override VMObject CloneCore(Dictionary<VMObject, VMObject> objectMap)
         {
+            if (objectMap.TryGetValue(this, out var thisItem)) return thisItem;
+
             var clone = new VMStruct();
 
-            // Important: Use a mapping to handle cycles during cloning
-            var objectMap = new Dictionary<VMObject, VMObject>();
+            objectMap.Add(this, clone);
 
-            Array.ForEach(i =>
+            foreach (var item in this)
             {
-                if (i is null || i is VMNull)
-                {
-                    clone.Array.Add(VMNull.Instance);
-                    return;
-                }
+                var clonedItem = item.Clone(objectMap);
+                clone.Array.Add(clonedItem);
+            }
 
-                if (objectMap.TryGetValue(i, out var alreadyCloned))
-                {
-                    // Cycle detected during cloning - reuse the cloned object
-                    alreadyCloned.AddReference();
-                    clone.Array.Add(alreadyCloned);
-                }
-                else
-                {
-                    var clonedItem = i.Clone();
-                    objectMap[i] = clonedItem;
-                    clone.Array.Add(clonedItem);
-                }
-            });
-
-            clone.AddReference();
             return clone;
         }
     }

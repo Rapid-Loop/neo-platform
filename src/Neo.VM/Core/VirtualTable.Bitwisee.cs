@@ -33,7 +33,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void Invert(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Invert(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x = engine.CurrentContext!.Pop().GetInteger();
 
@@ -47,7 +47,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void And(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void And(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -62,7 +62,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void Or(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Or(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -77,7 +77,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void XOr(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void XOr(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop().GetInteger();
             var x1 = engine.CurrentContext!.Pop().GetInteger();
@@ -92,7 +92,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void Equal(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Equal(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop();
             var x1 = engine.CurrentContext!.Pop();
@@ -107,7 +107,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.CurrentContext!.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void NotEqual(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void NotEqual(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x2 = engine.CurrentContext!.Pop();
             var x1 = engine.CurrentContext!.Pop();

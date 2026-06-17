@@ -39,9 +39,9 @@ namespace Neo.VM.Types
 
         private bool _isReadOnly = false;
 
-        protected readonly List<VMObject> Array = [];
+        protected readonly List<VMObject> Array;
 
-        public VMArray() { }
+        public VMArray() : this(false) { }
 
         public VMArray(bool isReadonly) : this([], isReadonly) { }
 
@@ -49,12 +49,7 @@ namespace Neo.VM.Types
 
         public VMArray(IEnumerable<VMObject> items, bool isReadonly)
         {
-            foreach (var item in items)
-            {
-                item.AddReference();
-                Array.Add(item);
-            }
-
+            Array = [.. items];
             _isReadOnly = isReadonly;
         }
 
@@ -64,9 +59,6 @@ namespace Neo.VM.Types
             set
             {
                 if (_isReadOnly) throw new InvalidOperationException();
-
-                Array[index]?.Release();
-                value.AddReference();
                 Array[index] = value;
             }
         }
@@ -82,7 +74,7 @@ namespace Neo.VM.Types
 
         public override int GetHashCode()
         {
-            return ((IReadOnlyList<VMObject>)Array).ToHashCode(RefCount ^ 397);
+            return AsSpan().ToHashCode(RefCount ^ 397);
         }
 
         public override bool Equals([NotNullWhen(true)] object? obj)
@@ -102,7 +94,7 @@ namespace Neo.VM.Types
             {
                 for (var i = 0; i < Count; i++)
                 {
-                    if (Equals(this[i], other[i]) == false)
+                    if (this[i].Equals(other[i]) == false)
                         return false;
                 }
 
@@ -127,16 +119,12 @@ namespace Neo.VM.Types
         public void Add(VMObject item)
         {
             if (_isReadOnly) throw new InvalidOperationException();
-
-            item.AddReference();
             Array.Add(item);
         }
 
         public void Clear()
         {
             if (_isReadOnly) throw new InvalidOperationException();
-
-            Array.ForEach(i => i.Release());
             Array.Clear();
         }
 
@@ -156,8 +144,6 @@ namespace Neo.VM.Types
         public bool Remove(VMObject item)
         {
             if (_isReadOnly) throw new InvalidOperationException();
-
-            Array[Array.IndexOf(item)]?.Release();
             return Array.Remove(item);
         }
 
@@ -173,16 +159,12 @@ namespace Neo.VM.Types
         public void Insert(int index, VMObject item)
         {
             if (_isReadOnly) throw new InvalidOperationException();
-
-            item.AddReference();
             Array.Insert(index, item);
         }
 
         public void RemoveAt(int index)
         {
             if (_isReadOnly) throw new InvalidOperationException();
-
-            Array[index]?.Release();
             Array.RemoveAt(index);
         }
 
@@ -203,37 +185,27 @@ namespace Neo.VM.Types
 
         public override VMObject Clone()
         {
+            var objectMap = new Dictionary<VMObject, VMObject>(ReferenceEqualityComparer.Instance);
+            return Clone(objectMap);
+        }
+
+        protected override VMObject CloneCore(Dictionary<VMObject, VMObject> objectMap)
+        {
+            if (objectMap.TryGetValue(this, out var thisItem)) return thisItem;
+
             var clone = new VMArray();
 
-            // Important: Use a mapping to handle cycles during cloning
-            var objectMap = new Dictionary<VMObject, VMObject>();
+            objectMap.Add(this, clone);
 
-            Array.ForEach(i =>
+            foreach (var item in this)
             {
-                if (i is null || i is VMNull)
-                {
-                    clone.Array.Add(VMNull.Instance);
-                    return;
-                }
-
-                if (objectMap.TryGetValue(i, out var alreadyCloned))
-                {
-                    // Cycle detected during cloning - reuse the cloned object
-                    alreadyCloned.AddReference();
-                    clone.Array.Add(alreadyCloned);
-                }
-                else
-                {
-                    var clonedItem = i.Clone();
-                    objectMap[i] = clonedItem;
-                    clone.Array.Add(clonedItem);
-                }
-            });
+                var clonedItem = item.Clone(objectMap);
+                clone.Array.Add(clonedItem);
+            }
 
             if (_isReadOnly)
                 clone.SetAsReadOnly();
 
-            clone.AddReference();
             return clone;
         }
 
@@ -248,11 +220,15 @@ namespace Neo.VM.Types
             throw new InvalidOperationException();
         }
 
-        public override ReadOnlySpan<byte> GetReadOnlySpan()
+        protected override ReadOnlySpan<byte> ComputeSpan(HashSet<VMObject> visited)
         {
             var result = new List<byte>();
 
-            Array.ForEach(i => result.AddRange(i.GetReadOnlySpan()));
+            foreach (var item in Array)
+            {
+                if (item is not VMNull)
+                    result.AddRange(item.GetSafeSpan(visited));
+            }
 
             return result.ToArray();
         }

@@ -40,7 +40,7 @@ namespace Neo.VM.Types
         public int RefCount => _refCount;
 
         private bool _disposed = false;
-        private int _refCount = 1;
+        private int _refCount = 0;
 
         #region IEquatable
 

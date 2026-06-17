@@ -200,7 +200,7 @@ namespace Neo.Core.VM
             return Emit(OpCode.SYSCALL, BitConverter.GetBytes(api));
         }
 
-        public ScriptBuilder CreateArray<T>(IReadOnlyList<T>? list = null)
+        public ScriptBuilder EmitCreateArray<T>(IReadOnlyList<T>? list = null)
         {
             if (list is null || list.Count == 0)
                 return Emit(OpCode.NEWARRAY0);
@@ -213,7 +213,7 @@ namespace Neo.Core.VM
             return Emit(OpCode.PACK);
         }
 
-        public ScriptBuilder CreateMap<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> map)
+        public ScriptBuilder EmitCreateMap<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> map)
             where TKey : notnull
             where TValue : notnull
         {
@@ -233,7 +233,7 @@ namespace Neo.Core.VM
             return Emit(OpCode.PACKMAP);
         }
 
-        public ScriptBuilder CreateMap<TKey, TValue>(IReadOnlyDictionary<TKey, TValue> map)
+        public ScriptBuilder EmitCreateMap<TKey, TValue>(IReadOnlyDictionary<TKey, TValue> map)
             where TKey : notnull
             where TValue : notnull
         {
@@ -251,7 +251,7 @@ namespace Neo.Core.VM
             return Emit(OpCode.PACKMAP);
         }
 
-        public ScriptBuilder CreateStruct<T>(IReadOnlyList<T> array)
+        public ScriptBuilder EmitCreateStruct<T>(IReadOnlyList<T> array)
             where T : notnull
         {
             if (array.Count == 0)

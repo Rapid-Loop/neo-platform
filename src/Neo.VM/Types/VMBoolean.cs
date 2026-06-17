@@ -21,6 +21,7 @@
 // SERVICES
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
@@ -67,8 +68,6 @@ namespace Neo.VM.Types
         {
             var clone = new VMBoolean(_value);
 
-            clone.AddReference();
-
             return clone;
         }
 
@@ -82,7 +81,7 @@ namespace Neo.VM.Types
             return _value ? BigInteger.One : BigInteger.Zero;
         }
 
-        public override ReadOnlySpan<byte> GetReadOnlySpan()
+        protected override ReadOnlySpan<byte> ComputeSpan(HashSet<VMObject> visited)
         {
             return _value ? [1] : [0];
         }

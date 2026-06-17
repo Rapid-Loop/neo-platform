@@ -22,6 +22,7 @@
 
 using Neo.Core;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.InteropServices;
@@ -79,12 +80,10 @@ namespace Neo.VM.Types
         {
             var clone = new VMInteropInterface(_underlyingObject, _interfaceName);
 
-            clone.AddReference();
-
             return clone;
         }
 
-        public override ReadOnlySpan<byte> GetReadOnlySpan()
+        protected override ReadOnlySpan<byte> ComputeSpan(HashSet<VMObject> visited)
         {
             var size = Marshal.SizeOf(_underlyingObject);
 

@@ -60,8 +60,6 @@ namespace Neo.VM.Types
 
         public override VMObject Clone()
         {
-            AddReference();
-
             return this;
         }
 
@@ -73,11 +71,6 @@ namespace Neo.VM.Types
         public override BigInteger GetInteger()
         {
             return BigInteger.Zero;
-        }
-
-        public override ReadOnlySpan<byte> GetReadOnlySpan()
-        {
-            return [];
         }
 
         public override string ToString()

@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.Core;
+using Neo.Core.Extensions;
 using Neo.Core.VM.Interface;
 using System;
 using System.Collections.Generic;
@@ -34,12 +35,12 @@ namespace Neo.VM.Types
     {
         public virtual VMObjectType Type => VMObjectType.Any;
 
-        public int Size => GetReadOnlySpan().Length;
+        public int Size => AsSpan().Length;
 
         public int RefCount => _refCount;
 
         private bool _disposed = false;
-        private int _refCount = 0;
+        private int _refCount = 1;
 
         #region IEquatable
 
@@ -56,12 +57,12 @@ namespace Neo.VM.Types
             if (Type != other.Type) return false;
             if (_disposed != other._disposed) return false;
             if (_refCount != other._refCount) return false;
-            return GetReadOnlySpan().SequenceEqual(other.GetReadOnlySpan());
+            return AsSpan().SequenceEqual(other.AsSpan());
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Type, RefCount, _disposed);
+            return AsSpan().ToHashCode(RefCount ^ 397);
         }
 
         #endregion
@@ -129,9 +130,57 @@ namespace Neo.VM.Types
         public abstract VMObject Clone();
 
         /// <summary>
+        /// Internal clone helper that shares the cycle map across the entire object graph.
+        /// </summary>
+        protected internal virtual VMObject Clone(Dictionary<VMObject, VMObject> objectMap)
+        {
+            if (objectMap.TryGetValue(this, out var existing)) return existing;
+            var clone = CloneCore(objectMap); // Call derived implementation
+            objectMap[this] = clone;          // Register immediately
+            return clone;
+        }
+
+        /// <summary>
+        /// Override this in derived classes for actual cloning logic (without map).
+        /// </summary>
+        protected virtual VMObject CloneCore(Dictionary<VMObject, VMObject> objectMap)
+        {
+            return Clone();
+        }
+
+        /// <summary>
         /// Converts this object to a <see cref="ReadOnlySpan{T}"/> (for serialization/storage)
         /// </summary>
-        public abstract ReadOnlySpan<byte> GetReadOnlySpan();
+        public ReadOnlySpan<byte> AsSpan()
+        {
+            var visited = new HashSet<VMObject>(ReferenceEqualityComparer.Instance);
+            return GetSafeSpan(visited);
+        }
+
+        /// <summary>
+        /// Internal method that derived classes should override
+        /// </summary>
+        protected internal ReadOnlySpan<byte> GetSafeSpan(HashSet<VMObject> visited)
+        {
+            if (visited.Contains(this))
+                return []; // Cycle detected - return empty
+
+            visited.Add(this);
+
+            var result = ComputeSpan(visited);
+
+            visited.Remove(this);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Override this in derived classes to provide their byte representation
+        /// </summary>
+        protected virtual ReadOnlySpan<byte> ComputeSpan(HashSet<VMObject> visited)
+        {
+            return [];
+        }
 
         /// <summary>
         /// Converts this object to a signed integer (if possible)
@@ -250,7 +299,7 @@ namespace Neo.VM.Types
             value.GetBoolean();
 
         public static implicit operator byte[](VMObject value) =>
-            [.. value.GetReadOnlySpan()];
+            [.. value.AsSpan()];
 
         public static implicit operator string(VMObject value) =>
             $"{value}";

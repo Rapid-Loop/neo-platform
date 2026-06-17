@@ -85,8 +85,8 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 1</remarks>
         public virtual void Cat(VirtualMachineEngine engine, OpCodeInst instruction)
         {
-            var x2 = engine.CurrentContext!.Pop().GetReadOnlySpan();
-            var x1 = engine.CurrentContext!.Pop().GetReadOnlySpan();
+            var x2 = engine.CurrentContext!.Pop().AsSpan();
+            var x1 = engine.CurrentContext!.Pop().AsSpan();
             var length = x1.Length + x2.Length;
 
             engine.Limits.AssertMaxItemSize(length);
@@ -112,7 +112,7 @@ namespace Neo.VM.Core
             if (index < 0)
                 throw new InvalidOperationException($"The index can not be negative for {nameof(OpCode.SUBSTR)}, index: {index}.");
 
-            var x = engine.CurrentContext!.Pop().GetReadOnlySpan();
+            var x = engine.CurrentContext!.Pop().AsSpan();
             if (checked(index + count) > x.Length)
                 throw new InvalidOperationException($"The index + count is out of range for {nameof(OpCode.SUBSTR)}, index: {index}, count: {count}, {index + count}/[0, {x.Length}].");
 
@@ -133,7 +133,7 @@ namespace Neo.VM.Core
             if (count < 0)
                 throw new InvalidOperationException($"The count can not be negative for {nameof(OpCode.LEFT)}, count: {count}.");
 
-            var x = engine.CurrentContext!.Pop().GetReadOnlySpan();
+            var x = engine.CurrentContext!.Pop().AsSpan();
             if (count > x.Length)
                 throw new InvalidOperationException($"The count is out of range for {nameof(OpCode.LEFT)}, {count}/[0, {x.Length}].");
 
@@ -154,7 +154,7 @@ namespace Neo.VM.Core
             if (count < 0)
                 throw new InvalidOperationException($"The count can not be negative for {nameof(OpCode.RIGHT)}, count: {count}.");
 
-            var x = engine.CurrentContext!.Pop().GetReadOnlySpan();
+            var x = engine.CurrentContext!.Pop().AsSpan();
             if (count > x.Length)
                 throw new InvalidOperationException($"The count is out of range for {nameof(OpCode.RIGHT)}, {count}/[0, {x.Length}].");
 

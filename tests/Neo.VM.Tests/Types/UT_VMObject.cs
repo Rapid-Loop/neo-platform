@@ -40,7 +40,6 @@ namespace Neo.VM.Tests.Types
             itemB[1] = itemB;
             itemC[1] = itemC;
 
-
             Assert.IsTrue(itemA.HasCircularReference());
             Assert.IsTrue(itemB.HasCircularReference());
             Assert.IsTrue(itemC.HasCircularReference());
@@ -281,11 +280,11 @@ namespace Neo.VM.Tests.Types
             item = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09 };
 
             Assert.IsInstanceOfType<VMByteArray>(item);
-            CollectionAssert.AreEqual(new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09 }, item.GetReadOnlySpan().ToArray());
+            CollectionAssert.AreEqual(new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09 }, item.AsSpan().ToArray());
         }
 
         [TestMethod]
-        public void TestClone()
+        public void TestCloneSelfReference()
         {
             var a = new VMArray()
             {
@@ -298,11 +297,14 @@ namespace Neo.VM.Tests.Types
                 new VMStruct() { 1, 2, 3 }
             };
 
+            a.Add(a);
+
             var aa = (VMArray)a.Clone();
 
-            Assert.AreNotEqual(a, aa);
+            Assert.AreEqual(a, aa);
             Assert.AreNotSame(a, aa);
             Assert.IsTrue(a[^2].Equals(aa[^2]));
+            Assert.IsTrue(a.HasCircularReference());
             Assert.AreNotSame(a[^2], aa[^2]);
         }
     }

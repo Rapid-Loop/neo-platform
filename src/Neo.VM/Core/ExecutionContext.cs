@@ -41,14 +41,14 @@ namespace Neo.VM.Core
         public int InstructionPointer { get; internal set; }
 
         /// <summary>
-        /// Returns the current <see cref="VMInstruction"/>.
+        /// Returns the current <see cref="OpCodeInst"/>.
         /// </summary>
-        public VMInstruction CurrentInstruction => new(_script, InstructionPointer);
+        public OpCodeInst CurrentInstruction => new(_script.Slice(InstructionPointer));
 
         /// <summary>
-        /// Returns the next <see cref="VMInstruction"/>.
+        /// Returns the next <see cref="OpCodeInst"/>.
         /// </summary>
-        public VMInstruction NextInstruction => new(_script, InstructionPointer + CurrentInstruction.Size);
+        public OpCodeInst NextInstruction => new(_script.Slice(InstructionPointer + CurrentInstruction.Size));
 
         /// <summary>
         /// Current stack frame

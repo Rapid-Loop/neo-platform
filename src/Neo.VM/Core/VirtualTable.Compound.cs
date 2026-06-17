@@ -38,7 +38,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2n+1, Push 1</remarks>
-        public virtual void PackMap(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void PackMap(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var size = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (size < 0 || size * 2 > engine.CurrentContext!.Frame.EvaluationStack.Count)
@@ -63,7 +63,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop n+1, Push 1</remarks>
-        public virtual void PackStruct(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void PackStruct(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var size = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (size < 0 || size > engine.CurrentContext!.Frame.EvaluationStack.Count)
@@ -87,7 +87,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop n+1, Push 1</remarks>
-        public virtual void Pack(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Pack(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var size = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (size < 0 || size > engine.CurrentContext!.Frame.EvaluationStack.Count)
@@ -111,7 +111,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 2n+1 or n+1</remarks>
-        public virtual void Unpack(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Unpack(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var obj = engine.CurrentContext!.Pop();
             switch (obj)
@@ -144,7 +144,7 @@ namespace Neo.VM.Core
         /// Pop 0, Push 1
         /// TODO: Change to NewNullArray method or add it?
         /// </remarks>
-        public virtual void NewArray0(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void NewArray0(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             engine.CurrentContext!.Push(new VMArray());
         }
@@ -156,7 +156,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void NewArray(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void NewArray(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var n = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (n < 0 || n > engine.Limits.MaxStackSize)
@@ -175,7 +175,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void NewArray_T(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void NewArray_T(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var n = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (n < 0 || n > engine.Limits.MaxStackSize)
@@ -206,7 +206,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 0, Push 1</remarks>
-        public virtual void NewStruct0(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void NewStruct0(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             engine.CurrentContext!.Push(new VMStruct());
         }
@@ -218,7 +218,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void NewStruct(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void NewStruct(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var n = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
             if (n < 0 || n > engine.Limits.MaxStackSize)
@@ -237,7 +237,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 0, Push 1</remarks>
-        public virtual void NewVMMap(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void NewVMMap(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             engine.CurrentContext!.Push(new VMMap());
         }
@@ -249,7 +249,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void Size(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Size(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x = engine.CurrentContext!.Pop();
             switch (x)
@@ -276,7 +276,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void HasKey(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void HasKey(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var key = engine.CurrentContext!.Pop();
             var x = engine.CurrentContext!.Pop();
@@ -316,7 +316,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void Keys(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Keys(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var map = (VMMap)engine.CurrentContext!.Pop();
 
@@ -330,7 +330,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void Values(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Values(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x = engine.CurrentContext!.Pop();
             var values = x switch
@@ -358,7 +358,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 1</remarks>
-        public virtual void PickItem(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void PickItem(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var key = engine.CurrentContext!.Pop();
             var x = engine.CurrentContext!.Pop();
@@ -401,7 +401,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void Append(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Append(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var newItem = engine.CurrentContext!.Pop();
             var array = (VMArray)engine.CurrentContext!.Pop();
@@ -419,7 +419,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 3, Push 0</remarks>
-        public virtual void SetItem(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void SetItem(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var value = engine.CurrentContext!.Pop();
             if (value is VMStruct s)
@@ -463,7 +463,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void ReverseItems(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void ReverseItems(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x = engine.CurrentContext!.Pop();
 
@@ -487,7 +487,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 2, Push 0</remarks>
-        public virtual void Remove(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void Remove(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var key = engine.CurrentContext!.Pop();
             var x = engine.CurrentContext!.Pop();
@@ -517,7 +517,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 0</remarks>
-        public virtual void ClearItems(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void ClearItems(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x = engine.CurrentContext!.Pop();
 
@@ -541,7 +541,7 @@ namespace Neo.VM.Core
         /// <param name="engine">The execution engine.</param>
         /// <param name="instruction">The instruction being executed.</param>
         /// <remarks>Pop 1, Push 1</remarks>
-        public virtual void PopItem(VirtualMachineEngine engine, VMInstruction instruction)
+        public virtual void PopItem(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var x = (VMArray)engine.CurrentContext!.Pop();
             var index = x.Count - 1;

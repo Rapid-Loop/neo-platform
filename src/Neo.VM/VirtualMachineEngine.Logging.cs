@@ -61,12 +61,12 @@ namespace Neo.VM
         {
             if (_logger.IsEnabled(logLevel) && _invocationStack.Count > 0)
             {
-                var context = _invocationStack.Peek();
+                var opcodeInst = _invocationStack.Peek().CurrentInstruction;
                 var message = VirtualMachineLocalizer.GetMessage(
                     VirtualMachineMessageNames.ExecuteOpCode,
-                    context.InstructionPointer,
-                    context.CurrentInstruction.OpCode,
-                    context.CurrentInstruction.DecodeOperand()
+                    opcodeInst.Position,
+                    opcodeInst.OpCode,
+                    opcodeInst.DecodeOperand()
                 );
 
                 _logger.LogExecuteMessage(logLevel, message);

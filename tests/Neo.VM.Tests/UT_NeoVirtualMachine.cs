@@ -70,9 +70,9 @@ namespace Neo.VM.Tests
             var actualTargetReturnValue = actualMethodDesc.TargetMethod.DynamicInvoke(expectedParamValue);
             var actualFoundSystemCall = vm.SystemCallTable.TryGetValue(expectedSystemName, out var actualSystemCallAddress);
 
-            using var sb = new ScriptBuilder();
-            sb.EmitSysCall(actualMethodDesc, expectedParamValue);
-            sb.EmitReturn();
+            using var sb = new ScriptBuilder()
+            .EmitSysCall(actualMethodDesc, expectedParamValue)
+            .EmitReturn();
 
             vm.LoadScript(sb.ToArray());
 
@@ -105,7 +105,7 @@ namespace Neo.VM.Tests
                 0x15,        // PUSH 5
                 0x16,        // PUSH 6
                 0x9e,        // ADD
-                0x40         // RET
+                0x40,        // RET
             ];
 
             var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);

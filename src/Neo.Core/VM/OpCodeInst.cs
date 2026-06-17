@@ -36,9 +36,11 @@ using System.Text;
 namespace Neo.Core.VM
 {
     [DebuggerDisplay("OpCode={OpCode}, OperandSize={OperandSize}")]
-    public sealed class VMInstruction : IEnumerable<VMInstruction>
+    public sealed class OpCodeInst : IEnumerable<OpCodeInst>
     {
         private const int OpCodeSize = 1;
+
+        public static OpCodeInst Ret => new((byte[])[(byte)OpCode.RET]);
 
         public int Position { get; private init; }
         public OpCode OpCode { get; private init; }
@@ -54,7 +56,7 @@ namespace Neo.Core.VM
 
         private readonly ReadOnlyMemory<byte> _script;
 
-        public VMInstruction(ReadOnlyMemory<byte> script, int start = 0)
+        public OpCodeInst(ReadOnlyMemory<byte> script, int start = 0)
         {
             if (script.IsEmpty)
                 throw new Exception("Bad Script.");
@@ -86,7 +88,7 @@ namespace Neo.Core.VM
             Position = start;
         }
 
-        static VMInstruction()
+        static OpCodeInst()
         {
             foreach (var field in typeof(OpCode).GetFields(BindingFlags.Public | BindingFlags.Static))
             {
@@ -101,14 +103,14 @@ namespace Neo.Core.VM
             }
         }
 
-        public IEnumerator<VMInstruction> GetEnumerator()
+        public IEnumerator<OpCodeInst> GetEnumerator()
         {
             var nip = Position + OperandSize + OpCodeSize;
             yield return this;
 
-            VMInstruction? instruct;
+            OpCodeInst? instruct;
             for (var ip = nip; ip < _script.Length; ip += instruct.OperandSize + OpCodeSize)
-                yield return instruct = new VMInstruction(_script, ip);
+                yield return instruct = new OpCodeInst(_script, ip);
         }
 
         IEnumerator IEnumerable.GetEnumerator() =>
@@ -142,10 +144,30 @@ namespace Neo.Core.VM
             var readable = asStr.All(char.IsAscii);
 
             if (string.IsNullOrWhiteSpace(asStr))
-                asStr = "No Data";
+                asStr = "[null]";
 
             return OpCode switch
             {
+                OpCode.PUSHT => $"// \"{bool.TrueString}\"",
+                OpCode.PUSHF => $"// \"{bool.FalseString}\"",
+                OpCode.PUSHM1 => "// \"-1\"",
+                OpCode.PUSH0 => "// \"0\"",
+                OpCode.PUSH1 => "// \"1\"",
+                OpCode.PUSH2 => "// \"2\"",
+                OpCode.PUSH3 => "// \"3\"",
+                OpCode.PUSH4 => "// \"4\"",
+                OpCode.PUSH5 => "// \"5\"",
+                OpCode.PUSH6 => "// \"6\"",
+                OpCode.PUSH7 => "// \"7\"",
+                OpCode.PUSH8 => "// \"8\"",
+                OpCode.PUSH9 => "// \"9\"",
+                OpCode.PUSH10 => "// \"10\"",
+                OpCode.PUSH11 => "// \"11\"",
+                OpCode.PUSH12 => "// \"12\"",
+                OpCode.PUSH13 => "// \"13\"",
+                OpCode.PUSH14 => "// \"14\"",
+                OpCode.PUSH15 => "// \"15\"",
+                OpCode.PUSH16 => "// \"16\"",
                 OpCode.JMP or
                 OpCode.JMPIF or
                 OpCode.JMPIFNOT or
@@ -154,7 +176,7 @@ namespace Neo.Core.VM
                 OpCode.JMPGT or
                 OpCode.JMPLT or
                 OpCode.CALL or
-                OpCode.ENDTRY => $"[{checked(Position + AsToken<byte>()):X08}]",
+                OpCode.ENDTRY => $"[{checked(Position + AsToken<byte>()):x8}]",
                 OpCode.JMP_L or
                 OpCode.JMPIF_L or
                 OpCode.PUSHA or
@@ -164,14 +186,14 @@ namespace Neo.Core.VM
                 OpCode.JMPGT_L or
                 OpCode.JMPLT_L or
                 OpCode.CALL_L or
-                OpCode.ENDTRY_L => $"[{checked(Position + AsToken<int>()):X08}]",
-                OpCode.TRY => $"[{AsToken<byte>():X02}, {AsToken<byte>(1):X02}]",
+                OpCode.ENDTRY_L => $"[{checked(Position + AsToken<int>()):x8}]",
+                OpCode.TRY => $"[{AsToken<byte>():x2}, {AsToken<byte>(1):x2}]",
                 OpCode.INITSLOT => $"{AsToken<byte>()}, {AsToken<byte>(1)}",
-                OpCode.TRY_L => $"[{checked(Position + AsToken<int>()):X08}, {checked(Position + AsToken<int>()):X08}]",
-                OpCode.CALLT => $"[{checked(Position + AsToken<ushort>()):X08}]",
+                OpCode.TRY_L => $"[{checked(Position + AsToken<int>()):x8}, {checked(Position + AsToken<int>()):x8}]",
+                OpCode.CALLT => $"[{checked(Position + AsToken<ushort>()):x8}]",
                 OpCode.NEWARRAY_T or
                 OpCode.ISTYPE or
-                OpCode.CONVERT => $"{AsToken<byte>():X02}",
+                OpCode.CONVERT => $"{AsToken<byte>():x2}",
                 OpCode.STLOC or
                 OpCode.LDLOC or
                 OpCode.LDSFLD or
@@ -188,7 +210,7 @@ namespace Neo.Core.VM
                 OpCode.SYSCALL => $"[{Unsafe.As<byte, uint>(ref operand[0])}]",
                 OpCode.PUSHDATA1 or
                 OpCode.PUSHDATA2 or
-                OpCode.PUSHDATA4 => readable ? $"{Convert.ToHexString(operand)} /* {asStr} */" : Convert.ToHexString(operand),
+                OpCode.PUSHDATA4 => operand.Length == 0 ? string.Empty : readable ? $"0x{Convert.ToHexStringLower(operand)} // \"{asStr}\"" : $"0x{Convert.ToHexStringLower(operand)}",
                 _ => string.Empty,
             };
         }

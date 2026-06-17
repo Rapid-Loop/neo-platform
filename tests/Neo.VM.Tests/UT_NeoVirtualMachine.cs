@@ -98,7 +98,7 @@ namespace Neo.VM.Tests
         }
 
         [TestMethod]
-        public void TestVMSimple()
+        public void TestSimpleAdd()
         {
             byte[] script =
             [
@@ -120,10 +120,40 @@ namespace Neo.VM.Tests
         }
 
         [TestMethod]
-        public void TestVMArray()
+        public void TestCircularReferenceCreateArray()
         {
             using var sb = new ScriptBuilder()
-                .CreateArray([1, 2, 3,])
+                .EmitPush(0)
+                .EmitCreateArray([1, 2, 3,])
+                .Emit(OpCode.DUP)
+                .Emit(OpCode.DUP)
+                .Emit(OpCode.SWAP)
+                .Emit(OpCode.SETITEM)
+                .EmitReturn();
+
+            var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
+            vm.LoadScript(sb.ToArray());
+
+            var actualState = vm.Execute();
+            var actualResults = vm.ResultStack;
+
+            Assert.AreEqual(VMState.HALT, actualState);
+            Assert.HasCount(1, actualResults);
+
+            var actualArray = actualResults.Pop() as VMArray;
+
+            Assert.IsNotNull(actualArray);
+            Assert.HasCount(3, actualArray);
+            Assert.HasCount(3, (VMArray)actualArray[0]);
+            Assert.AreEqual(2, actualArray[1].GetInteger());
+            Assert.AreEqual(3, actualArray[2].GetInteger());
+        }
+
+        [TestMethod]
+        public void TestCreateArray()
+        {
+            using var sb = new ScriptBuilder()
+                .EmitCreateArray([1, 2, 3,])
                 .EmitReturn();
 
             var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
@@ -145,7 +175,7 @@ namespace Neo.VM.Tests
         }
 
         [TestMethod]
-        public void TestVMPush()
+        public void TestPushingSimpleTypes()
         {
             using var sb = new ScriptBuilder()
                 .EmitPush(null as object)

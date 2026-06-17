@@ -77,6 +77,13 @@ namespace Neo.VM.Core
         public void Push(VMObject item)
         {
             item.AddReference();
+
+            foreach (var subItem in item.GetChildren())
+            {
+                if (ReferenceEquals(item, subItem)) continue;
+                subItem.AddReference();
+            }
+
             EvaluationStack.Push(item);
         }
 
@@ -90,6 +97,13 @@ namespace Neo.VM.Core
 
             var item = EvaluationStack.Pop();
             item.Release();
+
+            foreach (var subItem in item.GetChildren())
+            {
+                if (ReferenceEquals(item, subItem)) continue;
+                subItem.Release();
+            }
+
             return item;
         }
 

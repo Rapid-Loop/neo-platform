@@ -2623,7 +2623,7 @@ namespace Neo.Core.VM
         /// 
         /// The `value` is the third pushed item(the top item), the `n` or `key` is the second pushed item, and target is the first pushed item.
         /// If the target is an array or buffer, the index will be converted to an integer.
-        /// If the tartget is a buffer, the value should within [-128, 255].
+        /// If the target is a buffer, the value should within [-128, 255].
         /// 
         /// <remarks>
         ///     Push: 1 item(s)

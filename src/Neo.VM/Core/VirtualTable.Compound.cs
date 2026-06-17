@@ -40,7 +40,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2n+1, Push 1</remarks>
         public virtual void PackMap(VirtualMachineEngine engine, OpCodeInst instruction)
         {
-            var size = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
+            var size = checked((int)engine.CurrentContext!.Pop().GetInteger());
             if (size < 0 || size * 2 > engine.CurrentContext!.Frame.EvaluationStack.Count)
                 throw new InvalidOperationException($"The map size is out of valid range, 2*{size}/[0, {engine.CurrentContext!.Frame.EvaluationStack.Count}].");
 
@@ -65,7 +65,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop n+1, Push 1</remarks>
         public virtual void PackStruct(VirtualMachineEngine engine, OpCodeInst instruction)
         {
-            var size = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
+            var size = checked((int)engine.CurrentContext!.Pop().GetInteger());
             if (size < 0 || size > engine.CurrentContext!.Frame.EvaluationStack.Count)
                 throw new InvalidOperationException($"The struct size is out of valid range, {size}/[0, {engine.CurrentContext!.Frame.EvaluationStack.Count}].");
 
@@ -89,7 +89,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop n+1, Push 1</remarks>
         public virtual void Pack(VirtualMachineEngine engine, OpCodeInst instruction)
         {
-            var size = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
+            var size = checked((int)engine.CurrentContext!.Pop().GetInteger());
             if (size < 0 || size > engine.CurrentContext!.Frame.EvaluationStack.Count)
                 throw new InvalidOperationException($"The array size is out of valid range, {size}/[0, {engine.CurrentContext!.Frame.EvaluationStack.Count}].");
 
@@ -157,7 +157,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 1, Push 1</remarks>
         public virtual void NewArray(VirtualMachineEngine engine, OpCodeInst instruction)
         {
-            var n = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
+            var n = checked((int)engine.CurrentContext!.Pop().GetInteger());
             if (n < 0 || n > engine.Limits.MaxStackSize)
                 throw new InvalidOperationException($"The array size is out of valid range, {n}/[0, {engine.Limits.MaxStackSize}].");
 
@@ -176,7 +176,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 1, Push 1</remarks>
         public virtual void NewArray_T(VirtualMachineEngine engine, OpCodeInst instruction)
         {
-            var n = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
+            var n = checked((int)engine.CurrentContext!.Pop().GetInteger());
             if (n < 0 || n > engine.Limits.MaxStackSize)
                 throw new InvalidOperationException($"The array size is out of valid range, {n}/[0, {engine.Limits.MaxStackSize}].");
 
@@ -219,7 +219,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 1, Push 1</remarks>
         public virtual void NewStruct(VirtualMachineEngine engine, OpCodeInst instruction)
         {
-            var n = unchecked((int)engine.CurrentContext!.Pop().GetInteger());
+            var n = checked((int)engine.CurrentContext!.Pop().GetInteger());
             if (n < 0 || n > engine.Limits.MaxStackSize)
                 throw new InvalidOperationException($"The struct size is out of valid range, {n}/[0, {engine.Limits.MaxStackSize}].");
 
@@ -368,7 +368,7 @@ namespace Neo.VM.Core
                     var index1 = key.GetInteger();
                     if (index1 < BigInteger.Zero || index1 >= array.Count)
                         throw new Exception($"The index of {nameof(VMArray)} is out of range, {index1}/[0, {array.Count}).");
-                    engine.CurrentContext!.Push(array[unchecked((int)index1)]);
+                    engine.CurrentContext!.Push(array[checked((int)index1)]);
                     break;
                 case VMMap map:
                     if (!map.TryGetValue(key, out var value))
@@ -380,13 +380,13 @@ namespace Neo.VM.Core
                     var index2 = key.GetInteger();
                     if (index2 < BigInteger.Zero || index2 >= a.Length)
                         throw new Exception($"The index of {nameof(VMByteArray)} is out of range, {index2}/[0, {a.Length}).");
-                    engine.CurrentContext!.Push(new BigInteger(a[unchecked((int)index2)]));
+                    engine.CurrentContext!.Push(new BigInteger(a[checked((int)index2)]));
                     break;
                 case VMBuffer buffer:
                     var index3 = key.GetInteger();
                     if (index3 < BigInteger.Zero || index3 >= buffer.Length)
                         throw new Exception($"The index of {nameof(VMBuffer)} is out of range, {index3}/[0, {buffer.Length}).");
-                    engine.CurrentContext!.Push((BigInteger)buffer.AsSpan()[unchecked((int)index3)]);
+                    engine.CurrentContext!.Push((BigInteger)buffer.AsSpan()[checked((int)index3)]);
                     break;
                 default:
                     throw new InvalidOperationException($"Invalid type for {instruction.OpCode}: {x.Type}");
@@ -433,7 +433,7 @@ namespace Neo.VM.Core
                     var index1 = key.GetInteger();
                     if (index1 < BigInteger.Zero || index1 >= array.Count)
                         throw new Exception($"The index of {nameof(VMArray)} is out of range, {index1}/[0, {array.Count}).");
-                    var i = unchecked((int)index1);
+                    var i = checked((int)index1);
                     array[i] = value;
                     break;
                 case VMMap map:
@@ -448,7 +448,7 @@ namespace Neo.VM.Core
                     var b = p.GetInteger();
                     if (b < sbyte.MinValue || b > byte.MaxValue)
                         throw new InvalidOperationException($"Overflow in {instruction.OpCode}, {b} is not a byte type.");
-                    buffer[unchecked((int)index2)] = (byte)b;
+                    buffer[checked((int)index2)] = (byte)b;
                     break;
                 default:
                     throw new InvalidOperationException($"Invalid type for {instruction.OpCode}: {x.Type}");
@@ -497,7 +497,7 @@ namespace Neo.VM.Core
                     var index1 = key.GetInteger();
                     if (index1 < 0 || index1 >= array.Count)
                         throw new InvalidOperationException($"The index of {nameof(VMArray)} is out of range, {index1}/[0, {array.Count}).");
-                    var i = unchecked((int)index1);
+                    var i = checked((int)index1);
                     var item = array[i];
                     array.RemoveAt(i);
                     break;

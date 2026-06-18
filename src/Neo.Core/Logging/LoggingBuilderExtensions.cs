@@ -24,27 +24,26 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
-using Neo.VM.Logging;
 using System;
 
-namespace Neo.VM.Tests.Extensions
+namespace Neo.Core.Logging
 {
-    internal static class LoggingBuilderExtensions
+    public static class LoggingBuilderExtensions
     {
-        public static ILoggingBuilder AddTraceExecution(this ILoggingBuilder builder)
+        public static ILoggingBuilder AddNeoPlatform(this ILoggingBuilder builder)
         {
             builder.AddConfiguration();
 
-            builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, TraceExecutionLoggerProvider>());
+            builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, NeoPlatformLoggerProvider>());
 
-            LoggerProviderOptions.RegisterProviderOptions<TraceExecutionLoggerOptions, TraceExecutionLoggerProvider>(builder.Services);
+            LoggerProviderOptions.RegisterProviderOptions<NeoPlatformLoggerOptions, NeoPlatformLoggerProvider>(builder.Services);
 
             return builder;
         }
 
-        public static ILoggingBuilder AddTraceExecution(this ILoggingBuilder builder, Action<TraceExecutionLoggerOptions> configure)
+        public static ILoggingBuilder AddNeoPlatform(this ILoggingBuilder builder, Action<NeoPlatformLoggerOptions> configure)
         {
-            builder.AddTraceExecution();
+            builder.AddNeoPlatform();
             builder.Services.Configure(configure);
             return builder;
         }

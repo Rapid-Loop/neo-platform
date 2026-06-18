@@ -20,8 +20,12 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Neo.VM.Tests.Extensions;
+using Neo.Core;
+using Neo.Core.Logging;
+using Neo.VM.Core;
+using Neo.VM.Extensions;
 
 namespace Neo.VM.Tests
 {
@@ -30,8 +34,30 @@ namespace Neo.VM.Tests
         public static readonly ILoggerFactory TraceLoggerFactory = LoggerFactory.Create(logging =>
         {
             logging.ClearProviders();
-            logging.AddTraceExecution();
+            logging.AddNeoPlatform();
             logging.SetMinimumLevel(LogLevel.Trace);
         });
+
+        public static VirtualMachineEngine CreateTestVirtualMachineEngine()
+        {
+            var services = new ServiceCollection();
+
+            services
+                .AddSingleton(ProtocolSettings.Default)      // NOTE: This is unneeded VM automatically uses Defaults (ONLY DEMO PURPOSES)
+                .AddSingleton(VirtualTable.Default)          // NOTE: This is unneeded VM automatically uses Defaults (ONLY DEMO PURPOSES)
+                .AddSingleton(ExecutionEngineLimits.Default) // NOTE: This is unneeded VM automatically uses Defaults (ONLY DEMO PURPOSES)
+                .AddVirtualMachine()
+                .AddLogging(
+                    logging =>
+                    {
+                        logging.ClearProviders();
+                        logging.AddNeoPlatform(); // Custom logger for our platform (file, debugger, console, etc)
+                        logging.SetMinimumLevel(LogLevel.Trace);
+                    });
+
+            var provider = services.BuildServiceProvider();
+
+            return provider.GetRequiredService<VirtualMachineEngine>();
+        }
     }
 }

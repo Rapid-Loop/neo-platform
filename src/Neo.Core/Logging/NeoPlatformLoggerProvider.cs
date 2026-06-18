@@ -26,19 +26,19 @@ using System;
 using System.Collections.Concurrent;
 using System.Runtime.Versioning;
 
-namespace Neo.VM.Logging
+namespace Neo.Core.Logging
 {
     [UnsupportedOSPlatform("browser")]
-    [ProviderAlias("TraceExecution")]
-    internal sealed class TraceExecutionLoggerProvider : ILoggerProvider
+    [ProviderAlias("NeoPlatform")]
+    public sealed class NeoPlatformLoggerProvider : ILoggerProvider
     {
         private readonly IDisposable? _onChangeToken;
-        private readonly ConcurrentDictionary<string, TraceExecutionLogger> _loggers = new(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, NeoPlatformLogger> _loggers = new(StringComparer.OrdinalIgnoreCase);
 
-        private TraceExecutionLoggerOptions _currentConfig;
+        private NeoPlatformLoggerOptions _currentConfig;
 
-        public TraceExecutionLoggerProvider(
-            IOptionsMonitor<TraceExecutionLoggerOptions> config)
+        public NeoPlatformLoggerProvider(
+            IOptionsMonitor<NeoPlatformLoggerOptions> config)
         {
             _currentConfig = config.CurrentValue;
             _onChangeToken = config.OnChange(updatedConfig => _currentConfig = updatedConfig);
@@ -51,7 +51,7 @@ namespace Neo.VM.Logging
                     new(name, GetCurrentConfig)
             );
 
-        private TraceExecutionLoggerOptions GetCurrentConfig() =>
+        private NeoPlatformLoggerOptions GetCurrentConfig() =>
             _currentConfig;
 
         public void Dispose()

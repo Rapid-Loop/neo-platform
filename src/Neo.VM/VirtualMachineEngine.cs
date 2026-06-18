@@ -20,13 +20,12 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Neo.Core;
 using Neo.Core.Blockchain;
 using Neo.Core.Blockchain.Interface;
 using Neo.Core.VM;
 using Neo.VM.Core;
+using Neo.VM.Pipeline;
 using Neo.VM.Types;
 using System;
 using System.Collections.Generic;
@@ -43,6 +42,8 @@ namespace Neo.VM
         public long GasConsumed => _maxGasConsumed;
 
         public long GasLeft => _maxGasLimit - _maxGasConsumed;
+
+        public long GasLimit => _maxGasLimit;
 
         /// <summary>
         /// Restrictions on the VM.
@@ -69,15 +70,17 @@ namespace Neo.VM
         /// </summary>
         public Stack<VMObject> ResultStack { get; } = [];
 
+        public Exception? FaultException { get; private set; }
+
         public HardFork ActiveFork => _currentFork;
 
 
-        private readonly ILoggerFactory _loggerFactory;
-        private readonly ILogger _logger;
         private readonly Stack<ExecutionContext> _invocationStack = [];
         private readonly VirtualTable _defaultOpCodeTable;
         private readonly ExecutionEngineLimits _limits;
         private readonly long _maxGasLimit;
+
+        private readonly VirtualMachinePipeline _pipeline;
 
         private readonly ProtocolSettings _protocolSettings;
         private readonly Block _persistingBlock;
@@ -90,23 +93,21 @@ namespace Neo.VM
         private long _maxGasConsumed;
 
         public VirtualMachineEngine(
-            ProtocolSettings? protocolSettings = default,
             Block? persistingBlock = default,
             IVerifiable? container = default,
-            long gasLimit = ExecutionEngineLimits.MaxGas,
+            ProtocolSettings? protocolSettings = default,
             VirtualTable? opCodeTable = default,
             ExecutionEngineLimits? limits = default,
-            ILoggerFactory? loggerFactory = default)
+            VirtualMachinePipeline? pipeline = default)
         {
-            _protocolSettings = protocolSettings ?? ProtocolSettings.Default;
-            _persistingBlock = persistingBlock ?? new Block();
+            _persistingBlock = persistingBlock ?? new();
             _container = container ?? new Transaction();
-            _maxGasLimit = gasLimit;
+            _protocolSettings = protocolSettings ?? ProtocolSettings.Default;
+            _maxGasLimit = container is Transaction tx ? tx.SystemFee : ExecutionEngineLimits.MaxGas;
             _defaultOpCodeTable = opCodeTable ?? VirtualTable.Default;
             _limits = limits ?? ExecutionEngineLimits.Default;
-            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-            _logger = _loggerFactory.CreateLogger<VirtualMachineEngine>();
             _currentFork = _protocolSettings.GetActiveHardFork(_persistingBlock.Index);
+            _pipeline = pipeline ?? VirtualMachinePipeline.Empty;
         }
 
         public void Dispose()
@@ -169,7 +170,7 @@ namespace Neo.VM
         {
             _maxGasConsumed = 0;
 
-            LogExecuteStartupMessage();
+            _pipeline.PreExecution();
 
             if (State == VMState.BREAK)
                 State = VMState.NONE;
@@ -183,13 +184,15 @@ namespace Neo.VM
 
                     var currentInst = _currentContext.CurrentInstruction;
 
-                    LogExecuteOpCodeMessage();
+                    _pipeline.PreExecute(_currentContext);
 
                     if (_currentContext.ConsumeGas(currentInst.OpCode))
                         _defaultOpCodeTable[currentInst.OpCode](this, currentInst);
 
                     if (_currentContext is not null && _currentContext.ShouldContinue())
                         _currentContext.InstructionPointer += currentInst.Size;
+
+                    _pipeline.PostExecute(_currentContext);
                 }
             }
             catch (Exception ex)
@@ -198,8 +201,8 @@ namespace Neo.VM
             }
             finally
             {
-                LogExecuteSuccessfullyMessage();
                 Cleanup();
+                _pipeline.PostExecution();
             }
 
             return State;
@@ -212,7 +215,7 @@ namespace Neo.VM
         internal void OnFault(Exception ex)
         {
             State = VMState.FAULT;
-            _logger.LogError(ex, null);
+            FaultException = ex;
         }
 
         private void Cleanup()

@@ -22,6 +22,7 @@
 
 using Microsoft.Extensions.Logging;
 using Neo.VM.Logging;
+using System;
 
 namespace Neo.VM.Extensions
 {
@@ -58,6 +59,16 @@ namespace Neo.VM.Extensions
             this ILogger logger,
             LogLevel logLevel,
             string message
+        );
+
+        [LoggerMessage(
+            EventId = VirtualMachineEventId.Fault,
+            Message = ""
+        )]
+        public static partial void LogFaultMessage(
+            this ILogger logger,
+            LogLevel logLevel,
+            Exception exception
         );
 
         [LoggerMessage(

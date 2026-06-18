@@ -25,19 +25,19 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Neo.VM.Logging
+namespace Neo.Core.Logging
 {
-    internal sealed class TraceExecutionLogger : ILogger
+    internal sealed class NeoPlatformLogger : ILogger
     {
         private DateTime DateTimeNow => _getConfig().UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
         private bool ShowExceptionStackTrace => _getConfig().ShowExceptionStackTrace;
 
         private readonly string _name;
-        private readonly Func<TraceExecutionLoggerOptions> _getConfig;
+        private readonly Func<NeoPlatformLoggerOptions> _getConfig;
 
-        public TraceExecutionLogger(
+        public NeoPlatformLogger(
             string name,
-            Func<TraceExecutionLoggerOptions> config)
+            Func<NeoPlatformLoggerOptions> config)
         {
             _name = name;
             _getConfig = config;
@@ -91,7 +91,7 @@ namespace Neo.VM.Logging
         private void WriteDateTime() =>
             Write($"[{BuildFormatString(_getConfig().TimestampFormat)}] ", DateTimeNow);
 
-        public void Write([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args)
+        public static void Write([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args)
         {
             var message = string.Format(format, args);
 
@@ -99,10 +99,10 @@ namespace Neo.VM.Logging
             DebugWrite(message);
         }
 
-        public void WriteLine() =>
+        public static void WriteLine() =>
             Write(Environment.NewLine);
 
-        public void WriteLine([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args) =>
+        public static void WriteLine([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args) =>
             Write(string.Format(format, args) + Environment.NewLine);
 
         public void InfoMessage([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args)

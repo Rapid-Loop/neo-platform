@@ -22,9 +22,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace Neo.VM.Logging
+namespace Neo.Core.Logging
 {
-    internal sealed class TraceExecutionLoggerOptions
+    public sealed class NeoPlatformLoggerOptions
     {
         public const string DefaultDateTimeFormatString = "yyyy-MM-dd HH:mm:ss.ffff";
 

@@ -40,7 +40,7 @@ namespace Neo.VM
 
         internal IReadOnlyDictionary<string, uint> SystemCallTable => _systemCallTable;
 
-        public MethodDescriptor RegisterSystemCall<TSource>(string systemMethodName, string targetMethodName, TSource? targetInstance = default)
+        internal MethodDescriptor RegisterSystemCall<TSource>(string systemMethodName, string targetMethodName, TSource? targetInstance = default)
             where TSource : class?, new()
         {
             var hash = MethodDescriptor.CreateCallAddress(systemMethodName);

@@ -60,7 +60,7 @@ namespace Neo.VM.Tests
             var expectedTargetReturnValue = InternalRuntime.SayHello(expectedParamValue);
             var expectedGasPrice = 1_00000000L + GasTable.GetGasCost(OpCode.PUSHDATA1, HardFork.Gorgon);
 
-            var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
+            var vm = TestUtilities.CreateTestVirtualMachineEngine();
 
             var actualMethodDesc = vm.RegisterSystemCall<InternalRuntime>(
                 expectedSystemName,
@@ -108,7 +108,7 @@ namespace Neo.VM.Tests
                 0x40,        // RET
             ];
 
-            var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
+            var vm = TestUtilities.CreateTestVirtualMachineEngine();
             vm.LoadScript(script);
 
             var actualState = vm.Execute();
@@ -131,7 +131,7 @@ namespace Neo.VM.Tests
                 .Emit(OpCode.SETITEM)
                 .EmitReturn();
 
-            var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
+            var vm = TestUtilities.CreateTestVirtualMachineEngine();
             vm.LoadScript(sb.ToArray());
 
             var actualState = vm.Execute();
@@ -156,7 +156,7 @@ namespace Neo.VM.Tests
                 .EmitCreateArray([1, 2, 3,])
                 .EmitReturn();
 
-            var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
+            var vm = TestUtilities.CreateTestVirtualMachineEngine();
             vm.LoadScript(sb.ToArray());
 
             var actualState = vm.Execute();
@@ -196,7 +196,7 @@ namespace Neo.VM.Tests
 
             var script = sb.ToArray();
 
-            var vm = new VirtualMachineEngine(loggerFactory: TestUtilities.TraceLoggerFactory);
+            var vm = TestUtilities.CreateTestVirtualMachineEngine();
             vm.LoadScript(script);
 
             var actualState = vm.Execute();

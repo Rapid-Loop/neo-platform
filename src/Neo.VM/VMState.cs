@@ -41,10 +41,5 @@ namespace Neo.VM
         /// Indicates that the execution has ended, and an exception that cannot be caught is thrown.
         /// </summary>
         FAULT = 1 << 1,
-
-        /// <summary>
-        /// Indicates that a breakpoint is currently being hit.
-        /// </summary>
-        BREAK = 1 << 2,
     }
 }

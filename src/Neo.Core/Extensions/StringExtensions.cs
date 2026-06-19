@@ -42,6 +42,17 @@ namespace Neo.Core.Extensions
             return value;
         }
 
+        public static string PadCenter(this string str, int totalWidth, char paddingChar)
+        {
+            if (str is null) return string.Empty;
+
+            if (str.Length >= totalWidth)
+                return str;
+
+            var padLeft = (totalWidth - str.Length) / 2 + str.Length;
+            return str.PadLeft(padLeft, paddingChar).PadRight(totalWidth, paddingChar);
+        }
+
         /// <summary>
         /// Converts the specified address to a script hash.
         /// </summary>

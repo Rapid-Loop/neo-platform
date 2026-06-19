@@ -29,19 +29,18 @@ namespace Neo.VM.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddVirtualMachine(this IServiceCollection services)
+        public static IServiceCollection AddExecutionEngine(this IServiceCollection services)
         {
-            services.AddSingleton<IEngineMiddleware, ExecutionLoggerMiddleware>();
-
             // Register VirtualMachineEngine using the built pipeline
-            services.AddSingleton(sp =>
+            services.AddScoped(sp =>
             {
-                var middleware = sp.GetServices<IEngineMiddleware>();
+                var middleware = sp.GetServices<IEngineMiddleware>(); // NOTE: Get all custom middleware
+                var debugger = sp.GetRequiredService<DebuggerMiddleware>(); // NOTE: get the debugger middleware
                 var pipeline = VirtualMachinePipelineBuilder.Create()
-                .Use(middleware)
-                .Build();
+                    .Use([debugger, .. middleware]) // NOTE: ORDER MATTERS HERE
+                    .Build();
 
-                return VirtualMachineBuilder.Create(sp)
+                return VirtualMachineBuilder.Create()
                     .UsePipeline(pipeline)
                     .Build();
             });
@@ -49,14 +48,28 @@ namespace Neo.VM.Extensions
             return services;
         }
 
-        public static IServiceCollection AddVirtualMachineMiddleware<TMiddleware>(this IServiceCollection services)
+        public static IServiceCollection AddEngineMiddleware<TMiddleware>(this IServiceCollection services)
             where TMiddleware : class, IEngineMiddleware
         {
             services.AddSingleton<IEngineMiddleware, TMiddleware>();
             return services;
         }
 
-        public static IServiceCollection AddVirtualMachineMiddleware(this IServiceCollection services,
+        public static IServiceCollection AddEngineDebugger(this IServiceCollection services)
+        {
+            services.AddScoped<DebuggerMiddleware, DebuggerMiddleware>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddExecuteLogger(this IServiceCollection services)
+        {
+            services.AddScoped<IEngineMiddleware, ExecuteLoggerMiddleware>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddEngineMiddleware(this IServiceCollection services,
             params Type[] middlewareTypes)
         {
             foreach (var type in middlewareTypes)

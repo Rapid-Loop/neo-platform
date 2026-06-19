@@ -20,7 +20,6 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Microsoft.Extensions.DependencyInjection;
 using Neo.Core;
 using Neo.Core.Blockchain;
 using Neo.VM.Core;
@@ -44,12 +43,6 @@ namespace Neo.VM.Builders
 
         public static VirtualMachineBuilder Create() =>
             new();
-
-        public static VirtualMachineBuilder Create(IServiceProvider sp) =>
-            new VirtualMachineBuilder()
-            .UseVirtualTable(sp.GetRequiredService<VirtualTable>())
-            .UseProtocolSettings(sp.GetRequiredService<ProtocolSettings>())
-            .UseLimits(sp.GetRequiredService<ExecutionEngineLimits>());
 
         public VirtualMachineBuilder UsePipeline(VirtualMachinePipeline pipeline)
         {

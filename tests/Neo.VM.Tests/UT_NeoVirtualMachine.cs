@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Microsoft.Extensions.DependencyInjection;
 using Neo.Core;
 using Neo.Core.VM;
 using Neo.Core.VM.Attributes;
@@ -60,7 +61,8 @@ namespace Neo.VM.Tests
             var expectedTargetReturnValue = InternalRuntime.SayHello(expectedParamValue);
             var expectedGasPrice = 1_00000000L + GasTable.GetGasCost(OpCode.PUSHDATA1, HardFork.Gorgon);
 
-            var vm = TestUtilities.CreateTestVirtualMachineEngine();
+            using var scope = TestUtilities.Services.CreateScope();
+            var vm = scope.ServiceProvider.GetRequiredService<VirtualMachineEngine>();
 
             var actualMethodDesc = vm.RegisterSystemCall<InternalRuntime>(
                 expectedSystemName,
@@ -108,7 +110,8 @@ namespace Neo.VM.Tests
                 0x40,        // RET
             ];
 
-            var vm = TestUtilities.CreateTestVirtualMachineEngine();
+            using var scope = TestUtilities.Services.CreateScope();
+            var vm = scope.ServiceProvider.GetRequiredService<VirtualMachineEngine>();
             vm.LoadScript(script);
 
             var actualState = vm.Execute();
@@ -131,7 +134,8 @@ namespace Neo.VM.Tests
                 .Emit(OpCode.SETITEM)
                 .EmitReturn();
 
-            var vm = TestUtilities.CreateTestVirtualMachineEngine();
+            using var scope = TestUtilities.Services.CreateScope();
+            var vm = scope.ServiceProvider.GetRequiredService<VirtualMachineEngine>();
             vm.LoadScript(sb.ToArray());
 
             var actualState = vm.Execute();
@@ -156,7 +160,8 @@ namespace Neo.VM.Tests
                 .EmitCreateArray([1, 2, 3,])
                 .EmitReturn();
 
-            var vm = TestUtilities.CreateTestVirtualMachineEngine();
+            using var scope = TestUtilities.Services.CreateScope();
+            var vm = scope.ServiceProvider.GetRequiredService<VirtualMachineEngine>();
             vm.LoadScript(sb.ToArray());
 
             var actualState = vm.Execute();
@@ -196,7 +201,8 @@ namespace Neo.VM.Tests
 
             var script = sb.ToArray();
 
-            var vm = TestUtilities.CreateTestVirtualMachineEngine();
+            using var scope = TestUtilities.Services.CreateScope();
+            var vm = scope.ServiceProvider.GetRequiredService<VirtualMachineEngine>();
             vm.LoadScript(script);
 
             var actualState = vm.Execute();

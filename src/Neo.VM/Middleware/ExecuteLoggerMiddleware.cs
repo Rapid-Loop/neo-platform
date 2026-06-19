@@ -29,7 +29,7 @@ using System;
 
 namespace Neo.VM.Middleware
 {
-    public sealed class ExecutionLoggerMiddleware(IServiceProvider sp, ILogger<VirtualMachineEngine> logger) : IEngineMiddleware
+    public sealed class ExecuteLoggerMiddleware(IServiceProvider sp, ILogger<VirtualMachineEngine> logger) : IEngineMiddleware
     {
         private VirtualMachineEngine Engine => sp.GetRequiredService<VirtualMachineEngine>();
 
@@ -68,7 +68,7 @@ namespace Neo.VM.Middleware
                 var opcodeInst = context.CurrentInstruction;
                 var message = VirtualMachineLocalizer.GetMessage(
                     VirtualMachineMessageNames.ExecuteOpCode,
-                    opcodeInst.Position,
+                    context.InstructionPointer,
                     opcodeInst.OpCode,
                     opcodeInst.DecodeOperand()
                 );

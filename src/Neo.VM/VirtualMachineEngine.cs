@@ -172,13 +172,9 @@ namespace Neo.VM
 
             _pipeline.PreExecution();
 
-            if (State == VMState.BREAK)
-                State = VMState.NONE;
-
             try
             {
-                while ((State != VMState.HALT && State != VMState.FAULT)
-                    && _invocationStack.Count > 0)
+                while (State == VMState.NONE && _invocationStack.Count > 0)
                 {
                     _currentContext = _invocationStack.Peek();
 
@@ -188,6 +184,7 @@ namespace Neo.VM
 
                     if (_currentContext.ConsumeGas(currentInst.OpCode))
                         _defaultOpCodeTable[currentInst.OpCode](this, currentInst);
+
 
                     if (_currentContext is not null && _currentContext.ShouldContinue())
                         _currentContext.InstructionPointer += currentInst.Size;

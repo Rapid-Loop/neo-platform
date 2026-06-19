@@ -22,15 +22,16 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Neo.Core;
 using Neo.Core.Logging;
-using Neo.VM.Core;
 using Neo.VM.Extensions;
+using System;
 
 namespace Neo.VM.Tests
 {
     internal class TestUtilities
     {
+        private static readonly ServiceProvider s_serviceProvider;
+
         public static readonly ILoggerFactory TraceLoggerFactory = LoggerFactory.Create(logging =>
         {
             logging.ClearProviders();
@@ -38,15 +39,16 @@ namespace Neo.VM.Tests
             logging.SetMinimumLevel(LogLevel.Trace);
         });
 
-        public static VirtualMachineEngine CreateTestVirtualMachineEngine()
+        public static IServiceProvider Services => s_serviceProvider;
+
+        static TestUtilities()
         {
             var services = new ServiceCollection();
 
             services
-                .AddSingleton(ProtocolSettings.Default)      // NOTE: This is unneeded VM automatically uses Defaults (ONLY DEMO PURPOSES)
-                .AddSingleton(VirtualTable.Default)          // NOTE: This is unneeded VM automatically uses Defaults (ONLY DEMO PURPOSES)
-                .AddSingleton(ExecutionEngineLimits.Default) // NOTE: This is unneeded VM automatically uses Defaults (ONLY DEMO PURPOSES)
-                .AddVirtualMachine()
+                .AddEngineDebugger()
+                .AddExecuteLogger()
+                .AddExecutionEngine()
                 .AddLogging(
                     logging =>
                     {
@@ -55,9 +57,7 @@ namespace Neo.VM.Tests
                         logging.SetMinimumLevel(LogLevel.Trace);
                     });
 
-            var provider = services.BuildServiceProvider();
-
-            return provider.GetRequiredService<VirtualMachineEngine>();
+            s_serviceProvider = services.BuildServiceProvider();
         }
     }
 }

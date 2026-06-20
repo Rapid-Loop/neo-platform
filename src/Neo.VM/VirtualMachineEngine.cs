@@ -25,6 +25,7 @@ using Neo.Core.Blockchain;
 using Neo.Core.Blockchain.Interface;
 using Neo.Core.VM;
 using Neo.VM.Core;
+using Neo.VM.Extensions;
 using Neo.VM.Pipeline;
 using Neo.VM.Types;
 using System;
@@ -37,7 +38,7 @@ namespace Neo.VM
     /// </summary>
     public partial class VirtualMachineEngine : IDisposable
     {
-        public VMState State { get; internal set; }
+        public VMState State { get; internal set; } = VMState.NONE;
 
         public long GasConsumed => _maxGasConsumed;
 
@@ -75,8 +76,9 @@ namespace Neo.VM
         public HardFork ActiveFork => _currentFork;
 
 
+        protected readonly VirtualTable CurrentOpCodeTable;
+
         private readonly Stack<ExecutionContext> _invocationStack = [];
-        private readonly VirtualTable _defaultOpCodeTable;
         private readonly ExecutionEngineLimits _limits;
         private readonly long _maxGasLimit;
 
@@ -104,7 +106,7 @@ namespace Neo.VM
             _container = container ?? new Transaction();
             _protocolSettings = protocolSettings ?? ProtocolSettings.Default;
             _maxGasLimit = container is Transaction tx ? tx.SystemFee : ExecutionEngineLimits.MaxGas;
-            _defaultOpCodeTable = opCodeTable ?? VirtualTable.Default;
+            CurrentOpCodeTable = opCodeTable ?? VirtualTable.Default;
             _limits = limits ?? ExecutionEngineLimits.Default;
             _currentFork = _protocolSettings.GetActiveHardFork(_persistingBlock.Index);
             _pipeline = pipeline ?? VirtualMachinePipeline.Empty;
@@ -155,7 +157,9 @@ namespace Neo.VM
         {
             _maxGasConsumed += context.GasConsumed;
 
-            if (InvocationStack.Count > 0)
+            if (context.Parent is not null)
+                _currentContext = context.Parent;
+            else if (InvocationStack.Count > 0)
                 _currentContext = InvocationStack.Peek();
             else
             {
@@ -174,26 +178,35 @@ namespace Neo.VM
 
             try
             {
-                while (State == VMState.NONE && _invocationStack.Count > 0)
+                while (_currentContext is not null && State >= VMState.BREAK)
                 {
-                    _currentContext = _invocationStack.Peek();
+                    var context = _currentContext;
 
-                    var currentInst = _currentContext.CurrentInstruction;
+                    _pipeline.PreExecute(context);
 
-                    _pipeline.PreExecute(_currentContext);
+                    if (context.ConsumeGas(context.CurrentInstruction.OpCode))
+                    {
+                        CurrentOpCodeTable[context.CurrentInstruction.OpCode]
+                        (
+                            this,
+                            context.CurrentInstruction
+                        );
+                    }
 
-                    if (_currentContext.ConsumeGas(currentInst.OpCode))
-                        _defaultOpCodeTable[currentInst.OpCode](this, currentInst);
+                    if (_invocationStack.Count > 0 &&
+                        context == _invocationStack.Peek()
+                        && context.ShouldContinue())
+                        context.InstructionPointer += context.CurrentInstruction.Size;
 
+                    _pipeline.PostExecute(context);
 
-                    if (_currentContext is not null && _currentContext.ShouldContinue())
-                        _currentContext.InstructionPointer += currentInst.Size;
-
-                    _pipeline.PostExecute(_currentContext);
+                    if (State == VMState.BREAK) break;
                 }
             }
             catch (Exception ex)
             {
+                _maxGasConsumed += _currentContext.GetTotalGasConsumed();
+
                 OnFault(ex);
             }
             finally

@@ -20,31 +20,47 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.VM
+using Neo.VM.Core;
+using System.Collections.Generic;
+
+namespace Neo.VM.Extensions
 {
-    /// <summary>
-    /// Indicates the status of the VM.
-    /// </summary>
-    public enum VMState : byte
+    public static class ExecutionContextExtensions
     {
         /// <summary>
-        /// Indicates that the execution has been completed successfully.
+        /// Returns the total GasConsumed across this context and all its parents (call stack).
         /// </summary>
-        HALT = 0,
+        public static long GetTotalGasConsumed(this ExecutionContext? context)
+        {
+            var total = 0L;
+            var current = context;
+
+            while (current != null)
+            {
+                total += current.GasConsumed;
+                current = current.Parent;
+            }
+
+            return total;
+        }
 
         /// <summary>
-        /// Indicates that the execution has ended, and an exception that cannot be caught is thrown.
+        /// Returns a list of GasConsumed values from bottom (root) to top (current).
+        /// Useful for debugging / logging the full call stack gas usage.
         /// </summary>
-        FAULT = 1 << 0,
+        public static List<long> GetGasConsumedChain(this ExecutionContext? context)
+        {
+            var chain = new List<long>();
+            var current = context;
 
-        /// <summary>
-        /// Indicates that a breakpoint is currently being hit.
-        /// </summary>
-        BREAK = 1 << 1,
+            while (current != null)
+            {
+                chain.Add(current.GasConsumed);
+                current = current.Parent;
+            }
 
-        /// <summary>
-        /// Indicates that the execution is in progress or has not yet begun.
-        /// </summary>
-        NONE = 1 << 2,
+            chain.Reverse(); // root first
+            return chain;
+        }
     }
 }

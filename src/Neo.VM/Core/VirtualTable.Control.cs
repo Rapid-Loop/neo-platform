@@ -553,7 +553,9 @@ namespace Neo.VM.Core
         {
             var context = engine.CurrentContext!;
             var script = context.Script.Span[position..];
-            var newContext = new ExecutionContext([.. script], engine.ActiveFork, context.BlockHeight, engine.GasLeft, context.Depth + 1, context);
+            var newContext = new ExecutionContext([.. script], engine.ActiveFork, context.BlockHeight, engine.GasLeft - context.GasConsumed, context.Depth + 1, context);
+
+            context.InstructionPointer += context.CurrentInstruction.Size;
 
             engine.LoadContext(newContext);
         }
@@ -610,7 +612,7 @@ namespace Neo.VM.Core
         [DoesNotReturn]
         public virtual void ExecuteThrow(VirtualMachineEngine engine, VMObject? ex)
         {
-            throw new Exception();
+            throw new Exception($"{ex}");
         }
 
         #endregion

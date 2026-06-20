@@ -31,7 +31,7 @@ namespace Neo.VM.Types
 {
     public class VMInteropInterface : VMObject, IEquatable<VMInteropInterface>
     {
-        public override VMObjectType Type => VMObjectType.InteropInterface;
+        public override VMObjectType Type => VMObjectType.Interop;
 
         private readonly object _underlyingObject = new();
         private readonly string _interfaceName = string.Empty;
@@ -39,7 +39,7 @@ namespace Neo.VM.Types
         public object UnderlyingObject => _underlyingObject;
         public string InterfaceName => _interfaceName;
 
-        public VMInteropInterface() { }
+        public VMInteropInterface() : this(new()) { }
 
         public VMInteropInterface(object obj) : this(obj, obj.GetType().Name) { }
 

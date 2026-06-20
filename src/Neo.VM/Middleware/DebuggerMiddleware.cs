@@ -34,6 +34,8 @@ namespace Neo.VM.Middleware
     {
         public event EventHandler<DebuggerEventArgs>? OnBreakpoint;
 
+        public bool StepMode { get; set; }
+
         private VirtualMachineEngine Engine => sp.GetRequiredService<VirtualMachineEngine>();
 
         private readonly HashSet<int> _breakpoints = []; // script offset breakpoints
@@ -42,7 +44,8 @@ namespace Neo.VM.Middleware
         public void AddBreakpoint(int scriptOffset) =>
             _breakpoints.Add(scriptOffset);
 
-        public bool StepMode { get; set; }
+        public void Continue() =>
+            Engine.State = VMState.NONE;
 
         public void PreExecution(ExecutionDelegate next)
         {
@@ -79,6 +82,8 @@ namespace Neo.VM.Middleware
             {
                 StepMode = true; // stay in step mode
                 _lastStepPosition = position;
+
+                Engine.State = VMState.BREAK;
 
                 if (logger.IsEnabled(LogLevel.Debug))
                 {

@@ -30,10 +30,8 @@ namespace Neo.VM.Types
     {
         public override VMObjectType Type => VMObjectType.Any;
 
-        public static VMNull Instance => s_instance;
+        public static VMNull Instance => new();
 
-
-        private static readonly VMNull s_instance = new();
 
         protected override void Dispose(bool disposing)
         {

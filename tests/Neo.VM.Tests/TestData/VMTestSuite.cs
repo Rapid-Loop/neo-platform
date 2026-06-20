@@ -20,31 +20,29 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.VM
+using Neo.VM.Types;
+using System.Collections.Generic;
+
+namespace Neo.VM.Tests.TestData
 {
-    /// <summary>
-    /// Indicates the status of the VM.
-    /// </summary>
-    public enum VMState : byte
+    internal record VMTestSuite
     {
-        /// <summary>
-        /// Indicates that the execution has been completed successfully.
-        /// </summary>
-        HALT = 0,
+        public string Category { get; init; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
+        public List<VMTestCase> Tests { get; init; } = [];
+    }
 
-        /// <summary>
-        /// Indicates that the execution has ended, and an exception that cannot be caught is thrown.
-        /// </summary>
-        FAULT = 1 << 0,
+    internal record VMTestCase
+    {
+        public string Name { get; init; } = string.Empty;
+        public List<string> Script { get; init; } = [];
+        public List<StackItemModel> ResultStack { get; init; } = [];
+        public VMState State { get; set; } = VMState.NONE;
+    }
 
-        /// <summary>
-        /// Indicates that a breakpoint is currently being hit.
-        /// </summary>
-        BREAK = 1 << 1,
-
-        /// <summary>
-        /// Indicates that the execution is in progress or has not yet begun.
-        /// </summary>
-        NONE = 1 << 2,
+    internal record StackItemModel
+    {
+        public VMObjectType Type { get; init; }
+        public object? Value { get; init; }
     }
 }

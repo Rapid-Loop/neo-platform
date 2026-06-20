@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Core.Extensions;
 using Neo.Core.VM;
 using Neo.Core.VM.Specs;
 using Neo.VM.Types;
@@ -43,12 +44,12 @@ namespace Neo.VM.Core
         /// <summary>
         /// Returns the current <see cref="OpCodeInst"/>.
         /// </summary>
-        public OpCodeInst CurrentInstruction => new(_script.Slice(InstructionPointer));
+        public OpCodeInst CurrentInstruction => _script.TryCatch(t => new OpCodeInst(t.Slice(InstructionPointer))) ?? OpCodeInst.Ret;
 
         /// <summary>
         /// Returns the next <see cref="OpCodeInst"/>.
         /// </summary>
-        public OpCodeInst NextInstruction => new(_script.Slice(InstructionPointer + CurrentInstruction.Size));
+        public OpCodeInst NextInstruction => _script.TryCatch(t => new OpCodeInst(t.Slice(InstructionPointer + CurrentInstruction.Size))) ?? OpCodeInst.Ret;
 
         /// <summary>
         /// Current stack frame

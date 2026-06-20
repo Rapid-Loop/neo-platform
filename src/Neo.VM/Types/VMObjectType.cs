@@ -75,6 +75,6 @@ namespace Neo.VM.Types
         /// <summary>
         /// Represents an interface used to interoperate with the outside of the the VM.
         /// </summary>
-        InteropInterface = 0x60,
+        Interop = 0x60,
     }
 }

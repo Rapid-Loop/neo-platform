@@ -105,7 +105,12 @@ namespace Neo.VM.Types
 
         public override BigInteger GetInteger()
         {
-            return new(_memoryOwner.Memory[.._byteCount].Span[..VMInteger.MaxSize]);
+            var span = _memoryOwner.Memory[.._byteCount].Span;
+
+            if (span.Length > VMInteger.MaxSize)
+                return new(span[..VMInteger.MaxSize]);
+
+            return new(span);
         }
 
         protected override ReadOnlySpan<byte> ComputeSpan(HashSet<VMObject> visited)

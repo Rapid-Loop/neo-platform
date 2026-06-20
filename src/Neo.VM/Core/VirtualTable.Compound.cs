@@ -408,6 +408,7 @@ namespace Neo.VM.Core
             if (newItem is VMStruct s)
                 newItem = s.Clone();
 
+            newItem.AddReference();
             array.Add(newItem);
         }
 
@@ -425,7 +426,10 @@ namespace Neo.VM.Core
                 value = s.Clone();
 
             var key = engine.CurrentContext!.Pop();
-            var x = engine.CurrentContext!.Pop();
+            var x = engine.CurrentContext!.Pop(); // TODO: Add parameter for adding ref count or not
+
+            key.AddReference();
+            value.AddReference();
 
             switch (x)
             {
@@ -529,7 +533,7 @@ namespace Neo.VM.Core
                     map.Clear();
                     break;
                 default:
-                    break;
+                    throw new InvalidCastException();
             }
         }
 

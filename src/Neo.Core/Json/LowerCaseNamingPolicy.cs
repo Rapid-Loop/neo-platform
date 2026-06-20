@@ -20,31 +20,13 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-namespace Neo.VM
+using System.Text.Json;
+
+namespace Neo.Core.Json
 {
-    /// <summary>
-    /// Indicates the status of the VM.
-    /// </summary>
-    public enum VMState : byte
+    public class LowerCaseNamingPolicy : JsonNamingPolicy
     {
-        /// <summary>
-        /// Indicates that the execution has been completed successfully.
-        /// </summary>
-        HALT = 0,
-
-        /// <summary>
-        /// Indicates that the execution has ended, and an exception that cannot be caught is thrown.
-        /// </summary>
-        FAULT = 1 << 0,
-
-        /// <summary>
-        /// Indicates that a breakpoint is currently being hit.
-        /// </summary>
-        BREAK = 1 << 1,
-
-        /// <summary>
-        /// Indicates that the execution is in progress or has not yet begun.
-        /// </summary>
-        NONE = 1 << 2,
+        public override string ConvertName(string name) =>
+            name.ToLowerInvariant();
     }
 }

@@ -81,7 +81,7 @@ namespace Neo.VM
 
         internal MethodDescriptor GetSystemCallMethod(uint systemCallAddress)
         {
-            for (var current = _currentFork; current >= HardFork.Genesis; current--)
+            for (var current = _currentFork; current >= HardFork.Genesis && Enum.IsDefined(current); current--)
             {
                 if (_systemCallMethods.TryGetValue(systemCallAddress, out var table) &&
                     table.TryGetValue(current, out var methodDescriptor))
@@ -93,7 +93,7 @@ namespace Neo.VM
             throw new MissingMethodException($"SYSCALL [{systemCallAddress:D}]");
         }
 
-        internal void ExecuteSystemCall(uint systemCallAddress)
+        internal virtual void ExecuteSystemCall(uint systemCallAddress)
         {
             var methodDesc = GetSystemCallMethod(systemCallAddress);
             var parameters = new object?[methodDesc.Parameters.Count];

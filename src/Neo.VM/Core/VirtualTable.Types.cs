@@ -83,7 +83,7 @@ namespace Neo.VM.Core
                 VMObjectType.Array => new VMArray(x.GetChildren()),
                 VMObjectType.Struct => new VMStruct(x.GetChildren()),
                 VMObjectType.Map => new VMMap([.. x.GetChildren()]),
-                VMObjectType.InteropInterface => new VMInteropInterface(x),
+                VMObjectType.Interop => new VMInteropInterface(x),
                 _ => throw new InvalidCastException()
             };
 

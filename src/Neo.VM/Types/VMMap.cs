@@ -156,6 +156,10 @@ namespace Neo.VM.Types
             if (_isReadOnly)
                 throw new InvalidOperationException();
 
+            if (_map.TryGetValue(key, out var value))
+                value.Release();
+
+            key.Release();
             return _map.Remove(key);
         }
 

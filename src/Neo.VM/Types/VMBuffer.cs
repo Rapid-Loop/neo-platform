@@ -22,6 +22,7 @@
 
 using Neo.Core;
 using Neo.Core.Extensions;
+using Neo.Core.VM.Type;
 using System;
 using System.Buffers;
 using System.Collections.Generic;

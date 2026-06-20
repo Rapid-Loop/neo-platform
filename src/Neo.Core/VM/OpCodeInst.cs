@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.Core.VM.Attributes;
+using Neo.Core.VM.Type;
 using System;
 using System.Buffers.Binary;
 using System.Collections;
@@ -176,7 +177,7 @@ namespace Neo.Core.VM
                 OpCode.JMPGT or
                 OpCode.JMPLT or
                 OpCode.CALL or
-                OpCode.ENDTRY => $"[{checked(Position + AsToken<byte>()):x8}]",
+                OpCode.ENDTRY => $"[0x{checked(Position + AsToken<byte>()):x8}]",
                 OpCode.JMP_L or
                 OpCode.JMPIF_L or
                 OpCode.PUSHA or
@@ -186,14 +187,14 @@ namespace Neo.Core.VM
                 OpCode.JMPGT_L or
                 OpCode.JMPLT_L or
                 OpCode.CALL_L or
-                OpCode.ENDTRY_L => $"[{checked(Position + AsToken<int>()):x8}]",
-                OpCode.TRY => $"[{AsToken<byte>():x2}, {AsToken<byte>(1):x2}]",
-                OpCode.INITSLOT => $"{AsToken<byte>()}, {AsToken<byte>(1)}",
-                OpCode.TRY_L => $"[{checked(Position + AsToken<int>()):x8}, {checked(Position + AsToken<int>()):x8}]",
-                OpCode.CALLT => $"[{checked(Position + AsToken<ushort>()):x8}]",
+                OpCode.ENDTRY_L => $"[0x{checked(Position + AsToken<int>()):x8}]",
+                OpCode.TRY => $"[0x{AsToken<byte>():x2}, 0x{AsToken<byte>(1):x2}]",
+                OpCode.INITSLOT => $"[{AsToken<byte>()}, {AsToken<byte>(1)}]",
+                OpCode.TRY_L => $"[0x{checked(Position + AsToken<int>()):x8}, 0x{checked(Position + AsToken<int>()):x8}]",
+                OpCode.CALLT => $"[0x{checked(Position + AsToken<ushort>()):x8}]",
                 OpCode.NEWARRAY_T or
                 OpCode.ISTYPE or
-                OpCode.CONVERT => $"{AsToken<byte>():x2}",
+                OpCode.CONVERT => $"0x{AsToken<byte>():x2} // \"{AsToken<VMObjectType>():G}\"",
                 OpCode.STLOC or
                 OpCode.LDLOC or
                 OpCode.LDSFLD or
@@ -207,7 +208,7 @@ namespace Neo.Core.VM
                 OpCode.PUSHINT64 => $"{AsToken<long>()}",
                 OpCode.PUSHINT128 or
                 OpCode.PUSHINT256 => $"{new BigInteger(operand)}",
-                OpCode.SYSCALL => $"[{Unsafe.As<byte, uint>(ref operand[0])}]",
+                OpCode.SYSCALL => $"[0x{Unsafe.As<byte, uint>(ref operand[0]):x8}]",
                 OpCode.PUSHDATA1 or
                 OpCode.PUSHDATA2 or
                 OpCode.PUSHDATA4 => operand.Length == 0 ? string.Empty : readable ? $"0x{Convert.ToHexStringLower(operand)} // \"{asStr}\"" : $"0x{Convert.ToHexStringLower(operand)}",

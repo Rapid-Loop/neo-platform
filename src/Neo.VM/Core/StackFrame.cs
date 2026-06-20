@@ -74,14 +74,18 @@ namespace Neo.VM.Core
         /// <summary>
         /// Push item onto evaluation stack with reference counting
         /// </summary>
-        public void Push(VMObject item)
+        public void Push(VMObject item, bool addReferenceItem = true, bool addReferenceChildren = true)
         {
-            item.AddReference();
+            if (addReferenceItem)
+                item.AddReference();
 
-            foreach (var subItem in item.GetChildren())
+            if (addReferenceChildren)
             {
-                if (ReferenceEquals(item, subItem)) continue;
-                subItem.AddReference();
+                foreach (var subItem in item.GetChildren())
+                {
+                    if (ReferenceEquals(item, subItem)) continue;
+                    subItem.AddReference();
+                }
             }
 
             EvaluationStack.Push(item);
@@ -90,18 +94,23 @@ namespace Neo.VM.Core
         /// <summary>
         /// Pop item from evaluation stack and release reference
         /// </summary>
-        public VMObject Pop()
+        public VMObject Pop(bool releaseReferenceItem = true, bool releaseReferenceChildren = true)
         {
             if (EvaluationStack.Count == 0)
                 throw new InvalidOperationException("Evaluation stack underflow");
 
             var item = EvaluationStack.Pop();
-            item.Release();
 
-            foreach (var subItem in item.GetChildren())
+            if (releaseReferenceItem)
+                item.Release();
+
+            if (releaseReferenceChildren)
             {
-                if (ReferenceEquals(item, subItem)) continue;
-                subItem.Release();
+                foreach (var subItem in item.GetChildren())
+                {
+                    if (ReferenceEquals(item, subItem)) continue;
+                    subItem.Release();
+                }
             }
 
             return item;

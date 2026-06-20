@@ -22,6 +22,7 @@
 
 using Neo.Core.VM;
 using Neo.VM.Types;
+using System;
 using System.Numerics;
 
 namespace Neo.VM.Core
@@ -124,7 +125,14 @@ namespace Neo.VM.Core
         /// <param name="instruction">The instruction being executed.</param>
         public virtual void PushA(VirtualMachineEngine engine, OpCodeInst instruction)
         {
-            // TODO: Add VMPointer to stack
+            var ctx = engine.CurrentContext!;
+            var position = checked(ctx.InstructionPointer + instruction.AsToken<int>());
+
+            if (position < 0 || position > ctx.Script.Length)
+                throw new InvalidOperationException($"Bad pointer address(Instruction instruction) {position}");
+
+            var ptr = new VMPointer(ctx.Script, position);
+            ctx.Push(ptr);
         }
 
         /// <summary>

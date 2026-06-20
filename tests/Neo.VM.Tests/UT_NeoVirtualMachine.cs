@@ -26,6 +26,7 @@ using Neo.Core.VM;
 using Neo.Core.VM.Attributes;
 using Neo.Core.VM.SmartContract;
 using Neo.Core.VM.Specs;
+using Neo.Core.VM.Type;
 using Neo.VM.Types;
 using System;
 using System.Numerics;

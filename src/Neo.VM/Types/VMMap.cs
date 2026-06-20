@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.Core.Extensions;
+using Neo.Core.VM.Type;
 using System;
 using System.Collections;
 using System.Collections.Generic;

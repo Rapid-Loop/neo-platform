@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.Core.VM;
+using Neo.Core.VM.Type;
 using Neo.VM.Types;
 using System;
 using System.Diagnostics.CodeAnalysis;

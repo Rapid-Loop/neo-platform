@@ -20,7 +20,6 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Core.Extensions;
 using Neo.Core.VM;
 using Neo.Core.VM.Specs;
 using Neo.VM.Types;
@@ -44,12 +43,12 @@ namespace Neo.VM.Core
         /// <summary>
         /// Returns the current <see cref="OpCodeInst"/>.
         /// </summary>
-        public OpCodeInst CurrentInstruction => _script.TryCatch(t => new OpCodeInst(t.Slice(InstructionPointer))) ?? OpCodeInst.Ret;
+        public OpCodeInst CurrentInstruction => new(_script[InstructionPointer..]);
 
         /// <summary>
         /// Returns the next <see cref="OpCodeInst"/>.
         /// </summary>
-        public OpCodeInst NextInstruction => _script.TryCatch(t => new OpCodeInst(t.Slice(InstructionPointer + CurrentInstruction.Size))) ?? OpCodeInst.Ret;
+        public OpCodeInst NextInstruction => new(_script[(InstructionPointer + CurrentInstruction.Size)..]);
 
         /// <summary>
         /// Current stack frame
@@ -97,6 +96,8 @@ namespace Neo.VM.Core
 
         public ExecutionContext(byte[] script, HardFork fork = HardFork.Genesis, uint blockHeight = 0, long initialGas = 1_000000L, int depth = 0, ExecutionContext? parent = null)
         {
+            script = [.. script, (byte)OpCode.RET];
+
             _script = script.Clone() as byte[] ?? throw new ArgumentNullException(nameof(script));
             _blockHeight = blockHeight;
             _fork = fork;
@@ -137,17 +138,17 @@ namespace Neo.VM.Core
         /// <summary>
         /// Push value onto current frame's evaluation stack
         /// </summary>
-        public void Push(VMObject item)
+        public void Push(VMObject item, bool addReferenceItem = true, bool addReferenceChildren = true)
         {
-            Frame.Push(item);
+            Frame.Push(item, addReferenceItem, addReferenceChildren);
         }
 
         /// <summary>
         /// Pop value from current frame's evaluation stack
         /// </summary>
-        public VMObject Pop()
+        public VMObject Pop(bool releaseReferenceItem = true, bool releaseReferenceChildren = true)
         {
-            return Frame.Pop();
+            return Frame.Pop(releaseReferenceItem, releaseReferenceChildren);
         }
 
         /// <summary>

@@ -21,6 +21,7 @@
 // SERVICES
 
 using Neo.Core;
+using Neo.Core.VM.Type;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -85,16 +86,18 @@ namespace Neo.VM.Types
 
         protected override ReadOnlySpan<byte> ComputeSpan(HashSet<VMObject> visited)
         {
-            var size = Marshal.SizeOf(_underlyingObject);
-
-            if (size <= 0)
-                return CoreUtilities.StrictUtf8Encoding.GetBytes(_interfaceName);
-
-            var bytes = GC.AllocateUninitializedArray<byte>(size);
-            var ptr = Marshal.AllocHGlobal(size);
-
+            var ptr = nint.Zero;
+            byte[] bytes = [];
             try
             {
+                var size = Marshal.SizeOf(_underlyingObject);
+
+                if (size <= 0)
+                    return CoreUtilities.StrictUtf8Encoding.GetBytes(_interfaceName);
+
+                bytes = GC.AllocateUninitializedArray<byte>(size);
+
+                ptr = Marshal.AllocHGlobal(size);
                 Marshal.StructureToPtr(_underlyingObject, ptr, false);
                 Marshal.Copy(ptr, bytes, 0, size);
 
@@ -102,7 +105,6 @@ namespace Neo.VM.Types
             }
             catch
             {
-                bytes = null;
                 return CoreUtilities.StrictUtf8Encoding.GetBytes(_interfaceName);
             }
             finally

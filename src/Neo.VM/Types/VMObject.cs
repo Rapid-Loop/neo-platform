@@ -23,6 +23,7 @@
 using Neo.Core;
 using Neo.Core.Extensions;
 using Neo.Core.VM.Interface;
+using Neo.Core.VM.Type;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

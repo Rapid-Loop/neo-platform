@@ -23,9 +23,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Neo.Core.Logging;
-using Neo.VM.Builders;
 using Neo.VM.Extensions;
-using Neo.VM.Middleware;
 using System;
 
 namespace Neo.VM.Tests
@@ -50,16 +48,7 @@ namespace Neo.VM.Tests
                 .AddEngineDebugger()
                 .AddExecuteLogger()
                 .AddExecutionEngine()
-                .AddScoped(sp =>
-                {
-                    var middleware = sp.GetServices<IEngineMiddleware>(); // NOTE: Get all custom middleware
-                    var debugger = sp.GetRequiredService<DebuggerMiddleware>(); // NOTE: get the debugger middleware
-                    var pipeline = VirtualMachinePipelineBuilder.Create()
-                        .Use([debugger, .. middleware]) // NOTE: ORDER MATTERS HERE
-                        .Build();
-
-                    return new TestEngine(pipeline: pipeline);
-                })
+                .AddScoped<TestEngine>()
                 .AddLogging(
                     logging =>
                     {

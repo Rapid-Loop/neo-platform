@@ -127,10 +127,10 @@ namespace Neo.VM.Tests
         public void TestCircularReferenceCreateArray()
         {
             using var sb = new ScriptBuilder()
-                .EmitPush(0)
                 .EmitCreateArray([1, 2, 3,])
                 .Emit(OpCode.DUP)
                 .Emit(OpCode.DUP)
+                .EmitPush(0)
                 .Emit(OpCode.SWAP)
                 .Emit(OpCode.SETITEM)
                 .EmitReturn();

@@ -93,6 +93,7 @@ namespace Neo.VM.Tests.Middleware
                 Assert.AreEqual(expectedBreakLine, actualContext.InstructionPointer);
 
                 debugger.StepMode = false;
+                debugger.Continue();
             };
 
             var actualState = vm.Execute();

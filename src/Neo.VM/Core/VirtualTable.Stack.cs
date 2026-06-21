@@ -77,7 +77,7 @@ namespace Neo.VM.Core
             if (n < BigInteger.Zero)
                 throw new InvalidOperationException($"The negative value {n} is invalid for OpCode.{instruction.OpCode}.");
 
-            engine.CurrentContext!.RemoveAt(unchecked((int)n));
+            engine.CurrentContext!.RemoveAt(checked((int)n));
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Neo.VM.Core
             if (n < 0)
                 throw new InvalidOperationException($"The negative value {n} is invalid for OpCode.{instruction.OpCode}.");
 
-            engine.CurrentContext!.Push(engine.CurrentContext!.Peek(unchecked((int)n)));
+            engine.CurrentContext!.Push(engine.CurrentContext!.Peek(checked((int)n)));
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace Neo.VM.Core
         {
             var n = engine.CurrentContext!.Pop().GetInteger();
 
-            engine.CurrentContext!.Reverse(unchecked((int)n));
+            engine.CurrentContext!.Reverse(checked((int)n));
         }
     }
 }

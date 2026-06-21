@@ -36,7 +36,7 @@ namespace Neo.VM.Core
         /// <summary>
         /// Local variables for this frame (indexed)
         /// </summary>
-        public List<VMObject> Locals { get; } = [];
+        public List<VMObject> LocalVariables { get; } = [];
 
         public List<VMObject> StaticFields { get; } = [];
 
@@ -117,17 +117,9 @@ namespace Neo.VM.Core
         }
 
         /// <summary>
-        /// Peek at top of evaluation stack without removing
-        /// </summary>
-        public VMObject Peek()
-        {
-            return EvaluationStack.Count > 0 ? EvaluationStack.Peek() : VMNull.Instance;
-        }
-
-        /// <summary>
         /// Peek from top of evaluation stack without removing by an index
         /// </summary>
-        public VMObject Peek(int index)
+        public VMObject Peek(int index = 0)
         {
             var list = new List<VMObject>(EvaluationStack); // Copy to list (top is at the end)
             return list[index];
@@ -141,8 +133,10 @@ namespace Neo.VM.Core
 
             EvaluationStack.Clear();
 
-            list.ForEach(i =>
-                EvaluationStack.Push(i));
+            for (var i = list.Count - 1; i >= 0; i--)
+                EvaluationStack.Push(list[i]);
+
+            list.Clear();
 
             item.AddReference();
         }
@@ -151,16 +145,15 @@ namespace Neo.VM.Core
         {
             if (fromIndex == toIndex) return;
 
-            var actualFromIndex = EvaluationStack.Count - fromIndex - 1;
-            var actualToIndex = EvaluationStack.Count - toIndex - 1;
-
             var list = new List<VMObject>(EvaluationStack); // Copy to list (top is at the end)
-            (list[actualFromIndex], list[actualToIndex]) = (list[actualToIndex], list[actualFromIndex]);
+            (list[fromIndex], list[toIndex]) = (list[toIndex], list[fromIndex]);
 
             EvaluationStack.Clear();
 
-            list.ForEach(i =>
-                EvaluationStack.Push(i));
+            for (var i = list.Count - 1; i >= 0; i--)
+                EvaluationStack.Push(list[i]);
+
+            list.Clear();
         }
 
         public void Reverse(int n)
@@ -176,8 +169,10 @@ namespace Neo.VM.Core
 
             EvaluationStack.Clear();
 
-            list.ForEach(i =>
-                EvaluationStack.Push(i));
+            for (var i = list.Count - 1; i >= 0; i--)
+                EvaluationStack.Push(list[i]);
+
+            list.Clear();
         }
 
 
@@ -189,8 +184,10 @@ namespace Neo.VM.Core
             list.RemoveAt(index);
             EvaluationStack.Clear();
 
-            list.ForEach(i =>
-                EvaluationStack.Push(i));
+            for (var i = list.Count - 1; i >= 0; i--)
+                EvaluationStack.Push(list[i]);
+
+            list.Clear();
 
             removed.Release();
             return removed;
@@ -208,28 +205,37 @@ namespace Neo.VM.Core
             }
         }
 
+        public void InitLocalVariables(int count)
+        {
+            while (LocalVariables.Count < count)
+                LocalVariables.Add(VMNull.Instance);
+        }
+
         /// <summary>
         /// Set local variable at index (with proper ref counting)
         /// </summary>
-        public void SetLocal(int index, VMObject value)
+        public void SetLocalVariable(int index, VMObject value)
         {
             // Expand locals list if needed
-            while (Locals.Count <= index)
-                Locals.Add(VMNull.Instance);
+            while (LocalVariables.Count < index)
+                LocalVariables.Add(VMNull.Instance);
 
             // Release old value
-            Locals[index]?.Release();
+            LocalVariables[index]?.Release();
 
             // Add new value
             value.AddReference();
-            Locals[index] = value;
+            LocalVariables[index] = value;
+        }
+
+        public void InitStaticFields(int count)
+        {
+            while (StaticFields.Count < count)
+                StaticFields.Add(VMNull.Instance);
         }
 
         public void SetStaticField(int index, VMObject value)
         {
-            while (StaticFields.Count <= index)
-                StaticFields.Add(VMNull.Instance);
-
             StaticFields[index]?.Release();
 
             // Add new value
@@ -237,9 +243,15 @@ namespace Neo.VM.Core
             StaticFields[index] = value;
         }
 
+        public void InitArguments(int count)
+        {
+            while (Arguments.Count < count)
+                Arguments.Add(VMNull.Instance);
+        }
+
         public void SetArguments(int index, VMObject value)
         {
-            while (Arguments.Count <= index)
+            while (Arguments.Count < index)
                 Arguments.Add(VMNull.Instance);
 
             Arguments[index]?.Release();
@@ -254,7 +266,7 @@ namespace Neo.VM.Core
         /// </summary>
         public VMObject GetLocal(int index)
         {
-            return (index >= 0 && index < Locals.Count) ? Locals[index] : VMNull.Instance;
+            return (index >= 0 && index < LocalVariables.Count) ? LocalVariables[index] : VMNull.Instance;
         }
 
         public VMObject GetStaticFields(int index)
@@ -292,10 +304,10 @@ namespace Neo.VM.Core
             }
 
             // Release locals
-            for (var i = 0; i < Locals.Count; i++)
+            for (var i = 0; i < LocalVariables.Count; i++)
             {
-                Locals[i]?.Release();
-                Locals[i] = VMNull.Instance;
+                LocalVariables[i]?.Release();
+                LocalVariables[i] = VMNull.Instance;
             }
 
             // Release Static Fields
@@ -327,7 +339,7 @@ namespace Neo.VM.Core
             }
 
             // Check Locals
-            foreach (var item in frame.Locals)
+            foreach (var item in frame.LocalVariables)
             {
                 if (DetectCycle(item, visited))
                     return true;

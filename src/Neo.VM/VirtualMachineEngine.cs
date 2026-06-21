@@ -202,11 +202,11 @@ namespace Neo.VM
 
                     if (State == VMState.BREAK) break;
                 }
+
             }
             catch (Exception ex)
             {
                 _maxGasConsumed += _currentContext.GetTotalGasConsumed();
-
                 OnFault(ex);
             }
             finally

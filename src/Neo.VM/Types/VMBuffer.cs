@@ -48,6 +48,20 @@ namespace Neo.VM.Types
             _memoryOwner = MemoryPool<byte>.Shared.Rent(_byteCount);
         }
 
+        public VMBuffer(ReadOnlySpan<byte> data)
+        {
+            _byteCount = data.Length;
+            _memoryOwner = MemoryPool<byte>.Shared.Rent(_byteCount);
+            data.TryCopyTo(_memoryOwner.Memory.Span);
+        }
+
+        public VMBuffer(Span<byte> data)
+        {
+            _byteCount = data.Length;
+            _memoryOwner = MemoryPool<byte>.Shared.Rent(_byteCount);
+            data.TryCopyTo(_memoryOwner.Memory.Span);
+        }
+
         public VMBuffer(byte[] data)
         {
             _byteCount = data.Length;
@@ -138,7 +152,8 @@ namespace Neo.VM.Types
             var span = _memoryOwner.Memory[.._byteCount].Span;
 
             if (span.Length > VMInteger.MaxSize)
-                return new(span[..VMInteger.MaxSize]);
+                throw new InvalidCastException();
+            //return new(span[..VMInteger.MaxSize]);
 
             return new(span);
         }

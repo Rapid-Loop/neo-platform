@@ -403,7 +403,7 @@ namespace Neo.VM.Core
         /// <remarks>Pop 2, Push 0</remarks>
         public virtual void Append(VirtualMachineEngine engine, OpCodeInst instruction)
         {
-            var newItem = engine.CurrentContext!.Pop(releaseReferenceItem: false);
+            var newItem = engine.CurrentContext!.Pop(false, false);
             var array = (VMArray)engine.CurrentContext!.Pop(false, false);
 
             if (newItem is VMStruct s)
@@ -421,12 +421,12 @@ namespace Neo.VM.Core
         /// <remarks>Pop 3, Push 0</remarks>
         public virtual void SetItem(VirtualMachineEngine engine, OpCodeInst instruction)
         {
-            var value = engine.CurrentContext!.Pop(releaseReferenceItem: false);
+            var value = engine.CurrentContext!.Pop(false, false);
             if (value is VMStruct s)
                 value = s.Clone();
 
-            var key = engine.CurrentContext!.Pop(releaseReferenceItem: false);
-            var x = engine.CurrentContext!.Pop(releaseReferenceChildren: false);
+            var key = engine.CurrentContext!.Pop(false, false);
+            var x = engine.CurrentContext!.Pop(false, false);
 
             switch (x)
             {

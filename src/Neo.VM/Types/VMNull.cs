@@ -33,7 +33,6 @@ namespace Neo.VM.Types
 
         public static VMNull Instance => new();
 
-
         protected override void Dispose(bool disposing)
         {
             // Never dispose the singleton instance

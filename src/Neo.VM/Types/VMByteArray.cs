@@ -55,6 +55,13 @@ namespace Neo.VM.Types
             data.TryCopyTo(_memoryOwner.Memory);
         }
 
+        public VMByteArray(ReadOnlySpan<byte> data)
+        {
+            _byteCount = data.Length;
+            _memoryOwner = MemoryPool<byte>.Shared.Rent(_byteCount);
+            data.TryCopyTo(_memoryOwner.Memory.Span);
+        }
+
         public VMByteArray(Span<byte> data)
         {
             _byteCount = data.Length;

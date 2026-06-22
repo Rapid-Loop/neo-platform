@@ -26,7 +26,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Runtime.Versioning;
 
-namespace Neo.Core.Logging
+namespace Neo.Platform.Hosting.Logging
 {
     [UnsupportedOSPlatform("browser")]
     [ProviderAlias("NeoPlatform")]

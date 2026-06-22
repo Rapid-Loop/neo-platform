@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Configuration.Json;
 using Neo.Core;
 using Neo.Core.Cryptography.ECC;
 using Neo.Core.Interfaces;
@@ -28,9 +29,9 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace Neo.Configuration.Json
+namespace Neo.Configuration
 {
-    public class ProtocolSettingsModel : JsonModel, IMap<ProtocolSettings>
+    public class ProtocolSettingsOptions : JsonModel, IMap<ProtocolSettings>
     {
         public uint Network { get; set; }
 

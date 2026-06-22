@@ -20,19 +20,18 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using System.Diagnostics.CodeAnalysis;
+using System;
+using System.Threading.Tasks;
 
-namespace Neo.Core.Logging
+namespace Neo.Platform.CLI
 {
-    public sealed class NeoPlatformLoggerOptions
+    internal class Program
     {
-        public const string DefaultDateTimeFormatString = "yyyy-MM-dd HH:mm:ss.ffff";
+        private static Task Main(string[] args)
+        {
+            Console.WriteLine("Hello, World!");
 
-        public bool UseUtcTimestamp { get; set; } = true;
-
-        [StringSyntax(StringSyntaxAttribute.DateTimeFormat)]
-        public string TimestampFormat { get; set; } = DefaultDateTimeFormatString;
-
-        public bool ShowExceptionStackTrace { get; set; } = true;
+            return Task.CompletedTask;
+        }
     }
 }

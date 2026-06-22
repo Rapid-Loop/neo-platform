@@ -1,0 +1,119 @@
+// BSD 2-Clause License
+//
+// Copyright (c) 2026, Rapid Loop
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+//
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation
+//    and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES
+
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Neo.Platform.Hosting
+{
+    public class NeoPlatformLifetime : IHostLifetime, IDisposable
+    {
+        public NeoPlatformLifetimeOptions Options { get; }
+        public IHostEnvironment Environment { get; }
+        public IHostApplicationLifetime ApplicationLifetime { get; }
+
+        private CancellationTokenRegistration _appStartedReg;
+        private CancellationTokenRegistration _appStoppingReg;
+
+        private readonly ILogger _logger;
+
+        public NeoPlatformLifetime(
+            IOptions<NeoPlatformLifetimeOptions> options,
+            IHostEnvironment environment,
+            IHostApplicationLifetime applicationLifetime,
+            ILoggerFactory? loggerFactory = default)
+        {
+            Options = options?.Value ??
+                throw new ArgumentNullException(nameof(options));
+            Environment = environment ??
+                throw new ArgumentNullException(nameof(environment));
+            ApplicationLifetime = applicationLifetime ??
+                throw new ArgumentNullException(nameof(applicationLifetime));
+
+            _logger = (loggerFactory ?? NullLoggerFactory.Instance)
+                .CreateLogger("Neo.Hosting.Lifetime");
+        }
+
+        public void Dispose()
+        {
+            _appStartedReg.Dispose();
+            _appStoppingReg.Dispose();
+
+            GC.SuppressFinalize(this);
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            // Nothing to do
+            return Task.CompletedTask;
+        }
+
+        public Task WaitForStartAsync(CancellationToken cancellationToken)
+        {
+            if (Options.SuppressStatusMessages == false)
+            {
+                _appStartedReg = ApplicationLifetime.ApplicationStarted.Register
+                (
+                    static state =>
+                    {
+                        if (state is NeoPlatformLifetime pl)
+                            pl.OnApplicationStarted();
+                    },
+                    this
+                );
+
+                _appStoppingReg = ApplicationLifetime.ApplicationStopping.Register
+                (
+                    static state =>
+                    {
+                        if (state is NeoPlatformLifetime pl)
+                            pl.OnApplicationStopping();
+                    },
+                    this
+                );
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private void OnApplicationStarted()
+        {
+            if (_logger.IsEnabled(LogLevel.Information))
+            {
+                _logger.LogInformation("Neo platform started. Press Ctrl+C to shut down.");
+                _logger.LogInformation("Hosting environment: {envName}", Environment.EnvironmentName);
+                _logger.LogInformation("Content root path: {contentRoot}", Environment.ContentRootPath);
+            }
+        }
+
+        private void OnApplicationStopping()
+        {
+            if (_logger.IsEnabled(LogLevel.Information))
+                _logger.LogInformation("Neo platform is shutting down...");
+        }
+    }
+}

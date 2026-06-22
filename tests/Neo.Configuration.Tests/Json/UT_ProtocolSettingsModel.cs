@@ -33,7 +33,7 @@ namespace Neo.Configuration.Tests.Json
         public void TestPropertyValues()
         {
             var jsonTestString = "{\"network\":810960196,\"addressVersion\":53,\"millisecondsPerBlock\":1000,\"maxTransactionsPerBlock\":512,\"memoryPoolMaxTransactions\":50000,\"maxTraceableBlocks\":2102400,\"hardforks\":{\"Aspidochelone\":666},\"initialGasDistribution\":5200000000000000,\"validatorsCount\":1,\"standbyCommittee\":[\"03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c\"],\"seedList\":[\"seed1.neo.org:10333\"]}";
-            var actualProtocolOptionsModel = JsonModel.FromJson<ProtocolSettingsModel>(jsonTestString, TestDefaults.JsonDefaultSerializerOptions);
+            var actualProtocolOptionsModel = JsonModel.FromJson<ProtocolSettingsOptions>(jsonTestString, TestDefaults.JsonDefaultSerializerOptions);
 
             Assert.IsNotNull(actualProtocolOptionsModel);
 
@@ -60,7 +60,7 @@ namespace Neo.Configuration.Tests.Json
         public void TestObjectToProtocolSettings()
         {
             var jsonTestString = "{\"network\":810960196,\"addressVersion\":53,\"millisecondsPerBlock\":1000,\"maxTransactionsPerBlock\":512,\"memoryPoolMaxTransactions\":50000,\"maxTraceableBlocks\":2102400,\"hardforks\":{\"Aspidochelone\":666},\"initialGasDistribution\":5200000000000000,\"validatorsCount\":1,\"standbyCommittee\":[\"03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c\"],\"seedList\":[\"seed1.neo.org:10333\"]}";
-            var actualProtocolOptionsModel = JsonModel.FromJson<ProtocolSettingsModel>(jsonTestString, TestDefaults.JsonDefaultSerializerOptions);
+            var actualProtocolOptionsModel = JsonModel.FromJson<ProtocolSettingsOptions>(jsonTestString, TestDefaults.JsonDefaultSerializerOptions);
 
             Assert.IsNotNull(actualProtocolOptionsModel);
 

@@ -22,10 +22,9 @@
 
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Neo.Core.Logging
+namespace Neo.Platform.Hosting.Logging
 {
     internal sealed class NeoPlatformLogger : ILogger
     {
@@ -61,7 +60,7 @@ namespace Neo.Core.Logging
             if (string.IsNullOrEmpty(message) && exception == null)
                 return;
 
-            message = $"{_name}[{eventId.Id}] {message}";
+            message = $"{_name}[{eventId.Name ?? $"{eventId.Id:d}"}] {message}";
 
             switch (logLevel)
             {
@@ -80,7 +79,7 @@ namespace Neo.Core.Logging
                 case LogLevel.Error:
                 case LogLevel.Critical:
                     ErrorMessage("{0}", message);
-                    if (exception != null)
+                    if (exception is not null)
                         ErrorMessage(exception, ShowExceptionStackTrace);
                     break;
                 default:
@@ -96,7 +95,6 @@ namespace Neo.Core.Logging
             var message = string.Format(format, args);
 
             Console.Out.Write(message);
-            DebugWrite(message);
         }
 
         public static void WriteLine() =>
@@ -173,11 +171,6 @@ namespace Neo.Core.Logging
             SetTerminalForegroundColor(ConsoleColor.Red);
             WriteLine(format, args);
             ResetColor();
-        }
-
-        private static void DebugWrite(string? message)
-        {
-            if (Debugger.IsAttached) Debug.Write(message);
         }
 
         public static void SetTerminalForegroundColor(ConsoleColor consoleColor)

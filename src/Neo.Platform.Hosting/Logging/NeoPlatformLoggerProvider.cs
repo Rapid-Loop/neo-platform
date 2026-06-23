@@ -30,7 +30,7 @@ namespace Neo.Platform.Hosting.Logging
 {
     [UnsupportedOSPlatform("browser")]
     [ProviderAlias("NeoPlatform")]
-    public sealed class NeoPlatformLoggerProvider : ILoggerProvider
+    internal sealed class NeoPlatformLoggerProvider : ILoggerProvider
     {
         private readonly IDisposable? _onChangeToken;
         private readonly ConcurrentDictionary<string, NeoPlatformLogger> _loggers = new(StringComparer.OrdinalIgnoreCase);

@@ -28,6 +28,7 @@ using Neo.Core.VM;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Net;
 
 namespace Neo.Configuration
 {
@@ -49,7 +50,7 @@ namespace Neo.Configuration
 
         public int ValidatorsCount { get; set; }
 
-        public string[]? SeedList { get; set; }
+        public IPEndPoint[]? SeedList { get; set; }
 
         public IDictionary<HardFork, uint>? HardForks { get; set; }
 

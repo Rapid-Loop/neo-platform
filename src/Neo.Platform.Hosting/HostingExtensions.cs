@@ -27,8 +27,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.EventLog;
 using Neo.Configuration;
 using Neo.Core;
+using Neo.Core.Types.Converter;
 using Neo.Platform.Hosting.Logging;
 using System;
+using System.ComponentModel;
+using System.Net;
 
 namespace Neo.Platform.Hosting
 {
@@ -45,7 +48,7 @@ namespace Neo.Platform.Hosting
                     var manger = new ConfigurationManager();
 
                     config.AddConfiguration(manger);
-                    // TODO: Add neo platform configuration
+                    config.AddNeoPlatformConfiguration();
                 }
             );
 
@@ -129,6 +132,10 @@ namespace Neo.Platform.Hosting
                     // Add default services
                 }
             );
+
+            // IConfiguration.Get<T>() Converting
+            TypeDescriptor.AddAttributes(typeof(IPAddress), new TypeConverterAttribute(typeof(IPAddressTypeConverter)));
+            TypeDescriptor.AddAttributes(typeof(IPEndPoint), new TypeConverterAttribute(typeof(IPEndPointTypeConverter)));
 
             return builder;
         }

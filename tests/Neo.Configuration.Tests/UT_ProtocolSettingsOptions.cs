@@ -23,16 +23,17 @@
 using Neo.Configuration.Json;
 using Neo.Core.Cryptography.ECC;
 using Neo.Core.VM;
+using System.Net;
 
-namespace Neo.Configuration.Tests.Json
+namespace Neo.Configuration.Tests
 {
     [TestClass]
-    public class UT_ProtocolSettingsModel
+    public class UT_ProtocolSettingsOptions
     {
         [TestMethod]
         public void TestPropertyValues()
         {
-            var jsonTestString = "{\"network\":810960196,\"addressVersion\":53,\"millisecondsPerBlock\":1000,\"maxTransactionsPerBlock\":512,\"memoryPoolMaxTransactions\":50000,\"maxTraceableBlocks\":2102400,\"hardforks\":{\"Aspidochelone\":666},\"initialGasDistribution\":5200000000000000,\"validatorsCount\":1,\"standbyCommittee\":[\"03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c\"],\"seedList\":[\"seed1.neo.org:10333\"]}";
+            var jsonTestString = "{\"network\":810960196,\"addressVersion\":53,\"millisecondsPerBlock\":1000,\"maxTransactionsPerBlock\":512,\"memoryPoolMaxTransactions\":50000,\"maxTraceableBlocks\":2102400,\"hardforks\":{\"Aspidochelone\":666},\"initialGasDistribution\":5200000000000000,\"validatorsCount\":1,\"standbyCommittee\":[\"03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c\"],\"seedList\":[\"127.0.0.1:10333\"]}";
             var actualProtocolOptionsModel = JsonModel.FromJson<ProtocolSettingsOptions>(jsonTestString, TestDefaults.JsonDefaultSerializerOptions);
 
             Assert.IsNotNull(actualProtocolOptionsModel);
@@ -50,16 +51,19 @@ namespace Neo.Configuration.Tests.Json
             Assert.AreEqual(666u, actualProtocolOptionsModel.HardForks[HardFork.Aspidochelone]);
 
             Assert.IsNotNull(actualProtocolOptionsModel.StandbyCommittee);
+            Assert.HasCount(1, actualProtocolOptionsModel.StandbyCommittee);
             Assert.AreEqual(ECPoint.Parse("03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c", ECCurve.SecP256r1), actualProtocolOptionsModel.StandbyCommittee[0]);
 
             Assert.IsNotNull(actualProtocolOptionsModel.SeedList);
-            Assert.AreEqual("seed1.neo.org:10333", actualProtocolOptionsModel.SeedList[0]);
+            Assert.HasCount(1, actualProtocolOptionsModel.SeedList);
+            Assert.AreEqual(IPAddress.Parse("127.0.0.1"), actualProtocolOptionsModel.SeedList[0].Address);
+            Assert.AreEqual(10333, actualProtocolOptionsModel.SeedList[0].Port);
         }
 
         [TestMethod]
         public void TestObjectToProtocolSettings()
         {
-            var jsonTestString = "{\"network\":810960196,\"addressVersion\":53,\"millisecondsPerBlock\":1000,\"maxTransactionsPerBlock\":512,\"memoryPoolMaxTransactions\":50000,\"maxTraceableBlocks\":2102400,\"hardforks\":{\"Aspidochelone\":666},\"initialGasDistribution\":5200000000000000,\"validatorsCount\":1,\"standbyCommittee\":[\"03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c\"],\"seedList\":[\"seed1.neo.org:10333\"]}";
+            var jsonTestString = "{\"network\":810960196,\"addressVersion\":53,\"millisecondsPerBlock\":1000,\"maxTransactionsPerBlock\":512,\"memoryPoolMaxTransactions\":50000,\"maxTraceableBlocks\":2102400,\"hardforks\":{\"Aspidochelone\":666},\"initialGasDistribution\":5200000000000000,\"validatorsCount\":1,\"standbyCommittee\":[\"03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c\"],\"seedList\":[\"127.0.0.1:10333\"]}";
             var actualProtocolOptionsModel = JsonModel.FromJson<ProtocolSettingsOptions>(jsonTestString, TestDefaults.JsonDefaultSerializerOptions);
 
             Assert.IsNotNull(actualProtocolOptionsModel);
@@ -78,11 +82,14 @@ namespace Neo.Configuration.Tests.Json
             Assert.IsNotNull(actualProtocolSettings.HardForks);
             Assert.AreEqual(666u, actualProtocolSettings.HardForks[HardFork.Aspidochelone]);
 
-            Assert.IsNotNull(actualProtocolSettings.StandbyCommittee);
-            Assert.AreEqual(ECPoint.Parse("03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c", ECCurve.SecP256r1), actualProtocolSettings.StandbyCommittee[0]);
+            Assert.IsNotNull(actualProtocolOptionsModel.StandbyCommittee);
+            Assert.HasCount(1, actualProtocolOptionsModel.StandbyCommittee);
+            Assert.AreEqual(ECPoint.Parse("03b209fd4f53a7170ea4444e0cb0a6bb6a53c2bd016926989cf85f9b0fba17a70c", ECCurve.SecP256r1), actualProtocolOptionsModel.StandbyCommittee[0]);
 
-            Assert.IsNotNull(actualProtocolSettings.SeedList);
-            Assert.AreEqual("seed1.neo.org:10333", actualProtocolSettings.SeedList[0]);
+            Assert.IsNotNull(actualProtocolOptionsModel.SeedList);
+            Assert.HasCount(1, actualProtocolOptionsModel.SeedList);
+            Assert.AreEqual(IPAddress.Parse("127.0.0.1"), actualProtocolOptionsModel.SeedList[0].Address);
+            Assert.AreEqual(10333, actualProtocolOptionsModel.SeedList[0].Port);
         }
     }
 }

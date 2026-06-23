@@ -26,7 +26,7 @@ namespace Neo.Platform.Hosting
 {
     public static class ProtocolSettingNames
     {
-        public static readonly string SectionKey = nameof(ProtocolSettings);
+        public static readonly string SectionKey = "Protocol";
 
         public static readonly string NetworkKey = $"{SectionKey}:{nameof(ProtocolSettings.Network)}";
         public static readonly string AddressVersionKey = $"{SectionKey}:{nameof(ProtocolSettings.AddressVersion)}";

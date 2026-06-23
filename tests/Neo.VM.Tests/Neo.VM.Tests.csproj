@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Neo.Platform.Hosting\Neo.Platform.Hosting.csproj" />
     <ProjectReference Include="..\..\src\Neo.VM\Neo.VM.csproj" />
   </ItemGroup>
 

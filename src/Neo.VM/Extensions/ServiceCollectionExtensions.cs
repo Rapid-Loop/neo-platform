@@ -21,7 +21,7 @@
 // SERVICES
 
 using Microsoft.Extensions.DependencyInjection;
-using Neo.VM.Builders;
+using Neo.VM.Builder;
 using Neo.VM.Middleware;
 using System;
 
@@ -34,10 +34,10 @@ namespace Neo.VM.Extensions
             // Register VirtualMachineEngine using the built pipeline
             services.AddScoped(sp =>
             {
-                var middleware = sp.GetServices<IEngineMiddleware>(); // NOTE: Get all custom middleware
+                var middleware = sp.GetServices<IEngineMiddleware>();       // NOTE: Get all custom middleware
                 var debugger = sp.GetRequiredService<DebuggerMiddleware>(); // NOTE: get the debugger middleware
                 var pipeline = VirtualMachinePipelineBuilder.Create()
-                    .Use([debugger, .. middleware]) // NOTE: ORDER MATTERS HERE
+                    .Use([debugger, .. middleware])                         // NOTE: ORDER MATTERS HERE
                     .Build();
 
                 return VirtualMachineBuilder.Create()

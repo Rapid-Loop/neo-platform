@@ -20,19 +20,27 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using System.Diagnostics.CodeAnalysis;
+using System;
+using System.ComponentModel;
+using System.Globalization;
+using System.Net;
 
-namespace Neo.Core.Logging
+namespace Neo.Core.Types.Converter
 {
-    public sealed class NeoPlatformLoggerOptions
+    public class IPAddressTypeConverter : TypeConverter
     {
-        public const string DefaultDateTimeFormatString = "yyyy-MM-dd HH:mm:ss.ffff";
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType) =>
+            sourceType == typeof(string) && base.CanConvertFrom(context, sourceType);
 
-        public bool UseUtcTimestamp { get; set; } = true;
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
+        {
+            if (value is string ipString)
+            {
+                if (IPAddress.TryParse(ipString, out var ipAddress))
+                    return ipAddress;
+            }
 
-        [StringSyntax(StringSyntaxAttribute.DateTimeFormat)]
-        public string TimestampFormat { get; set; } = DefaultDateTimeFormatString;
-
-        public bool ShowExceptionStackTrace { get; set; } = true;
+            return base.ConvertFrom(context, culture, value);
+        }
     }
 }

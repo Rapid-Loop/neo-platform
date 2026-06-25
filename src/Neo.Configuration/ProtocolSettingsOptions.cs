@@ -20,6 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Neo.Configuration.Json;
 using Neo.Core;
 using Neo.Core.Cryptography.ECC;
 using Neo.Core.Interfaces;
@@ -27,10 +28,11 @@ using Neo.Core.VM;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Net;
 
-namespace Neo.Configuration.Json
+namespace Neo.Configuration
 {
-    public class ProtocolSettingsModel : JsonModel, IMap<ProtocolSettings>
+    public class ProtocolSettingsOptions : JsonModel, IMap<ProtocolSettings>
     {
         public uint Network { get; set; }
 
@@ -48,7 +50,7 @@ namespace Neo.Configuration.Json
 
         public int ValidatorsCount { get; set; }
 
-        public string[]? SeedList { get; set; }
+        public IPEndPoint[]? SeedList { get; set; }
 
         public IDictionary<HardFork, uint>? HardForks { get; set; }
 

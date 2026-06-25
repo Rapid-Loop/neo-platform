@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Net;
 
 namespace Neo.Core
 {
@@ -59,7 +60,7 @@ namespace Neo.Core
         /// <summary>
         /// The default seed nodes list.
         /// </summary>
-        public IReadOnlyList<string> SeedList { get; init; } = [];
+        public IPEndPoint[] SeedList { get; init; } = [];
 
         /// <summary>
         /// Indicates the time in milliseconds between two blocks. Note that starting from

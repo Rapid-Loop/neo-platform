@@ -26,7 +26,7 @@ using Neo.VM.Pipeline;
 using System;
 using System.Collections.Generic;
 
-namespace Neo.VM.Builders
+namespace Neo.VM.Builder
 {
     /// <summary>
     /// Fluent builder for constructing a <see cref="VirtualMachinePipeline"/>.

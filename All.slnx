@@ -4,6 +4,8 @@
     <Project Path="src/Neo.Core/Neo.Core.csproj" />
     <Project Path="src/Neo.IO/Neo.IO.csproj" Id="476db0c1-403f-4d31-92f8-dc55985e81a4" />
     <Project Path="src/Neo.Localization/Neo.Localization.csproj" Id="cf344ed8-cbf9-4f00-a5d4-d0c7bac43145" />
+    <Project Path="src/Neo.Platform.CLI/Neo.Platform.CLI.csproj" Id="febe8581-30b0-4de6-8a3e-92dbad252849" />
+    <Project Path="src/Neo.Platform.Hosting/Neo.Platform.Hosting.csproj" Id="de3bb911-e4a4-40e5-ab44-667ac6f8fe5e" />
     <Project Path="src/Neo.VM/Neo.VM.csproj" Id="e38e01be-d9e4-4c1d-a0bc-b9a37250d446" />
     <Project Path="src/Neo.Wallet/Neo.Wallet.csproj" Id="49b273b6-b9a6-402e-8ea6-db4e23a3fe40" />
   </Folder>

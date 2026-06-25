@@ -20,9 +20,10 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Neo.Core.Logging;
+using Neo.Platform.Hosting.Logging;
 using Neo.VM.Extensions;
 using System;
 
@@ -35,6 +36,8 @@ namespace Neo.VM.Tests
 
         public static readonly ILoggerFactory TraceLoggerFactory = LoggerFactory.Create(logging =>
         {
+            var manger = new ConfigurationManager();
+            logging.AddConfiguration(manger);
             logging.ClearProviders();
             logging.AddNeoPlatform();
             logging.SetMinimumLevel(LogLevel.Trace);
@@ -52,6 +55,8 @@ namespace Neo.VM.Tests
                 .AddLogging(
                     logging =>
                     {
+                        var manger = new ConfigurationManager();
+                        logging.AddConfiguration(manger);
                         logging.ClearProviders();
                         logging.AddNeoPlatform(); // Custom logger for our platform (file, debugger, console, etc)
                         logging.SetMinimumLevel(LogLevel.Trace);

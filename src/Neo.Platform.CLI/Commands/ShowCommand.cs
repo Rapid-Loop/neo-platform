@@ -20,23 +20,31 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration;
-using Neo.Configuration.Json.Converters;
-using Neo.Core.Interfaces;
-using System.Text.Json.Serialization;
+using Microsoft.Extensions.Logging;
+using System.CommandLine;
+using System.CommandLine.Invocation;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Neo.Wallet.Json
+namespace Neo.Platform.CLI.Commands
 {
-    public class Nep6WalletAccountModel : WalletAccountModel<ProtocolSettingsOptions>, IMap<Nep6WalletAccount>
+    internal class ShowCommand : Command
     {
-        [JsonConverter(typeof(JsonStringByteArrayConverter))]
-        public override byte[]? Key { get => base.Key; set => base.Key = value; }
+        public ShowCommand() : base("show", "Shows many configurations")
+        {
 
-        /// <summary>
-        /// Moves property values from <see cref="Nep6WalletAccountModel"/> to <see cref="Nep6WalletAccount"/> with <see cref="SCryptModel.Default"/> setting.
-        /// </summary>
-        /// <returns>A new <see cref="Nep6WalletAccount"/> object.</returns>
-        public Nep6WalletAccount ToObject() =>
-            new(this);
+        }
+
+        public class Handler(ILoggerFactory loggerFactory) : AsynchronousCommandLineAction
+        {
+            private readonly ILogger _logger = loggerFactory.CreateLogger<ShowCommand>();
+
+            public override Task<int> InvokeAsync(ParseResult parseResult, CancellationToken cancellationToken = default)
+            {
+                _logger.LogInformation("Hello World!!!!");
+
+                return Task.FromResult(0);
+            }
+        }
     }
 }

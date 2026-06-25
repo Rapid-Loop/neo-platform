@@ -26,14 +26,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
 using System;
 
-namespace Neo.Core.Logging
+namespace Neo.Platform.Hosting.Logging
 {
     public static class LoggingBuilderExtensions
     {
         public static ILoggingBuilder AddNeoPlatform(this ILoggingBuilder builder)
         {
-            builder.AddConfiguration();
-
             builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, NeoPlatformLoggerProvider>());
 
             LoggerProviderOptions.RegisterProviderOptions<NeoPlatformLoggerOptions, NeoPlatformLoggerProvider>(builder.Services);

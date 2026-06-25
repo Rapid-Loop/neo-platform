@@ -20,23 +20,33 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration;
-using Neo.Configuration.Json.Converters;
-using Neo.Core.Interfaces;
-using System.Text.Json.Serialization;
+using System.IO;
+using System.Threading;
 
-namespace Neo.Wallet.Json
+namespace Neo.Platform.Hosting.Factory
 {
-    public class Nep6WalletAccountModel : WalletAccountModel<ProtocolSettingsOptions>, IMap<Nep6WalletAccount>
+    internal static class NeoHostingFactory
     {
-        [JsonConverter(typeof(JsonStringByteArrayConverter))]
-        public override byte[]? Key { get => base.Key; set => base.Key = value; }
+        private static readonly uint s_networkSeed = 810960196u; // DEV0 Magic Code
+        private static readonly string s_globalString = "Global\\";
 
-        /// <summary>
-        /// Moves property values from <see cref="Nep6WalletAccountModel"/> to <see cref="Nep6WalletAccount"/> with <see cref="SCryptModel.Default"/> setting.
-        /// </summary>
-        /// <returns>A new <see cref="Nep6WalletAccount"/> object.</returns>
-        public Nep6WalletAccount ToObject() =>
-            new(this);
+        public static uint GetDevNetwork(uint index) =>
+            s_networkSeed & ~(0xfu << 24) | (index << 24);
+
+        public static FileInfo ResolveFileName(string filename, string rootPath)
+        {
+            if (Path.IsPathRooted(filename))
+                return new(filename);
+            if (Path.IsPathRooted(rootPath) == false)
+                rootPath = Path.GetFullPath(rootPath);
+            return new(Path.Combine(rootPath, filename));
+        }
+
+        public static Mutex CreateMutex(string? name = null)
+        {
+            if (string.IsNullOrEmpty(name))
+                name = Path.Combine(s_globalString, Path.GetRandomFileName());
+            return new(initiallyOwned: true, name);
+        }
     }
 }

@@ -20,7 +20,7 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration.Json;
+using Neo.Configuration;
 using Neo.Configuration.Json.Converters;
 using Neo.Core;
 using Neo.Core.Interfaces;
@@ -30,7 +30,7 @@ using System.Text.Json.Serialization;
 
 namespace Neo.Wallet.Json
 {
-    public class DevWalletAccountModel : WalletAccountModel<ProtocolSettingsModel>, IMap<DevWalletAccount>
+    public class DevWalletAccountModel : WalletAccountModel<ProtocolSettingsOptions>, IMap<DevWalletAccount>
     {
         [JsonConverter(typeof(JsonStringHexFormatConverter))]
         public override byte[]? Key { get => base.Key; set => base.Key = value; }

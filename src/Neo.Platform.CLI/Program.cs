@@ -20,23 +20,34 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Neo.Configuration;
-using Neo.Configuration.Json.Converters;
-using Neo.Core.Interfaces;
-using System.Text.Json.Serialization;
+using Microsoft.Extensions.Hosting;
+using Neo.Platform.CLI.Commands;
+using Neo.Platform.Hosting;
+using Neo.Platform.Hosting.Builder;
+using System.Threading.Tasks;
 
-namespace Neo.Wallet.Json
+namespace Neo.Platform.CLI
 {
-    public class Nep6WalletAccountModel : WalletAccountModel<ProtocolSettingsOptions>, IMap<Nep6WalletAccount>
+    internal class Program
     {
-        [JsonConverter(typeof(JsonStringByteArrayConverter))]
-        public override byte[]? Key { get => base.Key; set => base.Key = value; }
+        private static Task<int> Main(string[] args)
+        {
+            var rootCommand = new ProgramRootCommand();
+            var cmd = new PlatformCommandLineBuilder(rootCommand, args)
+                .UseHost(DefaultNeoBuildHostFactory, builder =>
+                {
+                    //builder.UseCommandAction<ProgramRootCommand, EmptyHandler>();
+                    builder.UseCommandAction<ShowCommand, ShowCommand.Handler>();
+                })
+                .EnablePosixBundling()
+                .EnableDefaultExceptionHandler(false)
+                .Build();
 
-        /// <summary>
-        /// Moves property values from <see cref="Nep6WalletAccountModel"/> to <see cref="Nep6WalletAccount"/> with <see cref="SCryptModel.Default"/> setting.
-        /// </summary>
-        /// <returns>A new <see cref="Nep6WalletAccount"/> object.</returns>
-        public Nep6WalletAccount ToObject() =>
-            new(this);
+            return cmd.InvokeAsync();
+        }
+
+        private static IHostBuilder DefaultNeoBuildHostFactory(string[] args) =>
+            new HostBuilder()
+            .UseNeoPlatformConfiguration();
     }
 }

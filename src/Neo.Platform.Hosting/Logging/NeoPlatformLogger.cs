@@ -22,10 +22,9 @@
 
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Neo.Core.Logging
+namespace Neo.Platform.Hosting.Logging
 {
     internal sealed class NeoPlatformLogger : ILogger
     {
@@ -61,7 +60,7 @@ namespace Neo.Core.Logging
             if (string.IsNullOrEmpty(message) && exception == null)
                 return;
 
-            message = $"{_name}[{eventId.Id}] {message}";
+            message = $"{_name}[{eventId.Name ?? $"{eventId.Id:d}"}] {message}";
 
             switch (logLevel)
             {
@@ -80,7 +79,7 @@ namespace Neo.Core.Logging
                 case LogLevel.Error:
                 case LogLevel.Critical:
                     ErrorMessage("{0}", message);
-                    if (exception != null)
+                    if (exception is not null)
                         ErrorMessage(exception, ShowExceptionStackTrace);
                     break;
                 default:
@@ -88,15 +87,26 @@ namespace Neo.Core.Logging
             }
         }
 
-        private void WriteDateTime() =>
-            Write($"[{BuildFormatString(_getConfig().TimestampFormat)}] ", DateTimeNow);
+        private void WriteDateTime(bool isError = false)
+        {
+            var format = $"[{BuildFormatString(_getConfig().TimestampFormat)}] ";
+            if (isError)
+                ErrorWrite(format, DateTimeNow);
+            else
+                Write(format, DateTimeNow);
+        }
 
         public static void Write([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args)
         {
             var message = string.Format(format, args);
 
             Console.Out.Write(message);
-            DebugWrite(message);
+        }
+        public static void ErrorWrite([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args)
+        {
+            var message = string.Format(format, args);
+
+            Console.Error.Write(message);
         }
 
         public static void WriteLine() =>
@@ -104,6 +114,12 @@ namespace Neo.Core.Logging
 
         public static void WriteLine([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args) =>
             Write(string.Format(format, args) + Environment.NewLine);
+
+        public static void ErrorWriteLine() =>
+            ErrorWrite(Environment.NewLine);
+
+        public static void ErrorWriteLine([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args) =>
+            ErrorWrite(string.Format(format, args) + Environment.NewLine);
 
         public void InfoMessage([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args)
         {
@@ -148,17 +164,17 @@ namespace Neo.Core.Logging
             var stackTrace = exception.InnerException?.StackTrace ?? exception.StackTrace;
 
             SetTerminalForegroundColor(ConsoleColor.Red);
-            WriteDateTime();
+            WriteDateTime(isError: true);
             SetTerminalForegroundColor(ConsoleColor.DarkRed);
-            WriteLine("{0}: ", exception.InnerException?.GetType().Name ?? exception.GetType().Name);
+            ErrorWriteLine("{0}: ", exception.InnerException?.GetType().Name ?? exception.GetType().Name);
             SetTerminalForegroundColor(ConsoleColor.Red);
-            WriteLine("   {0}", exception.InnerException?.Message ?? exception.Message);
+            ErrorWriteLine("   {0}", exception.InnerException?.Message ?? exception.Message);
 
             if (showStackTrace)
             {
-                WriteLine("Stack Trace: ");
+                ErrorWriteLine("Stack Trace: ");
                 SetTerminalForegroundColor(ConsoleColor.DarkRed);
-                WriteLine("   {0}", stackTrace?.Trim() ?? string.Empty);
+                ErrorWriteLine("   {0}", stackTrace?.Trim() ?? string.Empty);
             }
 
             ResetColor();
@@ -167,17 +183,12 @@ namespace Neo.Core.Logging
         public void ErrorMessage([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args)
         {
             SetTerminalForegroundColor(ConsoleColor.Red);
-            WriteDateTime();
+            WriteDateTime(isError: true);
             SetTerminalForegroundColor(ConsoleColor.DarkRed);
-            Write("Error: ");
+            ErrorWrite("Error: ");
             SetTerminalForegroundColor(ConsoleColor.Red);
-            WriteLine(format, args);
+            ErrorWriteLine(format, args);
             ResetColor();
-        }
-
-        private static void DebugWrite(string? message)
-        {
-            if (Debugger.IsAttached) Debug.Write(message);
         }
 
         public static void SetTerminalForegroundColor(ConsoleColor consoleColor)

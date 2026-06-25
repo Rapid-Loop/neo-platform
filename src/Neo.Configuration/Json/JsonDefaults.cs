@@ -48,6 +48,7 @@ namespace Neo.Configuration.Json
                 new JsonStringEnumConverter(),
                 new JsonStringECPointConverter(),
                 new JsonStringUInt160Converter(),
+                new JsonIPEndPointConverter(),
             },
         };
     }

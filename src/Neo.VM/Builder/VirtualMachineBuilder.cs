@@ -26,7 +26,7 @@ using Neo.VM.Core;
 using Neo.VM.Pipeline;
 using System;
 
-namespace Neo.VM.Builders
+namespace Neo.VM.Builder
 {
     public sealed class VirtualMachineBuilder
     {

@@ -53,6 +53,7 @@ namespace Neo.Wallet.Tests
                 new JsonStringEnumConverter(),
                 new JsonStringECPointConverter(),
                 new JsonStringUInt160Converter(),
+                new JsonIPEndPointConverter(),
             }
         };
 

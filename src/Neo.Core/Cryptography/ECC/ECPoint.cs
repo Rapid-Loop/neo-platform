@@ -22,7 +22,9 @@
 
 using Neo.Core.Extensions;
 using Neo.Core.Serialization;
+using Neo.Core.Types.Converter;
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Numerics;
@@ -30,6 +32,7 @@ using System.Security.Cryptography;
 
 namespace Neo.Core.Cryptography.ECC
 {
+    [TypeConverter(typeof(ECPointTypeConverter))]
     public class ECPoint : IEquatable<ECPoint>, IComparable, IComparable<ECPoint>, INeoSerializable
     {
         public const int UncompressedLength = 65;

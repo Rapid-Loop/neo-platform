@@ -21,33 +21,36 @@
 // SERVICES
 
 using Microsoft.Extensions.Hosting;
-using Neo.Platform.CLI.Commands;
-using Neo.Platform.Hosting;
-using Neo.Platform.Hosting.Builder;
+using System;
+using System.CommandLine;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace Neo.Platform.CLI
+namespace Neo.Platform.Hosting
 {
-    internal class Program
+    public sealed class PlatformCommandLine(ParseResult parseResult, IHost host, InvocationConfiguration invocationConfiguration)
     {
-        private static Task<int> Main(string[] args)
+        public async Task<int> InvokeAsync(CancellationToken cancellationToken = default)
         {
-            var rootCommand = new ProgramRootCommand();
-            var cmd = new PlatformCommandLineBuilder(rootCommand, args)
-                .UseHost(DefaultNeoBuildHostFactory, builder =>
-                {
-                    //builder.UseCommandAction<ProgramRootCommand, EmptyHandler>();
-                    builder.UseCommandAction<ShowCommand, ShowCommand.Handler>();
-                })
-                .EnablePosixBundling()
-                .EnableDefaultExceptionHandler(false)
-                .Build();
+            await host.StartAsync(cancellationToken);
 
-            return cmd.InvokeAsync();
+            var exitCode = 0;
+
+            try
+            {
+                exitCode = await parseResult.InvokeAsync(invocationConfiguration, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                exitCode = ex.HResult;
+            }
+            finally
+            {
+                await host.StopAsync(cancellationToken);
+            }
+
+
+            return exitCode;
         }
-
-        private static IHostBuilder DefaultNeoBuildHostFactory(string[] args) =>
-            new HostBuilder()
-            .UseNeoPlatformConfiguration();
     }
 }

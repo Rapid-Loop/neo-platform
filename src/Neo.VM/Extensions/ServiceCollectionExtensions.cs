@@ -21,7 +21,7 @@
 // SERVICES
 
 using Microsoft.Extensions.DependencyInjection;
-using Neo.VM.Builders;
+using Neo.VM.Builder;
 using Neo.VM.Middleware;
 using System;
 

@@ -28,8 +28,11 @@ using Microsoft.Extensions.Logging.EventLog;
 using Neo.Configuration;
 using Neo.Core;
 using Neo.Core.Types.Converter;
+using Neo.Platform.Hosting.Configuration;
 using Neo.Platform.Hosting.Logging;
 using System;
+using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.ComponentModel;
 using System.Net;
 
@@ -37,6 +40,26 @@ namespace Neo.Platform.Hosting
 {
     public static class HostingExtensions
     {
+
+        public static IHostBuilder UseCommandAction<TCommand, TCommandAction>(this IHostBuilder builder)
+            where TCommand : Command
+            where TCommandAction : CommandLineAction
+        {
+            if (builder.Properties[typeof(ParseResult)] is ParseResult parseResult &&
+                parseResult.CommandResult.Command is Command command &&
+                command.GetType() == typeof(TCommand))
+            {
+                builder.ConfigureServices(services =>
+                {
+                    services.AddTransient<TCommandAction>();
+
+                    var sp = services.BuildServiceProvider();
+                    command.Action = sp.GetRequiredService<TCommandAction>();
+                });
+            }
+
+            return builder;
+        }
 
         public static IHostBuilder UseNeoPlatformConfiguration(this IHostBuilder builder)
         {
@@ -122,8 +145,8 @@ namespace Neo.Platform.Hosting
                 }
             );
 
-            builder.AddNeoPlatformLifetime();
-            builder.AddNeoPlatformOptions();
+            builder.UseNeoPlatformLifetime();
+            builder.UseNeoPlatformOptions();
 
             builder.ConfigureServices
             (
@@ -140,7 +163,7 @@ namespace Neo.Platform.Hosting
             return builder;
         }
 
-        public static IHostBuilder AddNeoPlatformOptions(this IHostBuilder builder) =>
+        public static IHostBuilder UseNeoPlatformOptions(this IHostBuilder builder) =>
             builder.ConfigureServices
             (
                 static (context, services) =>
@@ -151,7 +174,7 @@ namespace Neo.Platform.Hosting
                 }
             );
 
-        public static IHostBuilder AddNeoPlatformLifetime(this IHostBuilder builder, Action<NeoPlatformLifetimeOptions>? configure = default) =>
+        public static IHostBuilder UseNeoPlatformLifetime(this IHostBuilder builder, Action<NeoPlatformLifetimeOptions>? configure = default) =>
             builder.ConfigureServices(
                 services =>
                 {

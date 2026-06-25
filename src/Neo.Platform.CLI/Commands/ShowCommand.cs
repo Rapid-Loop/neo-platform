@@ -20,34 +20,31 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Microsoft.Extensions.Hosting;
-using Neo.Platform.CLI.Commands;
-using Neo.Platform.Hosting;
-using Neo.Platform.Hosting.Builder;
+using Microsoft.Extensions.Logging;
+using System.CommandLine;
+using System.CommandLine.Invocation;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace Neo.Platform.CLI
+namespace Neo.Platform.CLI.Commands
 {
-    internal class Program
+    internal class ShowCommand : Command
     {
-        private static Task<int> Main(string[] args)
+        public ShowCommand() : base("show", "Shows many configurations")
         {
-            var rootCommand = new ProgramRootCommand();
-            var cmd = new PlatformCommandLineBuilder(rootCommand, args)
-                .UseHost(DefaultNeoBuildHostFactory, builder =>
-                {
-                    //builder.UseCommandAction<ProgramRootCommand, EmptyHandler>();
-                    builder.UseCommandAction<ShowCommand, ShowCommand.Handler>();
-                })
-                .EnablePosixBundling()
-                .EnableDefaultExceptionHandler(false)
-                .Build();
 
-            return cmd.InvokeAsync();
         }
 
-        private static IHostBuilder DefaultNeoBuildHostFactory(string[] args) =>
-            new HostBuilder()
-            .UseNeoPlatformConfiguration();
+        public class Handler(ILoggerFactory loggerFactory) : AsynchronousCommandLineAction
+        {
+            private readonly ILogger _logger = loggerFactory.CreateLogger<ShowCommand>();
+
+            public override Task<int> InvokeAsync(ParseResult parseResult, CancellationToken cancellationToken = default)
+            {
+                _logger.LogInformation("Hello World!!!!");
+
+                return Task.FromResult(0);
+            }
+        }
     }
 }

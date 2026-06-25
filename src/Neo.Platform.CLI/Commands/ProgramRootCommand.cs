@@ -20,34 +20,17 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Microsoft.Extensions.Hosting;
-using Neo.Platform.CLI.Commands;
-using Neo.Platform.Hosting;
-using Neo.Platform.Hosting.Builder;
-using System.Threading.Tasks;
+using System.CommandLine;
 
-namespace Neo.Platform.CLI
+namespace Neo.Platform.CLI.Commands
 {
-    internal class Program
+    internal class ProgramRootCommand : RootCommand
     {
-        private static Task<int> Main(string[] args)
+        public ProgramRootCommand() : base("Neo Platform Command-line Tool")
         {
-            var rootCommand = new ProgramRootCommand();
-            var cmd = new PlatformCommandLineBuilder(rootCommand, args)
-                .UseHost(DefaultNeoBuildHostFactory, builder =>
-                {
-                    //builder.UseCommandAction<ProgramRootCommand, EmptyHandler>();
-                    builder.UseCommandAction<ShowCommand, ShowCommand.Handler>();
-                })
-                .EnablePosixBundling()
-                .EnableDefaultExceptionHandler(false)
-                .Build();
+            var showCommand = new ShowCommand();
 
-            return cmd.InvokeAsync();
+            Add(showCommand);
         }
-
-        private static IHostBuilder DefaultNeoBuildHostFactory(string[] args) =>
-            new HostBuilder()
-            .UseNeoPlatformConfiguration();
     }
 }

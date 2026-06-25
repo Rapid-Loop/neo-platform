@@ -20,18 +20,9 @@
 // DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 // SERVICES
 
-using Microsoft.Extensions.Configuration;
-using Neo.Platform.Hosting.Configuration;
-using System.Collections.Generic;
+using System.CommandLine;
 
-namespace Neo.Platform.Hosting
+namespace Neo.Platform.Hosting.Middleware
 {
-    public static class ConfigurationBuilderExtensions
-    {
-        public static IConfigurationBuilder AddNeoPlatformConfiguration(this IConfigurationBuilder builder, IEnumerable<KeyValuePair<string, string?>>? initialData = default)
-        {
-            builder.Add(new NeoEnvironmentConfigurationSource() { InitialData = initialData, });
-            return builder;
-        }
-    }
+    public delegate void PlatformCommandLineNextDelegate(ParseResult parseResult);
 }

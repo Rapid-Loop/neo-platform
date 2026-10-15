@@ -77,7 +77,7 @@ namespace Neo.Platform.Storage
             var ram = (ulong)gcInfo.TotalAvailableMemoryBytes / 3ul;  // 33% of all RAM
 
             _blockSharedCache = Cache.CreateLru(ram);
-            _bloomFilter = FilterPolicy.CreateBloom(10);
+            _bloomFilter = FilterPolicy.CreateBloomFull(10);
 
             var dbOptions = new DbOptions()
             {

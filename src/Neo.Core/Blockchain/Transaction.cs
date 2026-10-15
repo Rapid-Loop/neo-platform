@@ -114,8 +114,8 @@ namespace Neo.Core.Blockchain
         /// <summary>
         /// Gets the serialized size of this transaction in bytes.
         /// </summary>
-        public int Size =>
-            sizeof(byte) +  //Version
+        public int Size
+            => sizeof(byte) +  //Version
             sizeof(uint) +  //Nonce
             sizeof(long) +  //SystemFee
             sizeof(long) +  //NetworkFee
@@ -141,8 +141,10 @@ namespace Neo.Core.Blockchain
         /// <returns><see langword="true"/> if the objects are equal; otherwise, <see langword="false"/>.</returns>
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as Transaction);
         }
 
@@ -153,8 +155,10 @@ namespace Neo.Core.Blockchain
         /// <returns><see langword="true"/> if the transactions have the same hash; otherwise, <see langword="false"/>.</returns>
         public bool Equals([NotNullWhen(true)] Transaction? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
             return Hash == other.Hash;
         }
 

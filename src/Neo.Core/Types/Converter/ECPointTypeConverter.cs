@@ -35,8 +35,8 @@ namespace Neo.Core.Types.Converter
         /// <summary>
         /// Returns whether this converter can convert an object of the given type to an <see cref="ECPoint"/>.
         /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType) =>
-            sourceType == typeof(string) && base.CanConvertFrom(context, sourceType);
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
+            => sourceType == typeof(string) && base.CanConvertFrom(context, sourceType);
 
         /// <summary>
         /// Converts a string (or other supported value) to an <see cref="ECPoint"/> on secp256r1.
@@ -55,8 +55,8 @@ namespace Neo.Core.Types.Converter
         /// <summary>
         /// Converts an <see cref="ECPoint"/> to the requested destination type (typically a compressed hex string).
         /// </summary>
-        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType) =>
-            CanConvertTo(context, destinationType) ?
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+            => CanConvertTo(context, destinationType) ?
             value switch
             {
                 ECPoint e => e.Encode(shouldCompress: true),

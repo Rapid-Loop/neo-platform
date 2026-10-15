@@ -147,9 +147,12 @@ namespace Neo.VM.Types
         /// <returns><see langword="true"/> if the maps are equal; otherwise <see langword="false"/>.</returns>
         public bool Equals(VMMap? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
-            if (RefCount != other.RefCount) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
+            if (RefCount != other.RefCount)
+                return false;
 
             if (other.Count == Count)
             {
@@ -171,8 +174,10 @@ namespace Neo.VM.Types
         /// <inheritdoc />
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as VMMap);
         }
 
@@ -322,15 +327,15 @@ namespace Neo.VM.Types
         }
 
         /// <inheritdoc />
-        public IEnumerator<KeyValuePair<VMObject, VMObject>> GetEnumerator() =>
-            _map.GetEnumerator();
+        public IEnumerator<KeyValuePair<VMObject, VMObject>> GetEnumerator()
+            => _map.GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+            => GetEnumerator();
 
-        internal void SetAsReadOnly() =>
-            _isReadOnly = true;
+        internal void SetAsReadOnly()
+            => _isReadOnly = true;
 
         /// <inheritdoc />
         public override VMObject Clone()
@@ -342,7 +347,8 @@ namespace Neo.VM.Types
         /// <inheritdoc />
         protected override VMObject CloneCore(Dictionary<VMObject, VMObject> objectMap)
         {
-            if (objectMap.TryGetValue(this, out var thisItem)) return thisItem;
+            if (objectMap.TryGetValue(this, out var thisItem))
+                return thisItem;
 
             var clone = new VMMap();
 
@@ -372,8 +378,8 @@ namespace Neo.VM.Types
         }
 
         /// <inheritdoc />
-        public override bool GetBoolean() =>
-            _map.Count > 0;
+        public override bool GetBoolean()
+            => _map.Count > 0;
 
         /// <inheritdoc />
         [DoesNotReturn]

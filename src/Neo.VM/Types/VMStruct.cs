@@ -43,7 +43,8 @@ namespace Neo.VM.Types
         /// <inheritdoc />
         protected override VMObject CloneCore(Dictionary<VMObject, VMObject> objectMap)
         {
-            if (objectMap.TryGetValue(this, out var thisItem)) return thisItem;
+            if (objectMap.TryGetValue(this, out var thisItem))
+                return thisItem;
 
             var clone = new VMStruct();
 

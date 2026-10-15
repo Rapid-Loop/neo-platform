@@ -38,7 +38,8 @@ namespace Neo.Wallet.Tests
 
             foreach (var expectedAccountModel in expectedWallet.Accounts)
             {
-                if (expectedAccountModel is null) continue;
+                if (expectedAccountModel is null)
+                    continue;
 
                 var expectedAccount = expectedAccountModel.ToObject();
                 var actualAccount = actualWallet.CreateAccount(expectedAccountModel);

@@ -49,8 +49,8 @@ namespace Neo.VM.Builder
         /// Creates a new <see cref="VirtualMachineBuilder"/> instance.
         /// </summary>
         /// <returns>A new builder.</returns>
-        public static VirtualMachineBuilder Create() =>
-            new();
+        public static VirtualMachineBuilder Create()
+            => new();
 
         /// <summary>
         /// Configures the middleware pipeline used during execution.
@@ -136,8 +136,8 @@ namespace Neo.VM.Builder
         /// Unspecified options use engine defaults.
         /// </summary>
         /// <returns>A new engine instance.</returns>
-        public VirtualMachineEngine Build() =>
-            new
+        public VirtualMachineEngine Build()
+            => new
             (
                 _persistingBlock,
                 _tx,

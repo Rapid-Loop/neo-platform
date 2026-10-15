@@ -49,8 +49,8 @@ namespace Neo.Core.Extensions
         /// </summary>
         /// <param name="source">The array of serializable objects.</param>
         /// <returns>The number of bytes required to serialize the array.</returns>
-        public static int GetSerializedSize(this INeoSerializable[] source) =>
-            source.Length.GetCompactSize() +
+        public static int GetSerializedSize(this INeoSerializable[] source)
+            => source.Length.GetCompactSize() +
             source.Sum(static s => s.Size);
     }
 }

@@ -117,10 +117,14 @@ namespace Neo.VM.Types
         /// <returns><see langword="true"/> if the script and position match; otherwise <see langword="false"/>.</returns>
         public bool Equals(VMPointer? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
-            if (RefCount != other.RefCount) return false;
-            if (Length != other.Length) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
+            if (RefCount != other.RefCount)
+                return false;
+            if (Length != other.Length)
+                return false;
             return _ip == other._ip &&
                 _memoryOwner.Memory[.._byteCount]
                 .Span
@@ -130,8 +134,10 @@ namespace Neo.VM.Types
         /// <inheritdoc />
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as VMPointer);
         }
 

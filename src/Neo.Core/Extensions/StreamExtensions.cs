@@ -133,8 +133,8 @@ namespace Neo.Core.Extensions
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">The span to write.</param>
         public static void Write<T>(this Stream stream, Span<T> values)
-            where T : unmanaged =>
-            stream.Write((ReadOnlySpan<T>)values);
+            where T : unmanaged
+            => stream.Write((ReadOnlySpan<T>)values);
 
         /// <summary>
         /// Writes an unmanaged read-only span with a compact-size length prefix followed by the raw element bytes.

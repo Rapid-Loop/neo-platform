@@ -31,8 +31,8 @@ namespace Neo.Core.Tests
 {
     internal class TestUtilities
     {
-        public static BlockHeader CreateBlockHeader(uint index, UInt256 prevHash) =>
-            new()
+        public static BlockHeader CreateBlockHeader(uint index, UInt256 prevHash)
+            => new()
             {
                 PrevHash = prevHash,
                 MerkleRoot = UInt256.Parse("0x6226416a0e5aca42b5566f5a19ab467692688ba9d47986f6981a7f747bba2772"),

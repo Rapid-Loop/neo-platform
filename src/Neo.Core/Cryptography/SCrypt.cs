@@ -47,10 +47,14 @@ namespace Neo.Core.Cryptography
             ArgumentOutOfRangeException.ThrowIfZero(password.Length, nameof(password));
             ArgumentOutOfRangeException.ThrowIfZero(salt.Length, nameof(salt));
 
-            if (n <= 1 || (n & (n - 1)) != 0) throw new ArgumentException("N must be a power of 2 and > 1");
-            if (r < 1) throw new ArgumentException("r must be >= 1");
-            if (p < 1) throw new ArgumentException("p must be >= 1");
-            if (keyLength < 1) throw new ArgumentException("keyLength must be >= 1");
+            if (n <= 1 || (n & (n - 1)) != 0)
+                throw new ArgumentException("N must be a power of 2 and > 1");
+            if (r < 1)
+                throw new ArgumentException("r must be >= 1");
+            if (p < 1)
+                throw new ArgumentException("p must be >= 1");
+            if (keyLength < 1)
+                throw new ArgumentException("keyLength must be >= 1");
 
             return ScryptEncoder.CryptoScrypt(password, salt, n, r, p, keyLength);
         }
@@ -169,20 +173,58 @@ namespace Neo.Core.Cryptography
         {
             var d = (byte*)dst;
             var s = (byte*)src;
-            while (len >= 8) { *(ulong*)d = *(ulong*)s; d += 8; s += 8; len -= 8; }
-            if (len >= 4) { *(uint*)d = *(uint*)s; d += 4; s += 4; len -= 4; }
-            if (len >= 2) { *(ushort*)d = *(ushort*)s; d += 2; s += 2; len -= 2; }
-            if (len >= 1) *d = *s;
+            while (len >= 8)
+            {
+                *(ulong*)d = *(ulong*)s;
+                d += 8;
+                s += 8;
+                len -= 8;
+            }
+            if (len >= 4)
+            {
+                *(uint*)d = *(uint*)s;
+                d += 4;
+                s += 4;
+                len -= 4;
+            }
+            if (len >= 2)
+            {
+                *(ushort*)d = *(ushort*)s;
+                d += 2;
+                s += 2;
+                len -= 2;
+            }
+            if (len >= 1)
+                *d = *s;
         }
 
         private unsafe static void BulkXor(void* dst, void* src, int len)
         {
             var d = (byte*)dst;
             var s = (byte*)src;
-            while (len >= 8) { *(ulong*)d ^= *(ulong*)s; d += 8; s += 8; len -= 8; }
-            if (len >= 4) { *(uint*)d ^= *(uint*)s; d += 4; s += 4; len -= 4; }
-            if (len >= 2) { *(ushort*)d ^= *(ushort*)s; d += 2; s += 2; len -= 2; }
-            if (len >= 1) *d ^= *s;
+            while (len >= 8)
+            {
+                *(ulong*)d ^= *(ulong*)s;
+                d += 8;
+                s += 8;
+                len -= 8;
+            }
+            if (len >= 4)
+            {
+                *(uint*)d ^= *(uint*)s;
+                d += 4;
+                s += 4;
+                len -= 4;
+            }
+            if (len >= 2)
+            {
+                *(ushort*)d ^= *(ushort*)s;
+                d += 2;
+                s += 2;
+                len -= 2;
+            }
+            if (len >= 1)
+                *d ^= *s;
         }
 
         private unsafe static void Encode32(byte* p, uint x)
@@ -207,25 +249,61 @@ namespace Neo.Core.Cryptography
 
             for (var i = 0; i < 8; i += 2)
             {
-                x4 ^= R(x0 + x12, 7); x8 ^= R(x4 + x0, 9); x12 ^= R(x8 + x4, 13); x0 ^= R(x12 + x8, 18);
-                x9 ^= R(x5 + x1, 7); x13 ^= R(x9 + x5, 9); x1 ^= R(x13 + x9, 13); x5 ^= R(x1 + x13, 18);
-                x14 ^= R(x10 + x6, 7); x2 ^= R(x14 + x10, 9); x6 ^= R(x2 + x14, 13); x10 ^= R(x6 + x2, 18);
-                x3 ^= R(x15 + x11, 7); x7 ^= R(x3 + x15, 9); x11 ^= R(x7 + x3, 13); x15 ^= R(x11 + x7, 18);
+                x4 ^= R(x0 + x12, 7);
+                x8 ^= R(x4 + x0, 9);
+                x12 ^= R(x8 + x4, 13);
+                x0 ^= R(x12 + x8, 18);
+                x9 ^= R(x5 + x1, 7);
+                x13 ^= R(x9 + x5, 9);
+                x1 ^= R(x13 + x9, 13);
+                x5 ^= R(x1 + x13, 18);
+                x14 ^= R(x10 + x6, 7);
+                x2 ^= R(x14 + x10, 9);
+                x6 ^= R(x2 + x14, 13);
+                x10 ^= R(x6 + x2, 18);
+                x3 ^= R(x15 + x11, 7);
+                x7 ^= R(x3 + x15, 9);
+                x11 ^= R(x7 + x3, 13);
+                x15 ^= R(x11 + x7, 18);
 
-                x1 ^= R(x0 + x3, 7); x2 ^= R(x1 + x0, 9); x3 ^= R(x2 + x1, 13); x0 ^= R(x3 + x2, 18);
-                x6 ^= R(x5 + x4, 7); x7 ^= R(x6 + x5, 9); x4 ^= R(x7 + x6, 13); x5 ^= R(x4 + x7, 18);
-                x11 ^= R(x10 + x9, 7); x8 ^= R(x11 + x10, 9); x9 ^= R(x8 + x11, 13); x10 ^= R(x9 + x8, 18);
-                x12 ^= R(x15 + x14, 7); x13 ^= R(x12 + x15, 9); x14 ^= R(x13 + x12, 13); x15 ^= R(x14 + x13, 18);
+                x1 ^= R(x0 + x3, 7);
+                x2 ^= R(x1 + x0, 9);
+                x3 ^= R(x2 + x1, 13);
+                x0 ^= R(x3 + x2, 18);
+                x6 ^= R(x5 + x4, 7);
+                x7 ^= R(x6 + x5, 9);
+                x4 ^= R(x7 + x6, 13);
+                x5 ^= R(x4 + x7, 18);
+                x11 ^= R(x10 + x9, 7);
+                x8 ^= R(x11 + x10, 9);
+                x9 ^= R(x8 + x11, 13);
+                x10 ^= R(x9 + x8, 18);
+                x12 ^= R(x15 + x14, 7);
+                x13 ^= R(x12 + x15, 9);
+                x14 ^= R(x13 + x12, 13);
+                x15 ^= R(x14 + x13, 18);
             }
 
-            b[0] += x0; b[1] += x1; b[2] += x2; b[3] += x3;
-            b[4] += x4; b[5] += x5; b[6] += x6; b[7] += x7;
-            b[8] += x8; b[9] += x9; b[10] += x10; b[11] += x11;
-            b[12] += x12; b[13] += x13; b[14] += x14; b[15] += x15;
+            b[0] += x0;
+            b[1] += x1;
+            b[2] += x2;
+            b[3] += x3;
+            b[4] += x4;
+            b[5] += x5;
+            b[6] += x6;
+            b[7] += x7;
+            b[8] += x8;
+            b[9] += x9;
+            b[10] += x10;
+            b[11] += x11;
+            b[12] += x12;
+            b[13] += x13;
+            b[14] += x14;
+            b[15] += x15;
         }
 
-        private static uint R(uint a, int b) =>
-            (a << b) | (a >> (32 - b));
+        private static uint R(uint a, int b)
+            => (a << b) | (a >> (32 - b));
 
         private unsafe static void BlockMix(uint* bin, uint* bOut, uint* x, int r)
         {

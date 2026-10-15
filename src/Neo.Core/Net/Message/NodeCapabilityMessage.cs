@@ -42,8 +42,8 @@ namespace Neo.Core.Net.Message
         /// <summary>
         /// Gets the serialized size of this capability in bytes.
         /// </summary>
-        public virtual int Size =>
-            sizeof(NodeCapabilityType);
+        public virtual int Size
+            => sizeof(NodeCapabilityType);
 
         /// <summary>
         /// Reads one capability: type byte, then subtype payload (Neo <c>DeserializeFrom</c>).

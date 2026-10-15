@@ -224,11 +224,11 @@ namespace Neo.Core.Net
 
             var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
-            void OnCompleted(object? sender, EventArgs e) =>
-                tcs.TrySetResult();
+            void OnCompleted(object? sender, EventArgs e)
+                => tcs.TrySetResult();
 
-            void OnDisconnected(object? sender, EventArgs e) =>
-                tcs.TrySetException(new IOException("Connection closed before handshake completed."));
+            void OnDisconnected(object? sender, EventArgs e)
+                => tcs.TrySetException(new IOException("Connection closed before handshake completed."));
 
             HandshakeCompleted += OnCompleted;
             Disconnected += OnDisconnected;
@@ -624,11 +624,11 @@ namespace Neo.Core.Net
             }
         }
 
-        private void TouchReceived() =>
-            Interlocked.Exchange(ref _lastReceivedTicks, DateTime.UtcNow.Ticks);
+        private void TouchReceived()
+            => Interlocked.Exchange(ref _lastReceivedTicks, DateTime.UtcNow.Ticks);
 
-        private void TouchSent() =>
-            Interlocked.Exchange(ref _lastSentTicks, DateTime.UtcNow.Ticks);
+        private void TouchSent()
+            => Interlocked.Exchange(ref _lastSentTicks, DateTime.UtcNow.Ticks);
 
         private void AbortSocket()
         {

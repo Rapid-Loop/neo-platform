@@ -86,16 +86,16 @@ namespace Neo.Core.VM
                 type.GetEvent(targetMethodName, bindingFlags)?.GetRaiseMethod(true) ??
                 throw new TargetException($"Target {targetMethodName} not found in {type}.");
 
-            _systemMethodName = string.IsNullOrWhiteSpace(systemMethodName) ?
-                $"System.{type.Name}.{_targetMethodInfo.Name}" :
-                systemMethodName;
+            _systemMethodName = string.IsNullOrWhiteSpace(systemMethodName)
+                ? $"System.{type.Name}.{_targetMethodInfo.Name}"
+                : systemMethodName;
 
             var paramTypes = _targetMethodInfo.GetParameters().Select(static s => s.ParameterType);
             var delegateType = Expression.GetDelegateType([.. paramTypes, _targetMethodInfo.ReturnType]);
 
-            _targetMethod = _targetMethodInfo.IsStatic ?
-                _targetMethodInfo.CreateDelegate(delegateType) :
-                _targetMethodInfo.CreateDelegate(delegateType, targetInstance);
+            _targetMethod = _targetMethodInfo.IsStatic
+                ? _targetMethodInfo.CreateDelegate(delegateType)
+                : _targetMethodInfo.CreateDelegate(delegateType, targetInstance);
 
             _hash = CreateCallAddress(_systemMethodName);
         }
@@ -107,16 +107,20 @@ namespace Neo.Core.VM
         /// <returns><see langword="true"/> if both descriptors share the same hash; otherwise, <see langword="false"/>.</returns>
         public bool Equals(MethodDescriptor? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
             return _hash == other._hash;
         }
 
         /// <inheritdoc/>
         public override bool Equals(object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as MethodDescriptor);
         }
 
@@ -134,8 +138,8 @@ namespace Neo.Core.VM
         /// </summary>
         /// <param name="systemMethodName">The interoperable service name to hash.</param>
         /// <returns>The first four little-endian bytes of the SHA-256 hash.</returns>
-        public static uint CreateCallAddress(string systemMethodName) =>
-            BinaryPrimitives.ReadUInt32LittleEndian(Encoding.ASCII.GetBytes(systemMethodName).ToSha256());
+        public static uint CreateCallAddress(string systemMethodName)
+            => BinaryPrimitives.ReadUInt32LittleEndian(Encoding.ASCII.GetBytes(systemMethodName).ToSha256());
 
         /// <summary>
         /// Converts the descriptor to its interoperable service hash.

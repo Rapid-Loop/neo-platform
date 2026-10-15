@@ -56,15 +56,15 @@ namespace Neo.Platform.Hosting.Logging
         /// </summary>
         /// <param name="categoryName">Logger category name.</param>
         /// <returns>An <see cref="ILogger"/> for the category.</returns>
-        public ILogger CreateLogger(string categoryName) =>
-            _loggers.GetOrAdd(
+        public ILogger CreateLogger(string categoryName)
+            => _loggers.GetOrAdd(
                 categoryName,
                 name =>
                     new(name, GetCurrentConfig)
             );
 
-        private NeoPlatformLoggerOptions GetCurrentConfig() =>
-            _currentConfig;
+        private NeoPlatformLoggerOptions GetCurrentConfig()
+            => _currentConfig;
 
         /// <summary>
         /// Clears cached loggers and disposes option change subscriptions.

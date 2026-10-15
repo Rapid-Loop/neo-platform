@@ -46,17 +46,22 @@ namespace Neo.VM.Types
         /// <returns><see langword="true"/> if the values are equal; otherwise <see langword="false"/>.</returns>
         public bool Equals(VMBoolean? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
-            if (RefCount != other.RefCount) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
+            if (RefCount != other.RefCount)
+                return false;
             return _value == other._value;
         }
 
         /// <inheritdoc />
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as VMBoolean);
         }
 

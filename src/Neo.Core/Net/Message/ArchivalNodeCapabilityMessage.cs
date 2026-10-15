@@ -39,8 +39,8 @@ namespace Neo.Core.Net.Message
         /// <summary>
         /// Gets the serialized size of this capability in bytes.
         /// </summary>
-        public override int Size =>
-            base.Size +
+        public override int Size
+            => base.Size +
             1;
 
         protected override void DeserializeWithoutType(Stream reader)

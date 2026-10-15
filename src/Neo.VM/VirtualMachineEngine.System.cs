@@ -47,7 +47,9 @@ namespace Neo.VM
 
             if (_systemCallMethods.TryGetValue(hash, out var forks) &&
                 forks.TryGetValue(_currentFork, out _))
+            {
                 throw new InvalidOperationException($"Method {systemMethodName} is already registered.");
+            }
 
             var targetMethodDesc = new MethodDescriptor(
                 targetInstance ?? new TSource(),
@@ -73,7 +75,10 @@ namespace Neo.VM
             {
                 attr = attributes.FirstOrDefault(s => s.Fork == current);
 
-                if (attr is null) continue; else break;
+                if (attr is null)
+                    continue;
+                else
+                    break;
             }
 
             return attr ?? throw new NotImplementedException($"Missing attribute \'{typeof(MethodDescriptorAttribute)}\' from method \'{targetMethodDesc.TargetMethod.Target!.GetType().FullName}.{targetMethodDesc.TargetMethodInfo.Name}\'.");

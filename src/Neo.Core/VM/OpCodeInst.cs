@@ -77,9 +77,9 @@ namespace Neo.Core.VM
         /// <summary>
         /// Gets the total size of this instruction in bytes, including the opcode and operand.
         /// </summary>
-        public int Size => OperandPrefixSize > 0 ?
-            OpCodeSize + Operand.Length :
-            OpCodeSize + OperandSize;
+        public int Size => OperandPrefixSize > 0
+            ? OpCodeSize + Operand.Length
+            : OpCodeSize + OperandSize;
 
         private static readonly int[] s_operandSizeTable = new int[256];
         private static readonly int[] s_operandSizePrefixTable = new int[256];
@@ -130,10 +130,12 @@ namespace Neo.Core.VM
         {
             foreach (var field in typeof(OpCode).GetFields(BindingFlags.Public | BindingFlags.Static))
             {
-                if (field.IsLiteral == false) continue; // Skip non-enum values
+                if (field.IsLiteral == false)
+                    continue; // Skip non-enum values
 
                 var attr = field.GetCustomAttribute<OperandSizeAttribute>();
-                if (attr == null) continue;
+                if (attr == null)
+                    continue;
 
                 var index = (uint)(OpCode)field.GetValue(null)!;
                 s_operandSizeTable[index] = attr.Size;
@@ -156,8 +158,8 @@ namespace Neo.Core.VM
         }
 
         /// <inheritdoc/>
-        IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+            => GetEnumerator();
 
         /// <summary>
         /// Returns a human-readable representation of the instruction, including position, opcode, and decoded operand.

@@ -41,8 +41,8 @@ namespace Neo.Core
         /// <param name="dateTime">The date and time to convert.</param>
         /// <param name="offset">The UTC offset of <paramref name="dateTime"/>.</param>
         /// <returns>The Unix timestamp in milliseconds.</returns>
-        public static long ToUnixTimeMilliseconds(DateTime dateTime, TimeSpan offset = default) =>
-            new DateTimeOffset(dateTime, offset)
+        public static long ToUnixTimeMilliseconds(DateTime dateTime, TimeSpan offset = default)
+            => new DateTimeOffset(dateTime, offset)
                 .ToUnixTimeMilliseconds();
 
         /// <summary>
@@ -51,8 +51,8 @@ namespace Neo.Core
         /// <param name="timeSpan">The time span from the Unix epoch.</param>
         /// <param name="offset">The UTC offset applied to the conversion.</param>
         /// <returns>The Unix timestamp in milliseconds.</returns>
-        public static long ToUnixTimeMilliseconds(TimeSpan timeSpan, TimeSpan offset = default) =>
-            new DateTimeOffset(timeSpan.Ticks, offset)
+        public static long ToUnixTimeMilliseconds(TimeSpan timeSpan, TimeSpan offset = default)
+            => new DateTimeOffset(timeSpan.Ticks, offset)
                 .ToUnixTimeMilliseconds();
 
         /// <summary>
@@ -61,8 +61,8 @@ namespace Neo.Core
         /// <param name="dateTime">The date and time to convert.</param>
         /// <param name="offset">The UTC offset of <paramref name="dateTime"/>.</param>
         /// <returns>The Unix timestamp in seconds.</returns>
-        public static uint ToUnixTimeSeconds(DateTime dateTime, TimeSpan offset = default) =>
-            (uint)new DateTimeOffset(dateTime, offset)
+        public static uint ToUnixTimeSeconds(DateTime dateTime, TimeSpan offset = default)
+            => (uint)new DateTimeOffset(dateTime, offset)
                 .ToUnixTimeSeconds();
 
         /// <summary>
@@ -71,8 +71,8 @@ namespace Neo.Core
         /// <param name="timeSpan">The time span from the Unix epoch.</param>
         /// <param name="offset">The UTC offset applied to the conversion.</param>
         /// <returns>The Unix timestamp in seconds.</returns>
-        public static uint ToUnixTimeSeconds(TimeSpan timeSpan, TimeSpan offset = default) =>
-            (uint)new DateTimeOffset(timeSpan.Ticks, offset)
+        public static uint ToUnixTimeSeconds(TimeSpan timeSpan, TimeSpan offset = default)
+            => (uint)new DateTimeOffset(timeSpan.Ticks, offset)
                 .ToUnixTimeSeconds();
 
         /// <summary>
@@ -83,8 +83,8 @@ namespace Neo.Core
         /// <see langword="true"/> to return local time; otherwise UTC.
         /// </param>
         /// <returns>The converted date and time.</returns>
-        public static DateTime FromUnixTimeMilliseconds(ulong milliseconds, bool isLocalDateTime = false) =>
-            FromUnixTimeMilliseconds((long)milliseconds, isLocalDateTime);
+        public static DateTime FromUnixTimeMilliseconds(ulong milliseconds, bool isLocalDateTime = false)
+            => FromUnixTimeMilliseconds((long)milliseconds, isLocalDateTime);
 
         /// <summary>
         /// Converts a Unix timestamp in seconds to a <see cref="DateTime"/>.
@@ -94,8 +94,8 @@ namespace Neo.Core
         /// <see langword="true"/> to return local time; otherwise UTC.
         /// </param>
         /// <returns>The converted date and time.</returns>
-        public static DateTime FromUnixTimeSeconds(uint seconds, bool isLocalDateTime = false) =>
-            FromUnixTimeMilliseconds(seconds * TimeSpan.MillisecondsPerSecond, isLocalDateTime);
+        public static DateTime FromUnixTimeSeconds(uint seconds, bool isLocalDateTime = false)
+            => FromUnixTimeMilliseconds(seconds * TimeSpan.MillisecondsPerSecond, isLocalDateTime);
 
         /// <summary>
         /// Converts a Unix timestamp in milliseconds to a <see cref="DateTime"/>.

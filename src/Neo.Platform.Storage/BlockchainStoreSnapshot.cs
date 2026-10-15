@@ -113,15 +113,15 @@ namespace Neo.Platform.Storage
         /// Creates a backup handle for the underlying store.
         /// </summary>
         /// <returns>An <see cref="IStoreBackup"/> from the parent store.</returns>
-        public IStoreBackup CreateBackup() =>
-            _store.CreateBackup();
+        public IStoreBackup CreateBackup()
+            => _store.CreateBackup();
 
         /// <summary>
         /// Creates a checkpoint of the underlying store.
         /// </summary>
         /// <param name="checkpointDirectory">The directory that will receive the checkpoint.</param>
-        public void CreateCheckpoint(string checkpointDirectory) =>
-            _store.CreateCheckpoint(checkpointDirectory);
+        public void CreateCheckpoint(string checkpointDirectory)
+            => _store.CreateCheckpoint(checkpointDirectory);
 
         /// <summary>
         /// Creates a nested snapshot over the same database.
@@ -265,7 +265,7 @@ namespace Neo.Platform.Storage
             return false;
         }
 
-        IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+            => GetEnumerator();
     }
 }

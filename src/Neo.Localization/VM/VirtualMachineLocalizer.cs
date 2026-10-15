@@ -39,7 +39,7 @@ namespace Neo.Localization.VM
         /// <param name="args">Optional format arguments for the message template.</param>
         /// <returns>The localized message string.</returns>
         [return: NotNullIfNotNull(nameof(s_localizer))]
-        public static string GetMessage(string messageName, params object[] args) =>
-            s_localizer[messageName, args];
+        public static string GetMessage(string messageName, params object[] args)
+            => s_localizer[messageName, args];
     }
 }

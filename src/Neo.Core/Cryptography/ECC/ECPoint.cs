@@ -71,8 +71,8 @@ namespace Neo.Core.Cryptography.ECC
         /// <summary>
         /// Gets the serialized size of this point in bytes.
         /// </summary>
-        public int Size =>
-            sizeof(ECCurveName) +
+        public int Size
+            => sizeof(ECCurveName) +
             _uncompressed.Length;
 
         /// <summary>
@@ -135,7 +135,9 @@ namespace Neo.Core.Cryptography.ECC
         {
             if ((value.Length != UncompressedLength * 2 || value.Length != CompressedLength * 2) &&
                 value.Length % 2 != 0)
+            {
                 throw new FormatException();
+            }
 
             var bytes = Convert.FromHexString(value);
             var x = new BigInteger(bytes[1..33].AsSpan(), true, true);
@@ -181,8 +183,10 @@ namespace Neo.Core.Cryptography.ECC
         /// <returns><see langword="true"/> if the objects are equal; otherwise, <see langword="false"/>.</returns>
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as ECPoint);
         }
 
@@ -212,9 +216,12 @@ namespace Neo.Core.Cryptography.ECC
         /// <returns><see langword="true"/> if the points are equal; otherwise, <see langword="false"/>.</returns>
         public bool Equals(ECPoint? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
-            if (_curve != other._curve) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
+            if (_curve != other._curve)
+                return false;
             return _x == other._x && _y == other._y;
         }
 
@@ -227,7 +234,8 @@ namespace Neo.Core.Cryptography.ECC
         /// </returns>
         public int CompareTo(object? obj)
         {
-            if (ReferenceEquals(obj, this)) return 0;
+            if (ReferenceEquals(obj, this))
+                return 0;
             return CompareTo(obj as ECPoint);
         }
 
@@ -240,9 +248,11 @@ namespace Neo.Core.Cryptography.ECC
         /// </returns>
         public int CompareTo(ECPoint? other)
         {
-            if (other is null) return 1;
+            if (other is null)
+                return 1;
             var result = _x.CompareTo(other._x);
-            if (result != 0) return result;
+            if (result != 0)
+                return result;
             return _y.CompareTo(other._y);
         }
 
@@ -291,9 +301,9 @@ namespace Neo.Core.Cryptography.ECC
         /// <returns>The encoded public key bytes.</returns>
         public byte[] Encode(bool shouldCompress = true)
         {
-            return shouldCompress ?
-                ECCurve.CompressPoint(_uncompressed.AsSpan()) :
-                _uncompressed;
+            return shouldCompress
+                ? ECCurve.CompressPoint(_uncompressed.AsSpan())
+                : _uncompressed;
         }
 
         /// <summary>

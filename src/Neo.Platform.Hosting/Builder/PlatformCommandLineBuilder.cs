@@ -49,8 +49,8 @@ namespace Neo.Platform.Hosting.Builder
         private readonly List<Action<ParseResult, PlatformCommandLineNextDelegate>> _middleware = [];
         private IHostBuilder? _hostBuilder;
 
-        internal void AddMiddleware(Action<ParseResult, PlatformCommandLineNextDelegate> middleware) =>
-            _middleware.Add(middleware);
+        internal void AddMiddleware(Action<ParseResult, PlatformCommandLineNextDelegate> middleware)
+            => _middleware.Add(middleware);
 
         /// <summary>
         /// Configures host creation middleware that runs after parsing.

@@ -63,8 +63,8 @@ namespace Neo.Core.Net
         /// <summary>
         /// Actual bound endpoint after <see cref="Start()"/> (resolves port 0 to the OS-assigned port).
         /// </summary>
-        public IPEndPoint BoundEndPoint =>
-            _serverSocket.LocalEndPoint as IPEndPoint
+        public IPEndPoint BoundEndPoint
+            => _serverSocket.LocalEndPoint as IPEndPoint
                 ?? throw new InvalidOperationException($"Listener is not bound. Call {nameof(Start)} first.");
 
         /// <summary>

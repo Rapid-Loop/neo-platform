@@ -70,11 +70,11 @@ namespace Neo.Core.Cryptography
             Array.Clear(_buffer, 0, _buffer.Length);
         }
 
-        protected override void HashCore(byte[] rgb, int ibStart, int cbSize) =>
-            HashData(rgb, ibStart, cbSize);
+        protected override void HashCore(byte[] rgb, int ibStart, int cbSize)
+            => HashData(rgb, ibStart, cbSize);
 
-        protected override byte[] HashFinal() =>
-            EndHash();
+        protected override byte[] HashFinal()
+            => EndHash();
 
         private void InitializeState()
         {

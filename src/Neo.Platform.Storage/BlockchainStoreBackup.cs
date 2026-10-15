@@ -120,7 +120,9 @@ namespace Neo.Platform.Storage
 
             if (string.IsNullOrEmpty(walPath) == false &&
                 Directory.Exists(walPath) == false)
+            {
                 throw new DirectoryNotFoundException($"WAL path \'{walPath}\' does not exist.");
+            }
 
             _backupEngine.RestoreDbFromLatestBackup(restorePath, walPath ?? restorePath);
 
@@ -134,8 +136,8 @@ namespace Neo.Platform.Storage
         /// Lists available backups managed by the backup engine.
         /// </summary>
         /// <returns>An enumerable of backup metadata.</returns>
-        public IEnumerable<BackupInfo> ListBackups() =>
-            _backupEngine.AsEnumerable();
+        public IEnumerable<BackupInfo> ListBackups()
+            => _backupEngine.AsEnumerable();
 
         /// <summary>
         /// Deletes older backups, keeping only the newest backups up to the specified count.

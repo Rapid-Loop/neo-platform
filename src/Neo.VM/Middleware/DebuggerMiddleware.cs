@@ -59,14 +59,14 @@ namespace Neo.VM.Middleware
         /// Registers a breakpoint at the specified script offset.
         /// </summary>
         /// <param name="scriptOffset">The instruction pointer value at which to break.</param>
-        public void AddBreakpoint(int scriptOffset) =>
-            _breakpoints.Add(scriptOffset);
+        public void AddBreakpoint(int scriptOffset)
+            => _breakpoints.Add(scriptOffset);
 
         /// <summary>
         /// Resumes execution by clearing the <see cref="VMState.BREAK"/> state.
         /// </summary>
-        public void Continue() =>
-            Engine.State = VMState.NONE;
+        public void Continue()
+            => Engine.State = VMState.NONE;
 
         /// <inheritdoc />
         public void PreExecution(ExecutionDelegate next)

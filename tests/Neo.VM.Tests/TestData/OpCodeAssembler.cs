@@ -43,26 +43,32 @@ namespace Neo.VM.Tests.TestData
             foreach (var line in lines)
             {
                 var trimmed = line.Trim();
-                if (string.IsNullOrEmpty(trimmed)) continue;
+                if (string.IsNullOrEmpty(trimmed))
+                    continue;
 
                 if (trimmed.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
                 {
                     // Hex data (e.g., "0x04" for operand or small PUSH)
                     var hex = trimmed[2..].Replace(" ", "");
-                    if (hex.Length % 2 != 0) throw new FormatException($"Invalid hex: {trimmed}");
+                    if (hex.Length % 2 != 0)
+                        throw new FormatException($"Invalid hex: {trimmed}");
                     script.AddRange(Convert.FromHexString(hex));
                 }
                 else if (s_opcodeMap.TryGetValue(trimmed, out var opcode))
+                {
                     script.Add((byte)opcode);
+                }
                 else
+                {
                     throw new NotSupportedException($"Unknown opcode or token: {trimmed}");
+                }
             }
 
             return [.. script];
         }
 
-        public static byte[] Assemble(params string[] lines) =>
-            Assemble(lines as IEnumerable<string>);
+        public static byte[] Assemble(params string[] lines)
+            => Assemble(lines as IEnumerable<string>);
 
         public static byte[] Assemble(string scriptText)
         {

@@ -37,8 +37,8 @@ namespace Neo.Core.Extensions
         /// <param name="source">The sequence to hash.</param>
         /// <param name="seed">The initial hash seed.</param>
         /// <returns>An integer hash code derived from the sequence contents.</returns>
-        public static int ToHashCode<TSource>(this IEnumerable<TSource> source, int seed = 397) =>
-            source.Aggregate(seed,
+        public static int ToHashCode<TSource>(this IEnumerable<TSource> source, int seed = 397)
+            => source.Aggregate(seed,
                 (hash, b) =>
                         unchecked((hash * 31) ^ (b?.GetHashCode() ?? 0))
                 );

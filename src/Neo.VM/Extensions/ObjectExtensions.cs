@@ -42,8 +42,8 @@ namespace Neo.VM.Extensions
         /// <typeparam name="TSource">The source value type.</typeparam>
         /// <param name="source">The value to convert; <see langword="null"/> becomes <see cref="VMNull.Instance"/>.</param>
         /// <returns>A stack item suitable for evaluation-stack operations.</returns>
-        public static VMObject ToStackItem<TSource>(this TSource? source) =>
-            source switch
+        public static VMObject ToStackItem<TSource>(this TSource? source)
+            => source switch
             {
                 null => VMNull.Instance,
                 VMObject vm => vm,

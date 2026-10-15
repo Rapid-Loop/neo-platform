@@ -81,8 +81,10 @@ namespace Neo.Wallet
             {
                 foreach (var accountModel in nep6WalletModel.Accounts)
                 {
-                    if (accountModel.Key is null) continue;
-                    if (accountModel.Contract is null) continue;
+                    if (accountModel.Key is null)
+                        continue;
+                    if (accountModel.Contract is null)
+                        continue;
 
                     var account = new Nep6WalletAccount(accountModel, _scryptParameters);
 
@@ -92,8 +94,8 @@ namespace Neo.Wallet
         }
 
         /// <inheritdoc/>
-        public bool Contains(UInt160 scriptHash) =>
-            _walletAccounts.ContainsKey(scriptHash);
+        public bool Contains(UInt160 scriptHash)
+            => _walletAccounts.ContainsKey(scriptHash);
 
         /// <summary>
         /// Creates an account from a NEP-6 account model and adds it to the wallet.
@@ -112,8 +114,8 @@ namespace Neo.Wallet
         }
 
         /// <inheritdoc/>
-        public IWalletAccount<ProtocolSettings> CreateAccount(ProtocolSettings protocolSettings) =>
-            CreateAccount(RandomNumberGenerator.GetBytes(ChainWallet.MaxPrivateKeySizeInBytes), protocolSettings);
+        public IWalletAccount<ProtocolSettings> CreateAccount(ProtocolSettings protocolSettings)
+            => CreateAccount(RandomNumberGenerator.GetBytes(ChainWallet.MaxPrivateKeySizeInBytes), protocolSettings);
 
         /// <inheritdoc/>
         public IWalletAccount<ProtocolSettings> CreateAccount(byte[] privateKeyBytes, ProtocolSettings protocolSettings)
@@ -127,8 +129,8 @@ namespace Neo.Wallet
         }
 
         /// <inheritdoc/>
-        public IWalletAccount<ProtocolSettings> CreateAccount(string wifString, ProtocolSettings protocolSettings) =>
-            CreateAccount(ChainWallet.GetKeyFromWifString(wifString), protocolSettings);
+        public IWalletAccount<ProtocolSettings> CreateAccount(string wifString, ProtocolSettings protocolSettings)
+            => CreateAccount(ChainWallet.GetKeyFromWifString(wifString), protocolSettings);
 
         /// <inheritdoc/>
         public IWalletAccount<ProtocolSettings> CreateAccount(UInt160 contractHash, ProtocolSettings protocolSettings)
@@ -142,8 +144,8 @@ namespace Neo.Wallet
         }
 
         /// <inheritdoc/>
-        public IWalletAccount<ProtocolSettings> CreateMultiSigAccount(ProtocolSettings protocolSettings, params ECPoint[] publicKeys) =>
-            CreateMultiSigAccount(protocolSettings, (int)Math.Ceiling((2 * publicKeys.Length + 1) / 3m), publicKeys);
+        public IWalletAccount<ProtocolSettings> CreateMultiSigAccount(ProtocolSettings protocolSettings, params ECPoint[] publicKeys)
+            => CreateMultiSigAccount(protocolSettings, (int)Math.Ceiling((2 * publicKeys.Length + 1) / 3m), publicKeys);
 
         /// <inheritdoc/>
         public IWalletAccount<ProtocolSettings> CreateMultiSigAccount(ProtocolSettings protocolSettings, int m, params ECPoint[] publicKeys)
@@ -157,42 +159,42 @@ namespace Neo.Wallet
         }
 
         /// <inheritdoc/>
-        public IWalletAccount<ProtocolSettings> GetAccount(UInt160 scriptHash) =>
-            _walletAccounts[scriptHash];
+        public IWalletAccount<ProtocolSettings> GetAccount(UInt160 scriptHash)
+            => _walletAccounts[scriptHash];
 
         /// <inheritdoc/>
-        public IWalletAccount<ProtocolSettings> GetAccount(ECPoint publicKey) =>
-            _walletAccounts[publicKey.Encode(true).ToScriptHash()];
+        public IWalletAccount<ProtocolSettings> GetAccount(ECPoint publicKey)
+            => _walletAccounts[publicKey.Encode(true).ToScriptHash()];
 
         /// <inheritdoc/>
-        public IEnumerable<IWalletAccount<ProtocolSettings>> GetAccounts() =>
-            _walletAccounts.Values;
+        public IEnumerable<IWalletAccount<ProtocolSettings>> GetAccounts()
+            => _walletAccounts.Values;
 
         /// <inheritdoc/>
-        public IEnumerable<IWalletAccount<ProtocolSettings>> GetContractAccounts() =>
-            _walletAccounts.Values.Where(
+        public IEnumerable<IWalletAccount<ProtocolSettings>> GetContractAccounts()
+            => _walletAccounts.Values.Where(
                 static s =>
                     s.Contract.Script.Length == 0
             );
 
         /// <inheritdoc/>
-        public IWalletAccount<ProtocolSettings> GetDefaultAccount() =>
-            _walletAccounts.Values.Single(static s => s.IsDefault);
+        public IWalletAccount<ProtocolSettings> GetDefaultAccount()
+            => _walletAccounts.Values.Single(static s => s.IsDefault);
 
         /// <inheritdoc/>
-        public IEnumerable<IWalletAccount<ProtocolSettings>> GetMultiSigAccounts() =>
-            _walletAccounts.Values.Where(
+        public IEnumerable<IWalletAccount<ProtocolSettings>> GetMultiSigAccounts()
+            => _walletAccounts.Values.Where(
                 static w =>
                     WitnessContract.IsMultiSigContract(w.Contract.Script)
             );
 
         /// <inheritdoc/>
-        public IEnumerable<IWalletAccount<ProtocolSettings>> GetNetworkAccounts(uint network) =>
-            _walletAccounts.Values.Where(s => s.ProtocolConfiguration.Network == network);
+        public IEnumerable<IWalletAccount<ProtocolSettings>> GetNetworkAccounts(uint network)
+            => _walletAccounts.Values.Where(s => s.ProtocolConfiguration.Network == network);
 
         /// <inheritdoc/>
-        public bool RemoveAccount(UInt160 scriptHash) =>
-            _walletAccounts.Remove(scriptHash);
+        public bool RemoveAccount(UInt160 scriptHash)
+            => _walletAccounts.Remove(scriptHash);
 
         /// <inheritdoc/>
         public void SetDefaultAccount(UInt160 scriptHash)
@@ -212,8 +214,8 @@ namespace Neo.Wallet
         /// Converts this wallet to its JSON model representation.
         /// </summary>
         /// <returns>A <see cref="Nep6WalletModel"/> that mirrors the current wallet state.</returns>
-        public Nep6WalletModel ToObject() =>
-            new()
+        public Nep6WalletModel ToObject()
+            => new()
             {
                 Version = Version,
                 Name = Name,

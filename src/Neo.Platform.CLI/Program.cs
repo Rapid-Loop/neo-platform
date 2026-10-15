@@ -46,8 +46,8 @@ namespace Neo.Platform.CLI
             return cmd.InvokeAsync();
         }
 
-        private static IHostBuilder DefaultNeoBuildHostFactory(string[] args) =>
-            new HostBuilder()
+        private static IHostBuilder DefaultNeoBuildHostFactory(string[] args)
+            => new HostBuilder()
             .UseNeoPlatformConfiguration();
     }
 }

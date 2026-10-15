@@ -37,8 +37,8 @@ namespace Neo.Core.Extensions
         /// <param name="value">The value to measure.</param>
         /// <returns>The encoded size in bytes (1, 3, 5, or 9).</returns>
         public static byte GetCompactSize<T>(this T value)
-            where T : unmanaged, IBinaryInteger<T> =>
-            Convert.ToUInt64(value) switch
+            where T : unmanaged, IBinaryInteger<T>
+            => Convert.ToUInt64(value) switch
             {
                 < 0xfd => sizeof(byte),
                 <= ushort.MaxValue => sizeof(byte) + sizeof(ushort),

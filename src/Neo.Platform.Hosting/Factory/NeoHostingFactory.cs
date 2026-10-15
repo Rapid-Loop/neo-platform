@@ -38,8 +38,8 @@ namespace Neo.Platform.Hosting.Factory
         /// </summary>
         /// <param name="index">Development network index embedded in the high nibble of the magic.</param>
         /// <returns>The derived network magic number.</returns>
-        public static uint GetDevNetwork(uint index) =>
-            s_networkSeed & ~(0xfu << 24) | (index << 24);
+        public static uint GetDevNetwork(uint index)
+            => s_networkSeed & ~(0xfu << 24) | (index << 24);
 
         /// <summary>
         /// Resolves a file path relative to a root directory when the path is not rooted.

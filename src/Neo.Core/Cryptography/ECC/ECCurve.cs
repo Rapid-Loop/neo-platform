@@ -99,14 +99,16 @@ namespace Neo.Core.Cryptography.ECC
             var xCubed = BigInteger.ModPow(x, 3, _p);
             var z = (xCubed - (3 * x) + _b) % _p;
 
-            if (z < 0) z += _p;
+            if (z < 0)
+                z += _p;
 
             var y = BigInteger.ModPow(z, (_p + 1) / 4, _p);
 
             var isYEven = (y % 2 == 0);
             var shouldBeEven = compressedPublicKeyBytes[0] == 0x02;
 
-            if (isYEven != shouldBeEven) y = _p - y;
+            if (isYEven != shouldBeEven)
+                y = _p - y;
 
             var yBytes = y.ToByteArray(isUnsigned: true, isBigEndian: true);
 

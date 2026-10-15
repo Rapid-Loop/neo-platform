@@ -63,8 +63,8 @@ namespace Neo.IO.Hashing
         /// <param name="data">The input data to hash.</param>
         /// <param name="seed">The hash seed. Defaults to a fixed non-zero seed.</param>
         /// <returns>A 4-byte array containing the hash digest.</returns>
-        public static byte[] Hash(byte[] data, uint seed = DefaultSeed) =>
-            Hash(data.AsSpan(), seed);
+        public static byte[] Hash(byte[] data, uint seed = DefaultSeed)
+            => Hash(data.AsSpan(), seed);
 
         /// <summary>
         /// Computes the 32-bit MurmurHash3 of the specified data.
@@ -97,8 +97,8 @@ namespace Neo.IO.Hashing
         /// <param name="data">The input data to hash.</param>
         /// <param name="seed">The hash seed. Defaults to a fixed non-zero seed.</param>
         /// <returns>The hash digest as a <see cref="uint"/>.</returns>
-        public static uint HashToUInt32(byte[] data, uint seed = DefaultSeed) =>
-            HashToUInt32(data.AsSpan(), seed);
+        public static uint HashToUInt32(byte[] data, uint seed = DefaultSeed)
+            => HashToUInt32(data.AsSpan(), seed);
 
         /// <summary>
         /// Computes the 32-bit MurmurHash3 of the specified data and returns it as a <see cref="uint"/>.
@@ -106,8 +106,8 @@ namespace Neo.IO.Hashing
         /// <param name="data">The input data to hash.</param>
         /// <param name="seed">The hash seed. Defaults to a fixed non-zero seed.</param>
         /// <returns>The hash digest as a <see cref="uint"/>.</returns>
-        public static uint HashToUInt32(ReadOnlySpan<byte> data, uint seed = DefaultSeed) =>
-            BitConverter.ToUInt32(Hash(data, seed), 0);
+        public static uint HashToUInt32(ReadOnlySpan<byte> data, uint seed = DefaultSeed)
+            => BitConverter.ToUInt32(Hash(data, seed), 0);
 
         /// <summary>
         /// Computes the 32-bit MurmurHash3 of the UTF-8 encoding of the specified text and returns it as a <see cref="uint"/>.
@@ -137,7 +137,9 @@ namespace Neo.IO.Hashing
                 _bufferLength += needed;
 
                 if (_bufferLength != 4)
+                {
                     return;
+                }
                 else
                 {
                     var k = BitConverter.ToUInt32(_buffer, 0);
@@ -203,9 +205,12 @@ namespace Neo.IO.Hashing
             // Process remaining bytes
             if (_bufferLength > 0)
             {
-                if (_bufferLength >= 3) tail ^= (uint)_buffer[2] << 16;
-                if (_bufferLength >= 2) tail ^= (uint)_buffer[1] << 8;
-                if (_bufferLength >= 1) tail ^= (uint)_buffer[0];
+                if (_bufferLength >= 3)
+                    tail ^= (uint)_buffer[2] << 16;
+                if (_bufferLength >= 2)
+                    tail ^= (uint)_buffer[1] << 8;
+                if (_bufferLength >= 1)
+                    tail ^= (uint)_buffer[0];
 
                 tail *= C1;
                 tail = (tail << (int)R1) | (tail >> (32 - (int)R1));

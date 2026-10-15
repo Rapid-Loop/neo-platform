@@ -134,8 +134,8 @@ namespace Neo.Core
         /// </summary>
         /// <param name="blockHeight">The block height to evaluate.</param>
         /// <returns>The active hard fork at <paramref name="blockHeight"/>.</returns>
-        public HardFork GetActiveHardFork(long blockHeight) =>
-            HardForks
+        public HardFork GetActiveHardFork(long blockHeight)
+            => HardForks
                 .OrderBy(static o => o.Key)
                 .LastOrDefault(l => l.Value <= blockHeight)
             .Key;

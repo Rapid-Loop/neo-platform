@@ -73,8 +73,8 @@ namespace Neo.Core.Blockchain
         /// <param name="redeemScriptBytes">The script of the contract.</param>
         /// <param name="parameterList">The parameters of the contract.</param>
         /// <returns>The created contract.</returns>
-        public static WitnessContract Create(byte[] redeemScriptBytes, params MethodParameterType[] parameterList) =>
-            new(redeemScriptBytes, parameterList);
+        public static WitnessContract Create(byte[] redeemScriptBytes, params MethodParameterType[] parameterList)
+            => new(redeemScriptBytes, parameterList);
 
         /// <summary>
         /// Constructs a special contract with empty script, will get the script with scriptHash from blockchain when doing the verification.
@@ -82,8 +82,8 @@ namespace Neo.Core.Blockchain
         /// <param name="scriptHash">The hash of the contract.</param>
         /// <param name="parameterList">The parameters of the contract.</param>
         /// <returns>The created contract.</returns>
-        public static WitnessContract Create(UInt160 scriptHash, params MethodParameterType[] parameterList) =>
-            new(scriptHash, parameterList);
+        public static WitnessContract Create(UInt160 scriptHash, params MethodParameterType[] parameterList)
+            => new(scriptHash, parameterList);
 
         /// <summary>
         /// Creates a multi-sig contract.
@@ -91,8 +91,8 @@ namespace Neo.Core.Blockchain
         /// <param name="m">The number of correct signatures that need to be provided in order for the verification to pass.</param>
         /// <param name="publicKeys">The public keys of the contract.</param>
         /// <returns>The created contract.</returns>
-        public static WitnessContract CreateMultiSigContract(int m, params ECPoint[] publicKeys) =>
-            new(CreateMultiSigRedeemScript(m, publicKeys), [.. Enumerable.Repeat(MethodParameterType.Signature, m)]);
+        public static WitnessContract CreateMultiSigContract(int m, params ECPoint[] publicKeys)
+            => new(CreateMultiSigRedeemScript(m, publicKeys), [.. Enumerable.Repeat(MethodParameterType.Signature, m)]);
 
         /// <summary>
         /// Creates the script of multi-sig contract.
@@ -140,8 +140,8 @@ namespace Neo.Core.Blockchain
         /// </summary>
         /// <param name="publicKey">The public key of the contract.</param>
         /// <returns>The created contract.</returns>
-        public static WitnessContract CreateSignatureContract(ECPoint publicKey) =>
-            new(CreateSignatureRedeemScript(publicKey), [MethodParameterType.Signature]);
+        public static WitnessContract CreateSignatureContract(ECPoint publicKey)
+            => new(CreateSignatureRedeemScript(publicKey), [MethodParameterType.Signature]);
 
         /// <summary>
         /// Creates the script of signature contract.

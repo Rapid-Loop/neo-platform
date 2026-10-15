@@ -43,8 +43,8 @@ namespace Neo.VM.Builder
         /// Creates a new <see cref="VirtualMachinePipelineBuilder"/> instance.
         /// </summary>
         /// <returns>A new builder.</returns>
-        public static VirtualMachinePipelineBuilder Create() =>
-            new();
+        public static VirtualMachinePipelineBuilder Create()
+            => new();
 
         /// <summary>
         /// Registers a middleware instance.

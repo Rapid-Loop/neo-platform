@@ -72,9 +72,12 @@ namespace Neo.VM.Types
         /// <returns><see langword="true"/> if the underlying objects and names match; otherwise <see langword="false"/>.</returns>
         public bool Equals(VMInteropInterface? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
-            if (RefCount != other.RefCount) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
+            if (RefCount != other.RefCount)
+                return false;
             return Equals(_underlyingObject, other._underlyingObject) &&
                 string.Equals(_interfaceName, other._interfaceName);
         }
@@ -82,8 +85,10 @@ namespace Neo.VM.Types
         /// <inheritdoc />
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as VMInteropInterface);
         }
 

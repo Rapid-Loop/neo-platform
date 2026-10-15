@@ -67,9 +67,9 @@ namespace Neo.IO.Data
 
             _hashCount = Math.Max(1, (int)Math.Ceiling((_bitSize / (double)expectedElements) * Math.Log(2)));
 
-            _bits = elementBytes is null ?
-                new(_bitSize) :
-                new(elementBytes) { Length = _bitSize };
+            _bits = elementBytes is null
+                ? new(_bitSize)
+                : new(elementBytes) { Length = _bitSize };
 
             _tweak = tweak;
         }
@@ -115,8 +115,8 @@ namespace Neo.IO.Data
         /// Adds the specified data to the filter.
         /// </summary>
         /// <param name="data">The element data to insert.</param>
-        public void Add(byte[] data) =>
-            Add(data.AsSpan());
+        public void Add(byte[] data)
+            => Add(data.AsSpan());
 
         /// <summary>
         /// Tests whether the specified data may be present in the filter.
@@ -126,8 +126,8 @@ namespace Neo.IO.Data
         /// <see langword="false"/> if the element is definitely not present;
         /// otherwise <see langword="true"/> if it is probably present.
         /// </returns>
-        public bool Contains(byte[] data) =>
-            Contains(data.AsSpan());
+        public bool Contains(byte[] data)
+            => Contains(data.AsSpan());
 
         /// <summary>
         /// Estimates the false-positive probability after the specified number of insertions.
@@ -143,7 +143,7 @@ namespace Neo.IO.Data
         /// Copies the underlying bit array into the provided buffer.
         /// </summary>
         /// <param name="bytes">The destination buffer that receives the bit array contents.</param>
-        public void GetBits(byte[] bytes) =>
-            _bits.CopyTo(bytes, 0);
+        public void GetBits(byte[] bytes)
+            => _bits.CopyTo(bytes, 0);
     }
 }

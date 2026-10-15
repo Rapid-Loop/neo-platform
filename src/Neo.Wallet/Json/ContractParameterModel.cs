@@ -45,7 +45,7 @@ namespace Neo.Wallet.Json
         /// Converts this model to a <see cref="MethodParameterType"/>.
         /// </summary>
         /// <returns>The parameter <see cref="Type"/>.</returns>
-        public MethodParameterType ToObject() =>
-            Type;
+        public MethodParameterType ToObject()
+            => Type;
     }
 }

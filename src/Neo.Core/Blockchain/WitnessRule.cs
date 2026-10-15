@@ -47,8 +47,8 @@ namespace Neo.Core.Blockchain
         /// <summary>
         /// Gets the serialized size of this rule in bytes.
         /// </summary>
-        public int Size =>
-            Unsafe.SizeOf<WitnessRuleAction>() +
+        public int Size
+            => Unsafe.SizeOf<WitnessRuleAction>() +
             Condition.Size;
 
         /// <summary>
@@ -75,8 +75,10 @@ namespace Neo.Core.Blockchain
         /// <returns><see langword="true"/> if the objects are equal; otherwise, <see langword="false"/>.</returns>
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as WitnessRule);
         }
 
@@ -87,8 +89,10 @@ namespace Neo.Core.Blockchain
         /// <returns><see langword="true"/> if the rules are equal; otherwise, <see langword="false"/>.</returns>
         public bool Equals([NotNullWhen(true)] WitnessRule? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
             return Action == other.Action && Condition == other.Condition;
         }
 

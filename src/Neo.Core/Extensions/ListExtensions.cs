@@ -37,8 +37,8 @@ namespace Neo.Core.Extensions
         /// <param name="source">The list to hash.</param>
         /// <param name="seed">The initial hash seed.</param>
         /// <returns>An integer hash code derived from the list contents.</returns>
-        public static int ToHashCode<TSource>(this IList<TSource> source, int seed = 397) =>
-            source.Aggregate(seed,
+        public static int ToHashCode<TSource>(this IList<TSource> source, int seed = 397)
+            => source.Aggregate(seed,
                 (hash, b) =>
                         unchecked((hash * 31) ^ (b?.GetHashCode() ?? 0))
                 );
@@ -50,8 +50,8 @@ namespace Neo.Core.Extensions
         /// <param name="source">The list to hash.</param>
         /// <param name="seed">The initial hash seed.</param>
         /// <returns>An integer hash code derived from the list contents.</returns>
-        public static int ToHashCode<TSource>(this IReadOnlyList<TSource> source, int seed = 397) =>
-            source.Aggregate(seed,
+        public static int ToHashCode<TSource>(this IReadOnlyList<TSource> source, int seed = 397)
+            => source.Aggregate(seed,
                 (hash, b) =>
                         unchecked((hash * 31) ^ (b?.GetHashCode() ?? 0))
                 );

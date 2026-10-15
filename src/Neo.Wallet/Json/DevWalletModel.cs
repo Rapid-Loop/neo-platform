@@ -33,7 +33,7 @@ namespace Neo.Wallet.Json
         /// Converts this model to a <see cref="DevWallet"/>.
         /// </summary>
         /// <returns>A development wallet initialized from this model.</returns>
-        public DevWallet ToObject() =>
-            new(this);
+        public DevWallet ToObject()
+            => new(this);
     }
 }

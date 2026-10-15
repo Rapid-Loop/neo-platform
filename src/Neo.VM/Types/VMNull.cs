@@ -50,8 +50,10 @@ namespace Neo.VM.Types
         /// <inheritdoc />
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return true;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return true;
             return Equals(obj as VMNull);
         }
 
@@ -98,14 +100,14 @@ namespace Neo.VM.Types
         /// <summary>
         /// Always returns <see langword="true"/>; all null stack items are equal.
         /// </summary>
-        public static bool operator ==(VMNull left, VMNull right) =>
-            true;
+        public static bool operator ==(VMNull left, VMNull right)
+            => true;
 
         /// <summary>
         /// Always returns <see langword="false"/>; all null stack items are equal.
         /// </summary>
-        public static bool operator !=(VMNull left, VMNull right) =>
-            false;
+        public static bool operator !=(VMNull left, VMNull right)
+            => false;
 
     }
 }

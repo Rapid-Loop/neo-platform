@@ -40,12 +40,12 @@ namespace Neo.Platform.Hosting.Logging
         private readonly Func<NeoPlatformLoggerOptions> _getConfig = config;
 
         /// <inheritdoc />
-        public IDisposable? BeginScope<TState>(TState state) where TState : notnull =>
-            default!;
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull
+            => default!;
 
         /// <inheritdoc />
-        public bool IsEnabled(LogLevel logLevel) =>
-            logLevel != LogLevel.None;
+        public bool IsEnabled(LogLevel logLevel)
+            => logLevel != LogLevel.None;
 
         /// <inheritdoc />
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
@@ -119,26 +119,26 @@ namespace Neo.Platform.Hosting.Logging
         /// <summary>
         /// Writes a newline to standard output.
         /// </summary>
-        public static void WriteLine() =>
-            Write(Environment.NewLine);
+        public static void WriteLine()
+            => Write(Environment.NewLine);
 
         /// <summary>
         /// Writes a formatted message to standard output followed by a newline.
         /// </summary>
-        public static void WriteLine([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args) =>
-            Write(string.Format(format, args) + Environment.NewLine);
+        public static void WriteLine([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args)
+            => Write(string.Format(format, args) + Environment.NewLine);
 
         /// <summary>
         /// Writes a newline to standard error.
         /// </summary>
-        public static void ErrorWriteLine() =>
-            ErrorWrite(Environment.NewLine);
+        public static void ErrorWriteLine()
+            => ErrorWrite(Environment.NewLine);
 
         /// <summary>
         /// Writes a formatted message to standard error followed by a newline.
         /// </summary>
-        public static void ErrorWriteLine([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args) =>
-            ErrorWrite(string.Format(format, args) + Environment.NewLine);
+        public static void ErrorWriteLine([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string format, params object?[] args)
+            => ErrorWrite(string.Format(format, args) + Environment.NewLine);
 
         /// <summary>
         /// Writes an information-level message with platform coloring.
@@ -254,7 +254,7 @@ namespace Neo.Platform.Hosting.Logging
             Console.ResetColor();
         }
 
-        private static string BuildFormatString(string format, int index = 0) =>
-            $"{{{index}:{format}}}";
+        private static string BuildFormatString(string format, int index = 0)
+            => $"{{{index}:{format}}}";
     }
 }

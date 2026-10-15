@@ -40,8 +40,8 @@ namespace Neo.Core.Extensions
         /// <param name="span">The span to measure.</param>
         /// <returns>The number of bytes required to serialize the span contents.</returns>
         public static int GetSerializedSize<TSource>(this Span<TSource> span)
-            where TSource : unmanaged =>
-            span.Length.GetCompactSize() +
+            where TSource : unmanaged
+            => span.Length.GetCompactSize() +
             (span.Length * Unsafe.SizeOf<TSource>());
 
         /// <summary>
@@ -51,8 +51,8 @@ namespace Neo.Core.Extensions
         /// <param name="readOnlySpan">The span to measure.</param>
         /// <returns>The number of bytes required to serialize the span contents.</returns>
         public static int GetSerializedSize<TSource>(this ReadOnlySpan<TSource> readOnlySpan)
-            where TSource : unmanaged =>
-            readOnlySpan.Length.GetCompactSize() +
+            where TSource : unmanaged
+            => readOnlySpan.Length.GetCompactSize() +
             (readOnlySpan.Length * Unsafe.SizeOf<TSource>());
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace Neo.Core.Extensions
         /// <param name="startIndex">The offset into the byte data from which to begin deserialization.</param>
         /// <returns>The converted <see cref="INeoSerializable"/> object.</returns>
         public static T? AsSerializable<T>(this ReadOnlySpan<byte> span, int startIndex = 0)
-            where T : class?, INeoSerializable? =>
-            span.ToArray()
+            where T : class?, INeoSerializable?
+            => span.ToArray()
                 .AsSerializable<T>(startIndex);
 
         /// <summary>
@@ -119,8 +119,8 @@ namespace Neo.Core.Extensions
         /// <param name="data">The data to hash.</param>
         /// <param name="seed">The initial hash seed.</param>
         /// <returns>An integer hash code derived from the span contents.</returns>
-        public static int ToHashCode(this ReadOnlySpan<byte> data, int seed = 397) =>
-            data.Aggregate(seed,
+        public static int ToHashCode(this ReadOnlySpan<byte> data, int seed = 397)
+            => data.Aggregate(seed,
                 (hash, b) =>
                         unchecked((hash * 31) ^ b)
                 );

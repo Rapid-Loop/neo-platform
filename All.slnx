@@ -1,4 +1,23 @@
 <Solution>
+  <Folder Name="/.root/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="CODE_OF_CONDUCT.md" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="LICENSE" />
+    <File Path="nuget.config" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/.root/.github/">
+    <File Path=".github/PULL_REQUEST_TEMPLATE.md" />
+  </Folder>
+  <Folder Name="/.root/.github/workflows/">
+    <File Path=".github/workflows/verify.yml" />
+  </Folder>
+  <Folder Name="/.root/.images/">
+    <File Path=".images/logo.png" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Neo.Configuration/Neo.Configuration.csproj" Id="c4462615-3b84-448c-979e-2413261b5041" />
     <Project Path="src/Neo.Core/Neo.Core.csproj" />
@@ -10,6 +29,9 @@
     <Project Path="src/Neo.VM/Neo.VM.csproj" Id="e38e01be-d9e4-4c1d-a0bc-b9a37250d446" />
     <Project Path="src/Neo.Wallet/Neo.Wallet.csproj" Id="49b273b6-b9a6-402e-8ea6-db4e23a3fe40" />
   </Folder>
+  <Folder Name="/src/dir/">
+    <File Path="src/Directory.Build.props" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Neo.Configuration.Tests/Neo.Configuration.Tests.csproj" Id="7217a313-c582-473a-9630-eb961137e665" />
     <Project Path="tests/Neo.Core.Tests/Neo.Core.Tests.csproj" />
@@ -17,5 +39,8 @@
     <Project Path="tests/Neo.Platform.Storage.Tests/Neo.Platform.Storage.Tests.csproj" Id="2f88a159-541f-4c67-b9ac-fd3e62c20ae1" />
     <Project Path="tests/Neo.VM.Tests/Neo.VM.Tests.csproj" Id="47c53794-838b-4c3c-bc6c-e216708dd709" />
     <Project Path="tests/Neo.Wallet.Tests/Neo.Wallet.Tests.csproj" Id="86f0d22b-f832-4cc5-844f-eb7aeb8b7dfb" />
+  </Folder>
+  <Folder Name="/tests/dir/">
+    <File Path="tests/Directory.Build.props" />
   </Folder>
 </Solution>

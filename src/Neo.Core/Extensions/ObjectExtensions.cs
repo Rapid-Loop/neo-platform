@@ -36,8 +36,8 @@ namespace Neo.Core.Extensions
         /// <param name="source">The array to measure.</param>
         /// <returns>The number of bytes required to serialize the array.</returns>
         public static int GetSerializedSize<TSource>(this TSource[] source)
-            where TSource : unmanaged =>
-            source.Length.GetCompactSize() +
+            where TSource : unmanaged
+            => source.Length.GetCompactSize() +
             (source.Length * Unsafe.SizeOf<TSource>());
     }
 }

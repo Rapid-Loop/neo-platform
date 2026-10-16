@@ -91,7 +91,8 @@ namespace Neo.VM.Core
             {
                 foreach (var subItem in item.GetChildren())
                 {
-                    if (ReferenceEquals(item, subItem)) continue;
+                    if (ReferenceEquals(item, subItem))
+                        continue;
                     subItem.AddReference();
                 }
             }
@@ -120,7 +121,8 @@ namespace Neo.VM.Core
             {
                 foreach (var subItem in item.GetChildren())
                 {
-                    if (ReferenceEquals(item, subItem)) continue;
+                    if (ReferenceEquals(item, subItem))
+                        continue;
                     subItem.Release();
                 }
             }
@@ -167,7 +169,8 @@ namespace Neo.VM.Core
         /// <param name="toIndex">The second depth index.</param>
         public void Swap(int fromIndex, int toIndex)
         {
-            if (fromIndex == toIndex) return;
+            if (fromIndex == toIndex)
+                return;
 
             var list = new List<VMObject>(EvaluationStack); // Copy to list (top is at the end)
             (list[fromIndex], list[toIndex]) = (list[toIndex], list[fromIndex]);
@@ -192,7 +195,8 @@ namespace Neo.VM.Core
             if (n < 0 || n > list.Count)
                 throw new ArgumentOutOfRangeException(nameof(n), $"Out of stack bounds: {n}/{list.Count}");
 
-            if (n <= 1) return;
+            if (n <= 1)
+                return;
 
             list.Reverse(list.Count - n, n);
 
@@ -393,7 +397,8 @@ namespace Neo.VM.Core
 
         private static bool DetectCycleInFrame(StackFrame frame, HashSet<VMObject> visited)
         {
-            if (frame == null) return false;
+            if (frame == null)
+                return false;
 
             // Check Evaluation Stack
             foreach (var item in frame.EvaluationStack)
@@ -428,8 +433,10 @@ namespace Neo.VM.Core
 
         private static bool DetectCycle(VMObject current, HashSet<VMObject> visited)
         {
-            if (current == null) return false;
-            if (visited.Contains(current)) return true;   // Cycle found!
+            if (current == null)
+                return false;
+            if (visited.Contains(current))
+                return true;   // Cycle found!
 
             visited.Add(current);
 

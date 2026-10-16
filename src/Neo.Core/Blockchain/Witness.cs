@@ -64,8 +64,8 @@ namespace Neo.Core.Blockchain
         /// <summary>
         /// Gets the serialized size of this witness in bytes.
         /// </summary>
-        public int Size =>
-            InvocationScript.GetSerializedSize() +
+        public int Size
+            => InvocationScript.GetSerializedSize() +
             VerificationScript.GetSerializedSize();
 
         /// <summary>

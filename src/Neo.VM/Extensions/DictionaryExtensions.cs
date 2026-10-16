@@ -38,8 +38,8 @@ namespace Neo.VM.Extensions
         /// <typeparam name="TValue">The dictionary value type.</typeparam>
         /// <param name="source">The dictionary to convert.</param>
         /// <returns>A <see cref="VMMap"/> containing the converted entries.</returns>
-        public static VMMap ToStackItem<TKey, TValue>(this IDictionary<TKey, TValue> source) =>
-            new(
+        public static VMMap ToStackItem<TKey, TValue>(this IDictionary<TKey, TValue> source)
+            => new(
                 source.Select(static kv => new KeyValuePair<VMObject, VMObject>(
                     kv.Key.ToStackItem(),
                     kv.Value.ToStackItem())));

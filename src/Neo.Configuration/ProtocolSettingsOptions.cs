@@ -97,8 +97,8 @@ namespace Neo.Configuration
         /// Nullable collections are replaced with empty defaults.
         /// </summary>
         /// <returns>A new <see cref="ProtocolSettings"/> populated from this instance.</returns>
-        public ProtocolSettings ToObject() =>
-            new()
+        public ProtocolSettings ToObject()
+            => new()
             {
                 Network = Network,
                 AddressVersion = AddressVersion,

@@ -92,8 +92,8 @@ namespace Neo.Core.Blockchain
         /// <summary>
         /// Gets the serialized size of this block header in bytes.
         /// </summary>
-        public virtual int Size =>
-            sizeof(uint) +      // Version
+        public virtual int Size
+            => sizeof(uint) +      // Version
             UInt256.Length +    // PrevHash
             UInt256.Length +    // MerkleRoot
             sizeof(ulong) +     // Timestamp
@@ -119,8 +119,10 @@ namespace Neo.Core.Blockchain
         /// <returns><see langword="true"/> if the headers have the same hash; otherwise, <see langword="false"/>.</returns>
         public bool Equals([NotNullWhen(true)] BlockHeader? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
             return Hash == other.Hash;
         }
 
@@ -131,8 +133,10 @@ namespace Neo.Core.Blockchain
         /// <returns><see langword="true"/> if the objects are equal; otherwise, <see langword="false"/>.</returns>
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as BlockHeader);
         }
 

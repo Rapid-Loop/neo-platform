@@ -76,7 +76,8 @@ namespace Neo.Core.Cryptography
         /// <returns><see langword="true"/> if the objects are equal; otherwise, <see langword="false"/>.</returns>
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
+            if (ReferenceEquals(obj, this))
+                return true;
             return Equals(obj as ProtectedString);
         }
 
@@ -86,7 +87,8 @@ namespace Neo.Core.Cryptography
         /// <returns>A hash code for the current instance.</returns>
         public override int GetHashCode()
         {
-            if (_cachedHashCode != 0) return _cachedHashCode;
+            if (_cachedHashCode != 0)
+                return _cachedHashCode;
             return _cachedHashCode = _protectedMemory.ToArray()
                 .Aggregate(_protectedMemory.Length,
                 (hash, b) =>
@@ -97,8 +99,8 @@ namespace Neo.Core.Cryptography
         /// Decrypts and returns the plaintext string.
         /// </summary>
         /// <returns>The unprotected plaintext.</returns>
-        public override string ToString() =>
-            UnprotectData(_protectedMemory.Span);
+        public override string ToString()
+            => UnprotectData(_protectedMemory.Span);
 
         /// <summary>
         /// Compares this instance to a specified object.
@@ -109,7 +111,8 @@ namespace Neo.Core.Cryptography
         /// </returns>
         public int CompareTo(object? obj)
         {
-            if (ReferenceEquals(obj, this)) return 0;
+            if (ReferenceEquals(obj, this))
+                return 0;
             return CompareTo(obj as ProtectedString);
         }
 
@@ -122,7 +125,8 @@ namespace Neo.Core.Cryptography
         /// </returns>
         public int CompareTo(ProtectedString? other)
         {
-            if (other is null) return 1;
+            if (other is null)
+                return 1;
             return string.Compare(this, other);
         }
 
@@ -133,13 +137,15 @@ namespace Neo.Core.Cryptography
         /// <returns><see langword="true"/> if the plaintext values are equal; otherwise, <see langword="false"/>.</returns>
         public bool Equals([NotNullWhen(true)] ProtectedString? other)
         {
-            if (other is null) return false;
+            if (other is null)
+                return false;
             return string.Equals(this, other);
         }
 
         private static Memory<byte> ProtectData(byte[] data)
         {
-            if (data.Length == 0) return Memory<byte>.Empty;
+            if (data.Length == 0)
+                return Memory<byte>.Empty;
 
             using var aes = new AesGcm(s_entropy, TagSize);
             var nonceBytes = RandomNumberGenerator.GetBytes(NonceSize);
@@ -176,7 +182,8 @@ namespace Neo.Core.Cryptography
         /// <returns>The decrypted UTF-8 string.</returns>
         public static string UnprotectData(ReadOnlySpan<byte> protectedData)
         {
-            if (protectedData.Length == 0) return string.Empty;
+            if (protectedData.Length == 0)
+                return string.Empty;
 
             using var aes = new AesGcm(s_entropy, TagSize);
 
@@ -194,15 +201,15 @@ namespace Neo.Core.Cryptography
         /// Implicitly converts a plaintext string to a <see cref="ProtectedString"/>.
         /// </summary>
         /// <param name="value">The plaintext string.</param>
-        public static implicit operator ProtectedString(string value) =>
-            new(value);
+        public static implicit operator ProtectedString(string value)
+            => new(value);
 
         /// <summary>
         /// Implicitly converts a <see cref="ProtectedString"/> to its plaintext string.
         /// </summary>
         /// <param name="value">The protected string.</param>
-        public static implicit operator string(ProtectedString value) =>
-            value.ToString();
+        public static implicit operator string(ProtectedString value)
+            => value.ToString();
 
         /// <summary>
         /// Determines whether two <see cref="ProtectedString"/> values are equal.
@@ -215,7 +222,7 @@ namespace Neo.Core.Cryptography
         /// <summary>
         /// Determines whether two <see cref="ProtectedString"/> values are not equal.
         /// </summary>
-        public static bool operator !=(ProtectedString a, ProtectedString b) =>
-            !(a == b);
+        public static bool operator !=(ProtectedString a, ProtectedString b)
+            => !(a == b);
     }
 }

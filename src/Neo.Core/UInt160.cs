@@ -83,7 +83,8 @@ namespace Neo.Core
         /// </returns>
         public int CompareTo(object? obj)
         {
-            if (ReferenceEquals(obj, this)) return 0;
+            if (ReferenceEquals(obj, this))
+                return 0;
             return CompareTo(obj as UInt160);
         }
 
@@ -96,11 +97,14 @@ namespace Neo.Core
         /// </returns>
         public int CompareTo(UInt160? other)
         {
-            if (other is null) return 1;
+            if (other is null)
+                return 1;
             var result = _value3.CompareTo(other._value3);
-            if (result != 0) return result;
+            if (result != 0)
+                return result;
             result = _value2.CompareTo(other._value2);
-            if (result != 0) return result;
+            if (result != 0)
+                return result;
             return _value1.CompareTo(other._value1);
         }
 
@@ -122,7 +126,8 @@ namespace Neo.Core
         /// <returns><see langword="true"/> if the objects are equal; otherwise, <see langword="false"/>.</returns>
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
+            if (ReferenceEquals(obj, this))
+                return true;
             return Equals(obj as UInt160);
         }
 
@@ -133,7 +138,8 @@ namespace Neo.Core
         /// <returns><see langword="true"/> if the values are equal; otherwise, <see langword="false"/>.</returns>
         public bool Equals(UInt160? other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return false;
             return _value1 == other._value1 &&
                 _value2 == other._value2 &&
                 _value3 == other._value3;
@@ -189,7 +195,8 @@ namespace Neo.Core
         {
             result = null;
             var data = value.TrimStartIgnoreCase("0x");
-            if (data.Length != Length * 2) return false;
+            if (data.Length != Length * 2)
+                return false;
             try
             {
                 result = new UInt160([.. Convert.FromHexString(data).Reverse()]);

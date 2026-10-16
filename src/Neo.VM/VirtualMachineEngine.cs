@@ -104,7 +104,6 @@ namespace Neo.VM
 
         private readonly ProtocolSettings _protocolSettings;
         private readonly Block _persistingBlock;
-        private readonly IVerifiable _container;
         private readonly HardFork _currentFork;
 
         private ExecutionContext? _currentContext;
@@ -130,7 +129,6 @@ namespace Neo.VM
             VirtualMachinePipeline? pipeline = default)
         {
             _persistingBlock = persistingBlock ?? new();
-            _container = container ?? new Transaction();
             _protocolSettings = protocolSettings ?? ProtocolSettings.Default;
             _maxGasLimit = container is Transaction tx ? tx.SystemFee : ExecutionEngineLimits.MaxGas;
             CurrentOpCodeTable = opCodeTable ?? VirtualTable.Default;
@@ -194,9 +192,13 @@ namespace Neo.VM
             _maxGasConsumed += context.GasConsumed;
 
             if (context.Parent is not null)
+            {
                 _currentContext = context.Parent;
+            }
             else if (InvocationStack.Count > 0)
+            {
                 _currentContext = InvocationStack.Peek();
+            }
             else
             {
                 _currentContext = null;
@@ -236,13 +238,15 @@ namespace Neo.VM
                     if (_invocationStack.Count > 0 &&
                         context == _invocationStack.Peek()
                         && context.ShouldContinue())
+                    {
                         context.InstructionPointer += context.CurrentInstruction.Size;
+                    }
 
                     _pipeline.PostExecute(context);
 
-                    if (State == VMState.BREAK) break;
+                    if (State == VMState.BREAK)
+                        break;
                 }
-
             }
             catch (Exception ex)
             {

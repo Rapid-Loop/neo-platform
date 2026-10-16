@@ -56,8 +56,8 @@ namespace Neo.IO.Hashing
         /// <param name="data">The input data to hash.</param>
         /// <param name="seed">The hash seed. Defaults to a fixed non-zero seed.</param>
         /// <returns>A 16-byte array containing the hash digest.</returns>
-        public static byte[] Hash(byte[] data, uint seed = DefaultSeed) =>
-                Hash(data.AsSpan(), seed);
+        public static byte[] Hash(byte[] data, uint seed = DefaultSeed)
+                => Hash(data.AsSpan(), seed);
 
         /// <summary>
         /// Computes the 128-bit MurmurHash3 of the specified data.
@@ -90,8 +90,8 @@ namespace Neo.IO.Hashing
         /// <param name="data">The input data to hash.</param>
         /// <param name="seed">The hash seed. Defaults to a fixed non-zero seed.</param>
         /// <returns>The hash digest as a <see cref="UInt128"/>.</returns>
-        public static UInt128 HashToUInt128(byte[] data, uint seed = DefaultSeed) =>
-            HashToUInt128(data.AsSpan(), seed);
+        public static UInt128 HashToUInt128(byte[] data, uint seed = DefaultSeed)
+            => HashToUInt128(data.AsSpan(), seed);
 
         /// <summary>
         /// Computes the 128-bit MurmurHash3 of the specified data and returns it as a <see cref="UInt128"/>.
@@ -99,8 +99,8 @@ namespace Neo.IO.Hashing
         /// <param name="data">The input data to hash.</param>
         /// <param name="seed">The hash seed. Defaults to a fixed non-zero seed.</param>
         /// <returns>The hash digest as a <see cref="UInt128"/>.</returns>
-        public static UInt128 HashToUInt128(ReadOnlySpan<byte> data, uint seed = DefaultSeed) =>
-            BitConverter.ToUInt128(Hash(data, seed), 0);
+        public static UInt128 HashToUInt128(ReadOnlySpan<byte> data, uint seed = DefaultSeed)
+            => BitConverter.ToUInt128(Hash(data, seed), 0);
 
         /// <summary>
         /// Computes the 128-bit MurmurHash3 of the UTF-8 encoding of the specified text and returns it as a <see cref="UInt128"/>.
@@ -149,22 +149,37 @@ namespace Neo.IO.Hashing
                 ulong k1 = 0;
                 ulong k2 = 0;
 
-                if (bytesRemaining >= 1) k1 ^= (ulong)source[index + 0];
-                if (bytesRemaining >= 2) k1 ^= (ulong)source[index + 1] << 8;
-                if (bytesRemaining >= 3) k1 ^= (ulong)source[index + 2] << 16;
-                if (bytesRemaining >= 4) k1 ^= (ulong)source[index + 3] << 24;
-                if (bytesRemaining >= 5) k1 ^= (ulong)source[index + 4] << 32;
-                if (bytesRemaining >= 6) k1 ^= (ulong)source[index + 5] << 40;
-                if (bytesRemaining >= 7) k1 ^= (ulong)source[index + 6] << 48;
-                if (bytesRemaining >= 8) k1 ^= (ulong)source[index + 7] << 56;
+                if (bytesRemaining >= 1)
+                    k1 ^= (ulong)source[index + 0];
+                if (bytesRemaining >= 2)
+                    k1 ^= (ulong)source[index + 1] << 8;
+                if (bytesRemaining >= 3)
+                    k1 ^= (ulong)source[index + 2] << 16;
+                if (bytesRemaining >= 4)
+                    k1 ^= (ulong)source[index + 3] << 24;
+                if (bytesRemaining >= 5)
+                    k1 ^= (ulong)source[index + 4] << 32;
+                if (bytesRemaining >= 6)
+                    k1 ^= (ulong)source[index + 5] << 40;
+                if (bytesRemaining >= 7)
+                    k1 ^= (ulong)source[index + 6] << 48;
+                if (bytesRemaining >= 8)
+                    k1 ^= (ulong)source[index + 7] << 56;
 
-                if (bytesRemaining >= 9) k2 ^= (ulong)source[index + 8];
-                if (bytesRemaining >= 10) k2 ^= (ulong)source[index + 9] << 8;
-                if (bytesRemaining >= 11) k2 ^= (ulong)source[index + 10] << 16;
-                if (bytesRemaining >= 12) k2 ^= (ulong)source[index + 11] << 24;
-                if (bytesRemaining >= 13) k2 ^= (ulong)source[index + 12] << 32;
-                if (bytesRemaining >= 14) k2 ^= (ulong)source[index + 13] << 40;
-                if (bytesRemaining >= 15) k2 ^= (ulong)source[index + 14] << 48;
+                if (bytesRemaining >= 9)
+                    k2 ^= (ulong)source[index + 8];
+                if (bytesRemaining >= 10)
+                    k2 ^= (ulong)source[index + 9] << 8;
+                if (bytesRemaining >= 11)
+                    k2 ^= (ulong)source[index + 10] << 16;
+                if (bytesRemaining >= 12)
+                    k2 ^= (ulong)source[index + 11] << 24;
+                if (bytesRemaining >= 13)
+                    k2 ^= (ulong)source[index + 12] << 32;
+                if (bytesRemaining >= 14)
+                    k2 ^= (ulong)source[index + 13] << 40;
+                if (bytesRemaining >= 15)
+                    k2 ^= (ulong)source[index + 14] << 48;
 
                 _h1 ^= MixK1(k1);
                 _h2 ^= MixK2(k2);

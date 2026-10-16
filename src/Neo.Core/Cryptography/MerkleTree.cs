@@ -39,7 +39,8 @@ namespace Neo.Core.Cryptography
         private MerkleTree(IEnumerable<byte[]> leaves)
         {
             _leaves.AddRange(leaves);
-            if (_leaves.Count == 0) return;
+            if (_leaves.Count == 0)
+                return;
 
             _root = BuildTree(_leaves);
         }
@@ -51,8 +52,10 @@ namespace Neo.Core.Cryptography
         /// <returns>The Merkle root of <paramref name="hashes"/>.</returns>
         public static UInt256 ComputeRoot(UInt256[] hashes)
         {
-            if (hashes.Length == 0) return UInt256.Zero;
-            if (hashes.Length == 1) return hashes[0];
+            if (hashes.Length == 0)
+                return UInt256.Zero;
+            if (hashes.Length == 1)
+                return hashes[0];
 
             var tree = new MerkleTree(hashes.Select(static s => s.ToArray()));
             return new(tree._root);

@@ -38,8 +38,8 @@ namespace Neo.Core.Extensions
         /// <param name="memory">The memory region to measure.</param>
         /// <returns>The number of bytes required to serialize the memory contents.</returns>
         public static int GetSerializedSize<TSource>(this Memory<TSource> memory)
-            where TSource : unmanaged =>
-            memory.Length.GetCompactSize() +
+            where TSource : unmanaged
+            => memory.Length.GetCompactSize() +
             (memory.Length * Unsafe.SizeOf<TSource>());
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace Neo.Core.Extensions
         /// <param name="readOnlyMemory">The memory region to measure.</param>
         /// <returns>The number of bytes required to serialize the memory contents.</returns>
         public static int GetSerializedSize<TSource>(this ReadOnlyMemory<TSource> readOnlyMemory)
-            where TSource : unmanaged =>
-            readOnlyMemory.Length.GetCompactSize() +
+            where TSource : unmanaged
+            => readOnlyMemory.Length.GetCompactSize() +
             (readOnlyMemory.Length * Unsafe.SizeOf<TSource>());
 
         /// <summary>
@@ -61,8 +61,8 @@ namespace Neo.Core.Extensions
         /// <param name="startIndex">The offset into the byte data from which to begin deserialization.</param>
         /// <returns>The converted <see cref="INeoSerializable"/> object.</returns>
         public static T? AsSerializable<T>(this ReadOnlyMemory<byte> memory, int startIndex = 0)
-            where T : class?, INeoSerializable? =>
-            memory.ToArray()
+            where T : class?, INeoSerializable?
+            => memory.ToArray()
                 .AsSerializable<T>(startIndex);
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace Neo.Core.Extensions
         /// <param name="data">The data to hash.</param>
         /// <param name="seed">The initial hash seed.</param>
         /// <returns>An integer hash code derived from the memory contents.</returns>
-        public static int ToHashCode(this Memory<byte> data, int seed) =>
-            data.Aggregate(seed,
+        public static int ToHashCode(this Memory<byte> data, int seed)
+            => data.Aggregate(seed,
                 (hash, b) =>
                         unchecked((hash * 31) ^ b)
                 );
@@ -128,8 +128,8 @@ namespace Neo.Core.Extensions
         /// </summary>
         /// <param name="data">The data to hash.</param>
         /// <returns>An integer hash code derived from the memory contents.</returns>
-        public static int ToHashCode(this Memory<byte> data) =>
-            data.Aggregate(data.Length,
+        public static int ToHashCode(this Memory<byte> data)
+            => data.Aggregate(data.Length,
                 (hash, b) =>
                         (hash * 31) ^ b
                 );
@@ -139,8 +139,8 @@ namespace Neo.Core.Extensions
         /// </summary>
         /// <param name="data">The data to hash.</param>
         /// <returns>An integer hash code derived from the memory contents.</returns>
-        public static int ToHashCode(this ReadOnlyMemory<byte> data) =>
-            data.Aggregate(data.Length,
+        public static int ToHashCode(this ReadOnlyMemory<byte> data)
+            => data.Aggregate(data.Length,
                 (hash, b) =>
                         (hash * 31) ^ b
                 );

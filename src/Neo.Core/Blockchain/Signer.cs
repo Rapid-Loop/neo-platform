@@ -96,8 +96,10 @@ namespace Neo.Core.Blockchain
         /// <returns><see langword="true"/> if the objects are equal; otherwise, <see langword="false"/>.</returns>
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as Signer);
         }
 
@@ -108,22 +110,32 @@ namespace Neo.Core.Blockchain
         /// <returns><see langword="true"/> if the signers are equal; otherwise, <see langword="false"/>.</returns>
         public bool Equals([NotNullWhen(true)] Signer? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
-            if (Account != other.Account) return false;
-            if (Scopes != other.Scopes) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
+            if (Account != other.Account)
+                return false;
+            if (Scopes != other.Scopes)
+                return false;
 
             if (Scopes.HasFlag(WitnessScope.CustomContracts) &&
                 AllowedContracts.SequenceEqual(other.AllowedContracts) == false)
+            {
                 return false;
+            }
 
             if (Scopes.HasFlag(WitnessScope.CustomGroups) &&
                 AllowedGroups.SequenceEqual(other.AllowedGroups) == false)
+            {
                 return false;
+            }
 
             if (Scopes.HasFlag(WitnessScope.WitnessRules) &&
                 Rules.SequenceEqual(other.Rules) == false)
+            {
                 return false;
+            }
 
             return true;
         }

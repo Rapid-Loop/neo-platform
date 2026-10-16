@@ -61,8 +61,10 @@ namespace Neo.VM.Types
         /// <inheritdoc />
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as VMObject);
         }
 
@@ -73,10 +75,14 @@ namespace Neo.VM.Types
         /// <returns><see langword="true"/> if the items are equal; otherwise <see langword="false"/>.</returns>
         public bool Equals([NotNullWhen(true)] VMObject? other)
         {
-            if (other is null) return false;
-            if (Type != other.Type) return false;
-            if (_disposed != other._disposed) return false;
-            if (_refCount != other._refCount) return false;
+            if (other is null)
+                return false;
+            if (Type != other.Type)
+                return false;
+            if (_disposed != other._disposed)
+                return false;
+            if (_refCount != other._refCount)
+                return false;
             return AsSpan().SequenceEqual(other.AsSpan());
         }
 
@@ -135,13 +141,13 @@ namespace Neo.VM.Types
 
         internal void Release()
         {
-            if (_disposed) return;
+            if (_disposed)
+                return;
 
             var newCount = Interlocked.Decrement(ref _refCount);
 
             if (newCount < 0)
                 Dispose(true);
-
         }
 
         #endregion
@@ -156,8 +162,8 @@ namespace Neo.VM.Types
             return DetectCycle(this, visited);
         }
 
-        internal virtual IEnumerable<VMObject> GetChildren() =>
-            [];
+        internal virtual IEnumerable<VMObject> GetChildren()
+            => [];
 
         /// <summary>
         /// Returns a deep clone of this object.
@@ -170,7 +176,8 @@ namespace Neo.VM.Types
         /// </summary>
         protected internal virtual VMObject Clone(Dictionary<VMObject, VMObject> objectMap)
         {
-            if (objectMap.TryGetValue(this, out var existing)) return existing;
+            if (objectMap.TryGetValue(this, out var existing))
+                return existing;
             var clone = CloneCore(objectMap); // Call derived implementation
             objectMap[this] = clone;          // Register immediately
             return clone;
@@ -262,115 +269,115 @@ namespace Neo.VM.Types
         }
 
         /// <summary>Converts a <see cref="byte"/> to a <see cref="VMInteger"/>.</summary>
-        public static implicit operator VMObject(byte value) =>
-            new VMInteger(value);
+        public static implicit operator VMObject(byte value)
+            => new VMInteger(value);
 
         /// <summary>Converts an <see cref="sbyte"/> to a <see cref="VMInteger"/>.</summary>
-        public static implicit operator VMObject(sbyte value) =>
-            new VMInteger(value);
+        public static implicit operator VMObject(sbyte value)
+            => new VMInteger(value);
 
         /// <summary>Converts a <see cref="short"/> to a <see cref="VMInteger"/>.</summary>
-        public static implicit operator VMObject(short value) =>
-            new VMInteger(value);
+        public static implicit operator VMObject(short value)
+            => new VMInteger(value);
 
         /// <summary>Converts a <see cref="ushort"/> to a <see cref="VMInteger"/>.</summary>
-        public static implicit operator VMObject(ushort value) =>
-            new VMInteger(value);
+        public static implicit operator VMObject(ushort value)
+            => new VMInteger(value);
 
         /// <summary>Converts an <see cref="int"/> to a <see cref="VMInteger"/>.</summary>
-        public static implicit operator VMObject(int value) =>
-            new VMInteger(value);
+        public static implicit operator VMObject(int value)
+            => new VMInteger(value);
 
         /// <summary>Converts a <see cref="uint"/> to a <see cref="VMInteger"/>.</summary>
-        public static implicit operator VMObject(uint value) =>
-            new VMInteger(value);
+        public static implicit operator VMObject(uint value)
+            => new VMInteger(value);
 
         /// <summary>Converts a <see cref="long"/> to a <see cref="VMInteger"/>.</summary>
-        public static implicit operator VMObject(long value) =>
-            new VMInteger(value);
+        public static implicit operator VMObject(long value)
+            => new VMInteger(value);
 
         /// <summary>Converts a <see cref="ulong"/> to a <see cref="VMInteger"/>.</summary>
-        public static implicit operator VMObject(ulong value) =>
-            new VMInteger(value);
+        public static implicit operator VMObject(ulong value)
+            => new VMInteger(value);
 
         /// <summary>Converts an <see cref="Int128"/> to a <see cref="VMInteger"/>.</summary>
-        public static implicit operator VMObject(Int128 value) =>
-            new VMInteger(value);
+        public static implicit operator VMObject(Int128 value)
+            => new VMInteger(value);
 
         /// <summary>Converts a <see cref="UInt128"/> to a <see cref="VMInteger"/>.</summary>
-        public static implicit operator VMObject(UInt128 value) =>
-            new VMInteger(value);
+        public static implicit operator VMObject(UInt128 value)
+            => new VMInteger(value);
 
         /// <summary>Converts a <see cref="BigInteger"/> to a <see cref="VMInteger"/>.</summary>
-        public static implicit operator VMObject(BigInteger value) =>
-            new VMInteger(value);
+        public static implicit operator VMObject(BigInteger value)
+            => new VMInteger(value);
 
         /// <summary>Converts a <see cref="bool"/> to a <see cref="VMBoolean"/>.</summary>
-        public static implicit operator VMObject(bool value) =>
-            new VMBoolean(value);
+        public static implicit operator VMObject(bool value)
+            => new VMBoolean(value);
 
         /// <summary>Converts a byte array to a <see cref="VMByteArray"/>.</summary>
-        public static implicit operator VMObject(byte[] value) =>
-            new VMByteArray(value);
+        public static implicit operator VMObject(byte[] value)
+            => new VMByteArray(value);
 
         /// <summary>Converts a UTF-8 string to a <see cref="VMByteArray"/>.</summary>
-        public static implicit operator VMObject(string value) =>
-            new VMByteArray(CoreUtilities.StrictUtf8Encoding.GetBytes(value));
+        public static implicit operator VMObject(string value)
+            => new VMByteArray(CoreUtilities.StrictUtf8Encoding.GetBytes(value));
 
         /// <summary>Converts a stack item to a <see cref="byte"/> via <see cref="GetInteger"/>.</summary>
-        public static implicit operator byte(VMObject value) =>
-            (byte)value.GetInteger();
+        public static implicit operator byte(VMObject value)
+            => (byte)value.GetInteger();
 
         /// <summary>Converts a stack item to an <see cref="sbyte"/> via <see cref="GetInteger"/>.</summary>
-        public static implicit operator sbyte(VMObject value) =>
-            (sbyte)value.GetInteger();
+        public static implicit operator sbyte(VMObject value)
+            => (sbyte)value.GetInteger();
 
         /// <summary>Converts a stack item to a <see cref="short"/> via integer conversion.</summary>
-        public static implicit operator short(VMObject value) =>
-            new VMInteger(value);
+        public static implicit operator short(VMObject value)
+            => new VMInteger(value);
 
         /// <summary>Converts a stack item to a <see cref="ushort"/> via <see cref="GetInteger"/>.</summary>
-        public static implicit operator ushort(VMObject value) =>
-            (ushort)value.GetInteger();
+        public static implicit operator ushort(VMObject value)
+            => (ushort)value.GetInteger();
 
         /// <summary>Converts a stack item to an <see cref="int"/> via <see cref="GetInteger"/>.</summary>
-        public static implicit operator int(VMObject value) =>
-            (int)value.GetInteger();
+        public static implicit operator int(VMObject value)
+            => (int)value.GetInteger();
 
         /// <summary>Converts a stack item to a <see cref="uint"/> via <see cref="GetInteger"/>.</summary>
-        public static implicit operator uint(VMObject value) =>
-            (uint)value.GetInteger();
+        public static implicit operator uint(VMObject value)
+            => (uint)value.GetInteger();
 
         /// <summary>Converts a stack item to a <see cref="long"/> via <see cref="GetInteger"/>.</summary>
-        public static implicit operator long(VMObject value) =>
-            (long)value.GetInteger();
+        public static implicit operator long(VMObject value)
+            => (long)value.GetInteger();
 
         /// <summary>Converts a stack item to a <see cref="ulong"/> via <see cref="GetInteger"/>.</summary>
-        public static implicit operator ulong(VMObject value) =>
-            (ulong)value.GetInteger();
+        public static implicit operator ulong(VMObject value)
+            => (ulong)value.GetInteger();
 
         /// <summary>Converts a stack item to an <see cref="Int128"/> via <see cref="GetInteger"/>.</summary>
-        public static implicit operator Int128(VMObject value) =>
-            (Int128)value.GetInteger();
+        public static implicit operator Int128(VMObject value)
+            => (Int128)value.GetInteger();
 
         /// <summary>Converts a stack item to a <see cref="UInt128"/> via <see cref="GetInteger"/>.</summary>
-        public static implicit operator UInt128(VMObject value) =>
-            (UInt128)value.GetInteger();
+        public static implicit operator UInt128(VMObject value)
+            => (UInt128)value.GetInteger();
 
         /// <summary>Converts a stack item to a <see cref="BigInteger"/> via <see cref="GetInteger"/>.</summary>
-        public static implicit operator BigInteger(VMObject value) =>
-            value.GetInteger();
+        public static implicit operator BigInteger(VMObject value)
+            => value.GetInteger();
 
         /// <summary>Converts a stack item to a <see cref="bool"/> via <see cref="GetBoolean"/>.</summary>
-        public static implicit operator bool(VMObject value) =>
-            value.GetBoolean();
+        public static implicit operator bool(VMObject value)
+            => value.GetBoolean();
 
         /// <summary>Converts a stack item to a byte array via <see cref="AsSpan"/>.</summary>
-        public static implicit operator byte[](VMObject value) =>
-            [.. value.AsSpan()];
+        public static implicit operator byte[](VMObject value)
+            => [.. value.AsSpan()];
 
         /// <summary>Converts a stack item to its string representation.</summary>
-        public static implicit operator string(VMObject value) =>
-            $"{value}";
+        public static implicit operator string(VMObject value)
+            => $"{value}";
     }
 }

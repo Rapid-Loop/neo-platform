@@ -515,9 +515,9 @@ namespace Neo.VM.Core
         public virtual void Ret(VirtualMachineEngine engine, OpCodeInst instruction)
         {
             var context = engine.InvocationStack.Pop();
-            var stackEval = engine.InvocationStack.Count == 0 ?
-                    engine.ResultStack :
-                    engine.InvocationStack.Peek().Frame.EvaluationStack;
+            var stackEval = engine.InvocationStack.Count == 0
+                    ? engine.ResultStack
+                    : engine.InvocationStack.Peek().Frame.EvaluationStack;
 
             if (context.Frame.EvaluationStack != stackEval)
             {

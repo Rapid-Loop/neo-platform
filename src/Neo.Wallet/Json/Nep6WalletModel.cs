@@ -33,7 +33,7 @@ namespace Neo.Wallet.Json
         /// Converts this model to a <see cref="Nep6Wallet"/>.
         /// </summary>
         /// <returns>A NEP-6 wallet initialized from this model.</returns>
-        public Nep6Wallet ToObject() =>
-            new(this);
+        public Nep6Wallet ToObject()
+            => new(this);
     }
 }

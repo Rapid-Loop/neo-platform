@@ -85,7 +85,8 @@ namespace Neo.VM.Types
             get => Array[index];
             set
             {
-                if (_isReadOnly) throw new InvalidOperationException();
+                if (_isReadOnly)
+                    throw new InvalidOperationException();
                 Array[index] = value;
             }
         }
@@ -109,8 +110,10 @@ namespace Neo.VM.Types
         /// <inheritdoc />
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as VMArray);
         }
 
@@ -121,9 +124,12 @@ namespace Neo.VM.Types
         /// <returns><see langword="true"/> if the arrays are equal; otherwise <see langword="false"/>.</returns>
         public bool Equals(VMArray? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
-            if (RefCount != other.RefCount) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
+            if (RefCount != other.RefCount)
+                return false;
 
             if (other.Count == Count)
             {
@@ -142,12 +148,12 @@ namespace Neo.VM.Types
         #region IEnumerable
 
         /// <inheritdoc />
-        public IEnumerator<VMObject> GetEnumerator() =>
-            Array.GetEnumerator();
+        public IEnumerator<VMObject> GetEnumerator()
+            => Array.GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+            => GetEnumerator();
 
         #endregion
 
@@ -160,7 +166,8 @@ namespace Neo.VM.Types
         /// <exception cref="InvalidOperationException">Thrown when the array is read-only.</exception>
         public void Add(VMObject item)
         {
-            if (_isReadOnly) throw new InvalidOperationException();
+            if (_isReadOnly)
+                throw new InvalidOperationException();
             Array.Add(item);
         }
 
@@ -170,7 +177,8 @@ namespace Neo.VM.Types
         /// <exception cref="InvalidOperationException">Thrown when the array is read-only.</exception>
         public void Clear()
         {
-            if (_isReadOnly) throw new InvalidOperationException();
+            if (_isReadOnly)
+                throw new InvalidOperationException();
             Array.Clear();
         }
 
@@ -205,7 +213,8 @@ namespace Neo.VM.Types
         /// <exception cref="InvalidOperationException">Thrown when the array is read-only.</exception>
         public bool Remove(VMObject item)
         {
-            if (_isReadOnly) throw new InvalidOperationException();
+            if (_isReadOnly)
+                throw new InvalidOperationException();
             return Array.Remove(item);
         }
 
@@ -231,7 +240,8 @@ namespace Neo.VM.Types
         /// <exception cref="InvalidOperationException">Thrown when the array is read-only.</exception>
         public void Insert(int index, VMObject item)
         {
-            if (_isReadOnly) throw new InvalidOperationException();
+            if (_isReadOnly)
+                throw new InvalidOperationException();
             Array.Insert(index, item);
         }
 
@@ -242,14 +252,15 @@ namespace Neo.VM.Types
         /// <exception cref="InvalidOperationException">Thrown when the array is read-only.</exception>
         public void RemoveAt(int index)
         {
-            if (_isReadOnly) throw new InvalidOperationException();
+            if (_isReadOnly)
+                throw new InvalidOperationException();
             Array.RemoveAt(index);
         }
 
         #endregion
 
-        internal override IEnumerable<VMObject> GetChildren() =>
-            [.. Array];
+        internal override IEnumerable<VMObject> GetChildren()
+            => [.. Array];
 
         /// <summary>
         /// Reverses the order of the items in the array.
@@ -257,13 +268,14 @@ namespace Neo.VM.Types
         /// <exception cref="InvalidOperationException">Thrown when the array is read-only.</exception>
         public void Reverse()
         {
-            if (_isReadOnly) throw new InvalidOperationException();
+            if (_isReadOnly)
+                throw new InvalidOperationException();
 
             Array.Reverse();
         }
 
-        internal void SetAsReadOnly() =>
-            _isReadOnly = true;
+        internal void SetAsReadOnly()
+            => _isReadOnly = true;
 
         /// <inheritdoc />
         public override VMObject Clone()
@@ -275,7 +287,8 @@ namespace Neo.VM.Types
         /// <inheritdoc />
         protected override VMObject CloneCore(Dictionary<VMObject, VMObject> objectMap)
         {
-            if (objectMap.TryGetValue(this, out var thisItem)) return thisItem;
+            if (objectMap.TryGetValue(this, out var thisItem))
+                return thisItem;
 
             var clone = new VMArray();
 

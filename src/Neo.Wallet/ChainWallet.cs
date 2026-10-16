@@ -57,7 +57,9 @@ namespace Neo.Wallet
             if (decodedWifBytes.Length != 34 ||
                 decodedWifBytes[0] != 0x80 ||
                 decodedWifBytes[33] != 0x01)
+            {
                 throw new FormatException("Invalid WIF key");
+            }
 
             return decodedWifBytes[1..^1];
         }
@@ -116,7 +118,9 @@ namespace Neo.Wallet
                 decodedSpan[0] != 0x01 ||
                 decodedSpan[1] != 0x42 ||
                 decodedSpan[2] != 0xe0)
+            {
                 throw new FormatException("Invalid NEP-2 key");
+            }
 
             const int SCryptKeyLengthInBytes = 64;
             const int SaltLengthInBytes = 4;
@@ -174,15 +178,15 @@ namespace Neo.Wallet
         /// </summary>
         /// <param name="file">The wallet file to open.</param>
         /// <returns>The loaded <see cref="DevWallet"/>.</returns>
-        public static DevWallet OpenDevWalletFile(FileInfo file) =>
-            JsonModel.FromJson<DevWalletModel>(file)!.ToObject();
+        public static DevWallet OpenDevWalletFile(FileInfo file)
+            => JsonModel.FromJson<DevWalletModel>(file)!.ToObject();
 
         /// <summary>
         /// Opens a NEP-6 wallet from a JSON file.
         /// </summary>
         /// <param name="file">The wallet file to open.</param>
         /// <returns>The loaded <see cref="Nep6Wallet"/>, or <see langword="null"/> if unavailable.</returns>
-        public static Nep6Wallet? OpenNep6WalletFie(FileInfo file) =>
-            JsonModel.FromJson<Nep6WalletModel>(file)!.ToObject();
+        public static Nep6Wallet? OpenNep6WalletFie(FileInfo file)
+            => JsonModel.FromJson<Nep6WalletModel>(file)!.ToObject();
     }
 }

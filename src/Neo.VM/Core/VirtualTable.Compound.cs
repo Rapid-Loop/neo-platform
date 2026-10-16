@@ -342,10 +342,12 @@ namespace Neo.VM.Core
 
             var newArray = new VMArray();
             foreach (var item in values)
+            {
                 if (item is VMStruct s)
                     newArray.Add(s.Clone());
                 else
                     newArray.Add(item);
+            }
 
             engine.CurrentContext!.Push(newArray);
         }

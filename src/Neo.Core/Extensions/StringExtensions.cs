@@ -54,7 +54,8 @@ namespace Neo.Core.Extensions
         /// <returns>The centered string, or the original string when it is already at least <paramref name="totalWidth"/> characters.</returns>
         public static string PadCenter(this string str, int totalWidth, char paddingChar)
         {
-            if (str is null) return string.Empty;
+            if (str is null)
+                return string.Empty;
 
             if (str.Length >= totalWidth)
                 return str;

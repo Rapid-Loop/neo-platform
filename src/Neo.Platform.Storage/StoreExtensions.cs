@@ -41,8 +41,8 @@ namespace Neo.Platform.Storage
         /// <param name="key">The storage key.</param>
         /// <param name="value">The value to serialize and store.</param>
         public static void Put<T>(this IStore store, ReadOnlySpan<byte> key, T value)
-            where T : INeoSerializable =>
-            store.Put(key, value.ToArray());
+            where T : INeoSerializable
+            => store.Put(key, value.ToArray());
 
         /// <summary>
         /// Reads and deserializes a value of type <typeparamref name="TResult"/> for <paramref name="key"/>.
@@ -54,8 +54,8 @@ namespace Neo.Platform.Storage
         /// The deserialized value, or <see langword="null"/> if the key is not present.
         /// </returns>
         public static TResult? Get<TResult>(this IReadOnlyStore store, ReadOnlySpan<byte> key)
-            where TResult : class?, INeoSerializable =>
-            store.Get(key)?.AsSerializable<TResult>();
+            where TResult : class?, INeoSerializable
+            => store.Get(key)?.AsSerializable<TResult>();
 
         /// <summary>
         /// Attempts to read and deserialize a value of type <typeparamref name="T"/> for <paramref name="key"/>.

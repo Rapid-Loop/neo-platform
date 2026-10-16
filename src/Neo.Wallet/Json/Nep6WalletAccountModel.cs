@@ -42,7 +42,7 @@ namespace Neo.Wallet.Json
         /// Moves property values from <see cref="Nep6WalletAccountModel"/> to <see cref="Nep6WalletAccount"/> with <see cref="SCryptModel.Default"/> setting.
         /// </summary>
         /// <returns>A new <see cref="Nep6WalletAccount"/> object.</returns>
-        public Nep6WalletAccount ToObject() =>
-            new(this);
+        public Nep6WalletAccount ToObject()
+            => new(this);
     }
 }

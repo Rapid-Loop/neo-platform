@@ -95,7 +95,8 @@ namespace Neo.Core.Extensions
             }
             catch (TException ex)
             {
-                if (onError == null) throw;
+                if (onError == null)
+                    throw;
                 return onError(obj, ex);
             }
         }
@@ -168,7 +169,9 @@ namespace Neo.Core.Extensions
             catch (TException innerException)
             {
                 if (string.IsNullOrEmpty(errorMessage))
+                {
                     throw;
+                }
                 else
                 {
                     if (Activator.CreateInstance(typeof(TException), errorMessage, innerException) is not TException ex)
@@ -176,7 +179,6 @@ namespace Neo.Core.Extensions
                     else
                         throw ex;
                 }
-
             }
         }
 
@@ -202,7 +204,9 @@ namespace Neo.Core.Extensions
             catch (TException innerException)
             {
                 if (string.IsNullOrEmpty(errorMessage))
+                {
                     throw;
+                }
                 else
                 {
                     if (Activator.CreateInstance(typeof(TException), errorMessage, innerException) is not TException ex)
@@ -210,7 +214,6 @@ namespace Neo.Core.Extensions
                     else
                         throw ex;
                 }
-
             }
         }
     }

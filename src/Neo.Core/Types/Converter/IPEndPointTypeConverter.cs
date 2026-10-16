@@ -41,8 +41,8 @@ namespace Neo.Core.Types.Converter
         /// <returns>
         /// <see langword="true"/> if conversion from <see cref="string"/> is supported; otherwise, the base result.
         /// </returns>
-        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType) =>
-            sourceType == typeof(string) && base.CanConvertFrom(context, sourceType);
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
+            => sourceType == typeof(string) && base.CanConvertFrom(context, sourceType);
 
         /// <summary>
         /// Converts the given object to an <see cref="IPEndPoint"/>.
@@ -56,7 +56,9 @@ namespace Neo.Core.Types.Converter
             if (value is string endPointString)
             {
                 if (IPEndPoint.TryParse(endPointString, out var ipEndPoint))
+                {
                     return ipEndPoint;
+                }
                 else
                 {
                     // Try to see if its a hostname

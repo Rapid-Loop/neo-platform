@@ -191,7 +191,8 @@ namespace Neo.VM.Core
             if (n < BigInteger.Zero)
                 throw new InvalidOperationException($"The negative value {n} is invalid for OpCode.{instruction.OpCode}.");
 
-            if (n == BigInteger.Zero) return;
+            if (n == BigInteger.Zero)
+                return;
 
             var x = engine.CurrentContext!.RemoveAt(unchecked((int)n));
 

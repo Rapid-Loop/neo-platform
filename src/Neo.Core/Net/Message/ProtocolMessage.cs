@@ -71,8 +71,8 @@ namespace Neo.Core.Net.Message
         /// <summary>
         /// Gets the serialized size of this frame in bytes.
         /// </summary>
-        public int Size =>
-            sizeof(ProtocolMessageFlags) +
+        public int Size
+            => sizeof(ProtocolMessageFlags) +
             sizeof(ProtocolMessageCommand) +
             _compressedPayloadBytes.GetSerializedSize();
 
@@ -235,8 +235,8 @@ namespace Neo.Core.Net.Message
             writer.Write<byte>(_compressedPayloadBytes.Span);
         }
 
-        private static bool ShallCompress(ProtocolMessageCommand command) =>
-            command is ProtocolMessageCommand.Block
+        private static bool ShallCompress(ProtocolMessageCommand command)
+            => command is ProtocolMessageCommand.Block
                 or ProtocolMessageCommand.Extensible
                 or ProtocolMessageCommand.Transaction
                 or ProtocolMessageCommand.Headers

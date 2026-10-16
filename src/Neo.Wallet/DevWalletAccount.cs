@@ -137,8 +137,8 @@ namespace Neo.Wallet
         }
 
         /// <inheritdoc/>
-        public override string ToString() =>
-            $"{ToObject()}";
+        public override string ToString()
+            => $"{ToObject()}";
 
         /// <summary>
         /// Not supported for development accounts.
@@ -179,15 +179,15 @@ namespace Neo.Wallet
         /// Gets a copy of the account private key.
         /// </summary>
         /// <returns>The private key bytes, or an empty array when no key is stored.</returns>
-        public byte[] GetPrivateKey() =>
-            _privateKeyBytes[..];
+        public byte[] GetPrivateKey()
+            => _privateKeyBytes[..];
 
         /// <summary>
         /// Converts this account to its JSON model representation.
         /// </summary>
         /// <returns>A <see cref="DevWalletAccountModel"/> that mirrors the current account state.</returns>
-        public DevWalletAccountModel ToObject() =>
-            new()
+        public DevWalletAccountModel ToObject()
+            => new()
             {
                 Address = Address,
                 Contract = new()

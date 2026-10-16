@@ -185,8 +185,8 @@ namespace Neo.Wallet
         }
 
         /// <inheritdoc/>
-        public override string ToString() =>
-            $"{ToObject()}";
+        public override string ToString()
+            => $"{ToObject()}";
 
         /// <summary>
         /// Changes the password used to protect the account private key and re-encrypts it as NEP-2.
@@ -196,11 +196,16 @@ namespace Neo.Wallet
         /// <returns><see langword="true"/> if the password was changed; otherwise, <see langword="false"/>.</returns>
         public bool ChangePassword(ProtectedString oldPassword, ProtectedString newPassword)
         {
-            if (_isLocked) return false;
-            if (_privateKeyBytes.Length == 0) return false;
-            if (string.IsNullOrEmpty(newPassword)) return false;
-            if (oldPassword == newPassword) return false;
-            if (_password != oldPassword) return false;
+            if (_isLocked)
+                return false;
+            if (_privateKeyBytes.Length == 0)
+                return false;
+            if (string.IsNullOrEmpty(newPassword))
+                return false;
+            if (oldPassword == newPassword)
+                return false;
+            if (_password != oldPassword)
+                return false;
 
             _password.Dispose();
             _password = newPassword;
@@ -225,7 +230,8 @@ namespace Neo.Wallet
         /// <exception cref="InvalidOperationException">Thrown when no NEP-2 key has been set.</exception>
         public bool VerifyPassword(ProtectedString password)
         {
-            if (string.IsNullOrEmpty(password)) return false;
+            if (string.IsNullOrEmpty(password))
+                return false;
             if (string.IsNullOrEmpty(_nep2String))
                 throw new InvalidOperationException($"Password is not set. Call {nameof(ChangePassword)} first.");
 
@@ -249,8 +255,8 @@ namespace Neo.Wallet
         /// <summary>
         /// Locks the account so that the private key cannot be retrieved until unlocked.
         /// </summary>
-        public void SetLock() =>
-            _isLocked = true;
+        public void SetLock()
+            => _isLocked = true;
 
         /// <summary>
         /// Gets a copy of the account private key.
@@ -269,8 +275,8 @@ namespace Neo.Wallet
         /// Converts this account to its JSON model representation.
         /// </summary>
         /// <returns>A <see cref="Nep6WalletAccountModel"/> that mirrors the current account state.</returns>
-        public Nep6WalletAccountModel ToObject() =>
-            new()
+        public Nep6WalletAccountModel ToObject()
+            => new()
             {
                 Address = Address,
                 Contract = new()

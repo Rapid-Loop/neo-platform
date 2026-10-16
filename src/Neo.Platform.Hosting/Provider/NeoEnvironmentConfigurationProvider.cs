@@ -116,7 +116,7 @@ namespace Neo.Platform.Hosting.Provider
                 data[normalizedKey[normalizedPrefix.Length..]] = value;
         }
 
-        private static string Normalize(string key) =>
-            key.Replace("_", ConfigurationPath.KeyDelimiter);
+        private static string Normalize(string key)
+            => key.Replace("_", ConfigurationPath.KeyDelimiter);
     }
 }

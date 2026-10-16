@@ -40,16 +40,16 @@ namespace Neo.Configuration.Json
         /// <param name="options">Optional serializer options; when <see langword="null"/>, instance defaults are used.</param>
         /// <returns>The JSON representation of this model.</returns>
         [return: NotNull]
-        public virtual string? ToString(JsonSerializerOptions? options = default) =>
-            ToJson(options);
+        public virtual string? ToString(JsonSerializerOptions? options = default)
+            => ToJson(options);
 
         /// <summary>
         /// Serializes this model to a JSON string.
         /// </summary>
         /// <param name="options">Optional serializer options; when <see langword="null"/>, instance defaults are used.</param>
         /// <returns>The JSON representation of this model.</returns>
-        public virtual string ToJson(JsonSerializerOptions? options) =>
-            JsonSerializer.Serialize<object>(this, options ?? _jsonSerializerOptions);
+        public virtual string ToJson(JsonSerializerOptions? options)
+            => JsonSerializer.Serialize<object>(this, options ?? _jsonSerializerOptions);
 
         /// <summary>
         /// Deserializes a JSON string into a <typeparamref name="TModel"/> instance.
@@ -59,8 +59,8 @@ namespace Neo.Configuration.Json
         /// <param name="options">Optional serializer options; when <see langword="null"/>, <see cref="JsonDefaults.SerializerOptions"/> is used.</param>
         /// <returns>The deserialized model, or <see langword="null"/> if deserialization yields no value.</returns>
         public static TModel? FromJson<TModel>(string jsonString, JsonSerializerOptions? options = default)
-            where TModel : notnull, JsonModel =>
-            JsonSerializer.Deserialize<TModel>(
+            where TModel : notnull, JsonModel
+            => JsonSerializer.Deserialize<TModel>(
                 jsonString,
                 options ?? JsonDefaults.SerializerOptions);
 

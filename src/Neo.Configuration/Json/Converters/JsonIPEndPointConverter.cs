@@ -55,7 +55,9 @@ namespace Neo.Configuration.Json.Converters
                 return default;
 
             if (IPEndPoint.TryParse(valueString, out var value))
+            {
                 return value;
+            }
             else
             {
                 // Try to see if its a hostname

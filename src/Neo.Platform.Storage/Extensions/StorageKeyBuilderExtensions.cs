@@ -36,8 +36,8 @@ namespace Neo.Platform.Storage.Extensions
         /// <param name="builder">The key builder.</param>
         /// <param name="data">The serializable value to append.</param>
         /// <returns>The same <paramref name="builder"/> for chaining.</returns>
-        public static StorageKeyBuilder Append(this StorageKeyBuilder builder, INeoSerializable data) =>
-            builder.Append(data.ToArray());
+        public static StorageKeyBuilder Append(this StorageKeyBuilder builder, INeoSerializable data)
+            => builder.Append(data.ToArray());
 
         /// <summary>
         /// Appends a prefix byte, then serializes and appends <paramref name="data"/>.
@@ -46,7 +46,7 @@ namespace Neo.Platform.Storage.Extensions
         /// <param name="prefix">The prefix byte to append first.</param>
         /// <param name="data">The serializable value to append after the prefix.</param>
         /// <returns>The same <paramref name="builder"/> for chaining.</returns>
-        public static StorageKeyBuilder Append(this StorageKeyBuilder builder, byte prefix, INeoSerializable data) =>
-            builder.Append(prefix).Append(data.ToArray());
+        public static StorageKeyBuilder Append(this StorageKeyBuilder builder, byte prefix, INeoSerializable data)
+            => builder.Append(prefix).Append(data.ToArray());
     }
 }

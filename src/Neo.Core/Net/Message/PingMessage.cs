@@ -51,8 +51,8 @@ namespace Neo.Core.Net.Message
         /// <summary>
         /// Gets the serialized size of this payload in bytes.
         /// </summary>
-        public int Size =>
-            sizeof(uint) + // LastBlockIndex
+        public int Size
+            => sizeof(uint) + // LastBlockIndex
             sizeof(uint) + // Timestamp
             sizeof(uint);  // Nonce
 
@@ -61,8 +61,8 @@ namespace Neo.Core.Net.Message
         /// </summary>
         /// <param name="lastBlockIndex">The sender's last known block index.</param>
         /// <returns>A new <see cref="PingMessage"/>.</returns>
-        public static PingMessage Create(uint lastBlockIndex) =>
-            Create(lastBlockIndex, RandomNumberFactory.NextUInt32());
+        public static PingMessage Create(uint lastBlockIndex)
+            => Create(lastBlockIndex, RandomNumberFactory.NextUInt32());
 
         /// <summary>
         /// Creates a ping/pong payload with the specified nonce.
@@ -70,8 +70,8 @@ namespace Neo.Core.Net.Message
         /// <param name="lastBlockIndex">The sender's last known block index.</param>
         /// <param name="nonce">The correlation nonce.</param>
         /// <returns>A new <see cref="PingMessage"/>.</returns>
-        public static PingMessage Create(uint lastBlockIndex, uint nonce) =>
-            new()
+        public static PingMessage Create(uint lastBlockIndex, uint nonce)
+            => new()
             {
                 LastBlockIndex = lastBlockIndex,
                 Timestamp = CoreUtilities.ToUnixTimeSeconds(DateTime.UtcNow),

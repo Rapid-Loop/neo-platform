@@ -63,7 +63,8 @@ namespace Neo.VM.Tests.TestData
             {
                 using var jsonStream = entry.Open();
                 var suite = JsonSerializer.Deserialize<VMTestSuite>(jsonStream, s_options);
-                if (suite != null) suites.Add(suite);
+                if (suite != null)
+                    suites.Add(suite);
             }
 
             return suites;

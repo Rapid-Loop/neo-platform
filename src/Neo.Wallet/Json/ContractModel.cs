@@ -54,8 +54,8 @@ namespace Neo.Wallet.Json
         /// Converts this model to a <see cref="WitnessContract"/>.
         /// </summary>
         /// <returns>A witness contract built from <see cref="Script"/> and <see cref="Parameters"/>.</returns>
-        public WitnessContract ToObject() =>
-            WitnessContract.Create(
+        public WitnessContract ToObject()
+            => WitnessContract.Create(
                 Script ?? [],
                 [
                     .. Parameters?.Select(

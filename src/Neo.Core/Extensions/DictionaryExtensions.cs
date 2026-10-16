@@ -58,8 +58,8 @@ namespace Neo.Core.Extensions
         /// <param name="source">The dictionary to hash.</param>
         /// <param name="seed">The initial hash seed.</param>
         /// <returns>An integer hash code derived from the dictionary contents.</returns>
-        public static int ToHashCode<TKey, TValue>(this IDictionary<TKey, TValue> source, int seed = 397) =>
-            source.Aggregate(seed,
+        public static int ToHashCode<TKey, TValue>(this IDictionary<TKey, TValue> source, int seed = 397)
+            => source.Aggregate(seed,
                 (hash, b) =>
                        unchecked((hash * 31) + ((b.Key?.GetHashCode() ?? 0) ^ (b.Value?.GetHashCode() ?? 0)))
                 );
@@ -72,8 +72,8 @@ namespace Neo.Core.Extensions
         /// <param name="source">The dictionary to hash.</param>
         /// <param name="seed">The initial hash seed.</param>
         /// <returns>An integer hash code derived from the dictionary contents.</returns>
-        public static int ToHashCode<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> source, int seed = 397) =>
-            source.Aggregate(seed,
+        public static int ToHashCode<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> source, int seed = 397)
+            => source.Aggregate(seed,
                 (hash, b) =>
                         unchecked((hash * 31) + ((b.Key?.GetHashCode() ?? 0) ^ (b.Value?.GetHashCode() ?? 0)))
                 );

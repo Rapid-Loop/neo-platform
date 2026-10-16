@@ -240,11 +240,11 @@ namespace Neo.Core.Tests.Net.Message
 
             public int Size => _bytes.Length;
 
-            public void Serialize(Stream writer) =>
-                writer.Write(_bytes, 0, _bytes.Length);
+            public void Serialize(Stream writer)
+                => writer.Write(_bytes, 0, _bytes.Length);
 
-            public void Deserialize(Stream reader) =>
-                throw new NotSupportedException();
+            public void Deserialize(Stream reader)
+                => throw new NotSupportedException();
         }
     }
 }

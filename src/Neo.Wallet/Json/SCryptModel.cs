@@ -60,7 +60,7 @@ namespace Neo.Wallet.Json
         /// Converts this model to a <see cref="ScryptParameters"/> instance.
         /// </summary>
         /// <returns>A <see cref="ScryptParameters"/> with the same N, R, and P values.</returns>
-        public ScryptParameters ToObject() =>
-            new(N, R, P);
+        public ScryptParameters ToObject()
+            => new(N, R, P);
     }
 }

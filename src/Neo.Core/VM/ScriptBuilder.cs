@@ -393,14 +393,14 @@ namespace Neo.Core.VM
         /// Emits an <see cref="OpCode.RET"/> instruction.
         /// </summary>
         /// <returns>A reference to this instance after the emit operation has completed.</returns>
-        public ScriptBuilder EmitReturn() =>
-            Emit(OpCode.RET);
+        public ScriptBuilder EmitReturn()
+            => Emit(OpCode.RET);
 
         private static ReadOnlySpan<byte> PadRight(Span<byte> buffer, int dataLength, int padLength, bool negative)
         {
-            var pad = negative ?
-                (byte)0xff :
-                (byte)0;
+            var pad = negative
+                ? (byte)0xff
+                : (byte)0;
 
             for (var x = dataLength; x < padLength; x++)
                 buffer[x] = pad;

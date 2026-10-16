@@ -41,7 +41,7 @@ namespace Neo.Platform.Hosting.Configuration
         /// </summary>
         /// <param name="builder">The configuration builder.</param>
         /// <returns>A <see cref="NeoEnvironmentConfigurationProvider"/> instance.</returns>
-        public IConfigurationProvider Build(IConfigurationBuilder builder) =>
-            new NeoEnvironmentConfigurationProvider(this);
+        public IConfigurationProvider Build(IConfigurationBuilder builder)
+            => new NeoEnvironmentConfigurationProvider(this);
     }
 }

@@ -34,7 +34,7 @@ namespace Neo.Core.Json
         /// </summary>
         /// <param name="name">The property name to convert.</param>
         /// <returns>The lower-case property name.</returns>
-        public override string ConvertName(string name) =>
-            name.ToLowerInvariant();
+        public override string ConvertName(string name)
+            => name.ToLowerInvariant();
     }
 }

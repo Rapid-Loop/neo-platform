@@ -178,8 +178,8 @@ namespace Neo.Platform.Storage
         /// Creates a backup handle for this store.
         /// </summary>
         /// <returns>An <see cref="IStoreBackup"/> bound to this database.</returns>
-        public IStoreBackup CreateBackup() =>
-            new BlockchainStoreBackup(_db, _backupOptions, _loggerFactory);
+        public IStoreBackup CreateBackup()
+            => new BlockchainStoreBackup(_db, _backupOptions, _loggerFactory);
 
         /// <summary>
         /// Creates a consistent snapshot of the current store state.
@@ -328,8 +328,8 @@ namespace Neo.Platform.Storage
         /// Returns a non-generic enumerator over all key/value pairs.
         /// </summary>
         /// <returns>An enumerator for the store contents.</returns>
-        public IEnumerator GetEnumerator() =>
-            GetEnumerator();
+        public IEnumerator GetEnumerator()
+            => GetEnumerator();
 
         IEnumerator<KeyValuePair<byte[], byte[]>> IEnumerable<KeyValuePair<byte[], byte[]>>.GetEnumerator()
         {

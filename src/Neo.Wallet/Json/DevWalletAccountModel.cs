@@ -49,8 +49,8 @@ namespace Neo.Wallet.Json
         /// A signature account when <see cref="Key"/> is present; otherwise a contract or watch-only account.
         /// </returns>
         /// <exception cref="InvalidOperationException">Thrown when creating a keyless account without an address.</exception>
-        public DevWalletAccount ToObject() =>
-            (Key is not null && Key.Length > 0)
+        public DevWalletAccount ToObject()
+            => (Key is not null && Key.Length > 0)
             ? new(
                 Key ?? [],
                 Extra?.ToObject() ?? ProtocolSettings.Default)

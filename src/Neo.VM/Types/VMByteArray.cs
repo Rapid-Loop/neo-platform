@@ -95,8 +95,10 @@ namespace Neo.VM.Types
         /// <inheritdoc />
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as VMByteArray);
         }
 
@@ -119,7 +121,8 @@ namespace Neo.VM.Types
         {
             foreach (var v in _memoryOwner.Memory[.._byteCount].Span)
             {
-                if (char.IsAscii((char)v)) continue;
+                if (char.IsAscii((char)v))
+                    continue;
                 return Convert.ToBase64String(_memoryOwner.Memory[.._byteCount].Span);
             }
 
@@ -182,10 +185,14 @@ namespace Neo.VM.Types
         /// <returns><see langword="true"/> if the contents are equal; otherwise <see langword="false"/>.</returns>
         public bool Equals([NotNullWhen(true)] VMByteArray? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
-            if (RefCount != other.RefCount) return false;
-            if (Length != other.Length) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
+            if (RefCount != other.RefCount)
+                return false;
+            if (Length != other.Length)
+                return false;
             return _memoryOwner.Memory[.._byteCount]
                 .Span
                 .SequenceEqual(other._memoryOwner.Memory[..other._byteCount].Span);
@@ -215,7 +222,7 @@ namespace Neo.VM.Types
         /// <summary>
         /// Inequality comparison.
         /// </summary>
-        public static bool operator !=(VMByteArray a, VMByteArray b) =>
-            !(a == b);
+        public static bool operator !=(VMByteArray a, VMByteArray b)
+            => !(a == b);
     }
 }

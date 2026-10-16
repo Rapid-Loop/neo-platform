@@ -130,10 +130,12 @@ namespace Neo.Platform.Hosting
                     var isWindows = OperatingSystem.IsWindows();
 
                     if (isWindows)
+                    {
                         logging.AddFilter<EventLogLoggerProvider>
                         (
                             level => level >= LogLevel.Warning
                         );
+                    }
 
                     logging.AddConfiguration(context.Configuration.GetSection("Logging"));
                     logging.AddNeoPlatform();
@@ -192,8 +194,8 @@ namespace Neo.Platform.Hosting
         /// </summary>
         /// <param name="builder">The host builder.</param>
         /// <returns>The same <paramref name="builder"/> for chaining.</returns>
-        public static IHostBuilder UseNeoPlatformOptions(this IHostBuilder builder) =>
-            builder.ConfigureServices
+        public static IHostBuilder UseNeoPlatformOptions(this IHostBuilder builder)
+            => builder.ConfigureServices
             (
                 static (context, services) =>
                 {
@@ -209,8 +211,8 @@ namespace Neo.Platform.Hosting
         /// <param name="builder">The host builder.</param>
         /// <param name="configure">Optional callback that configures <see cref="NeoPlatformLifetimeOptions"/>.</param>
         /// <returns>The same <paramref name="builder"/> for chaining.</returns>
-        public static IHostBuilder UseNeoPlatformLifetime(this IHostBuilder builder, Action<NeoPlatformLifetimeOptions>? configure = default) =>
-            builder.ConfigureServices(
+        public static IHostBuilder UseNeoPlatformLifetime(this IHostBuilder builder, Action<NeoPlatformLifetimeOptions>? configure = default)
+            => builder.ConfigureServices(
                 services =>
                 {
                     services.AddSingleton<IHostLifetime, NeoPlatformLifetime>();

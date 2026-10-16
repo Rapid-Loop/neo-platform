@@ -80,8 +80,8 @@ namespace Neo.Core.Net.Message
         /// <summary>
         /// Gets the serialized size of this payload in bytes.
         /// </summary>
-        public int Size =>
-            sizeof(uint) + // Network
+        public int Size
+            => sizeof(uint) + // Network
             sizeof(uint) + // Version
             sizeof(uint) + // Timestamp
             sizeof(uint) + // Nonce
@@ -94,8 +94,8 @@ namespace Neo.Core.Net.Message
         /// <param name="network">The network magic number.</param>
         /// <param name="capabilities">The node capabilities to advertise.</param>
         /// <returns>A new <see cref="VersionMessage"/>.</returns>
-        public static VersionMessage Create(uint network, params NodeCapabilityMessage[] capabilities) =>
-            new()
+        public static VersionMessage Create(uint network, params NodeCapabilityMessage[] capabilities)
+            => new()
             {
                 Network = network,
                 Capabilities = capabilities,
@@ -108,8 +108,8 @@ namespace Neo.Core.Net.Message
         /// <param name="nonce">The local node nonce.</param>
         /// <param name="capabilities">The node capabilities to advertise.</param>
         /// <returns>A new <see cref="VersionMessage"/>.</returns>
-        public static VersionMessage Create(uint network, uint nonce, params NodeCapabilityMessage[] capabilities) =>
-            new()
+        public static VersionMessage Create(uint network, uint nonce, params NodeCapabilityMessage[] capabilities)
+            => new()
             {
                 Network = network,
                 Nonce = nonce,

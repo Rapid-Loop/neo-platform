@@ -64,8 +64,10 @@ namespace Neo.VM.Types
         /// <inheritdoc />
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as VMInteger);
         }
 
@@ -108,9 +110,12 @@ namespace Neo.VM.Types
         /// <returns><see langword="true"/> if the values are equal; otherwise <see langword="false"/>.</returns>
         public bool Equals([NotNullWhen(true)] VMInteger? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
-            if (RefCount != other.RefCount) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
+            if (RefCount != other.RefCount)
+                return false;
             return _value == other._value;
         }
 
@@ -171,8 +176,8 @@ namespace Neo.VM.Types
         /// <summary>
         /// Negates an integer stack item.
         /// </summary>
-        public static VMInteger operator -(VMInteger a) =>
-            new(-a._value);
+        public static VMInteger operator -(VMInteger a)
+            => new(-a._value);
 
         // Comparison operators
         /// <summary>
@@ -180,39 +185,40 @@ namespace Neo.VM.Types
         /// </summary>
         public static bool operator ==(VMInteger a, VMInteger b)
         {
-            if (ReferenceEquals(a, b)) return true;
+            if (ReferenceEquals(a, b))
+                return true;
             return a.Equals(b);
         }
 
         /// <summary>
         /// Determines whether two integer stack items are not equal.
         /// </summary>
-        public static bool operator !=(VMInteger a, VMInteger b) =>
-            !(a == b);
+        public static bool operator !=(VMInteger a, VMInteger b)
+            => !(a == b);
 
         /// <summary>
         /// Determines whether the first integer is greater than the second.
         /// </summary>
-        public static bool operator >(VMInteger a, VMInteger b) =>
-            a._value > b._value;
+        public static bool operator >(VMInteger a, VMInteger b)
+            => a._value > b._value;
 
         /// <summary>
         /// Determines whether the first integer is less than the second.
         /// </summary>
-        public static bool operator <(VMInteger a, VMInteger b) =>
-            a._value < b._value;
+        public static bool operator <(VMInteger a, VMInteger b)
+            => a._value < b._value;
 
         /// <summary>
         /// Determines whether the first integer is greater than or equal to the second.
         /// </summary>
-        public static bool operator >=(VMInteger a, VMInteger b) =>
-            a._value >= b._value;
+        public static bool operator >=(VMInteger a, VMInteger b)
+            => a._value >= b._value;
 
         /// <summary>
         /// Determines whether the first integer is less than or equal to the second.
         /// </summary>
-        public static bool operator <=(VMInteger a, VMInteger b) =>
-            a._value <= b._value;
+        public static bool operator <=(VMInteger a, VMInteger b)
+            => a._value <= b._value;
 
         /// <summary>
         /// Converts a <see cref="VMInteger"/> to a <see cref="BigInteger"/>.

@@ -65,9 +65,9 @@ namespace Neo.Platform.Storage
 
         private StorageKeyBuilder(int id, byte prefix = 0, int maxLength = -1)
         {
-            _maxLength = maxLength <= 0 ?
-                ExecutionEngineLimits.Default.MaxStorageKeySize :
-                maxLength;
+            _maxLength = maxLength <= 0
+                ? ExecutionEngineLimits.Default.MaxStorageKeySize
+                : maxLength;
             _maxLength += PrefixLength;
             _memoryOwner = MemoryPool<byte>.Shared.Rent(_maxLength);
 
@@ -80,9 +80,9 @@ namespace Neo.Platform.Storage
         private StorageKeyBuilder(ReadOnlySpan<byte> data, int maxLength = -1)
         {
             _byteCount = data.Length;
-            _maxLength = maxLength <= 0 ?
-                _byteCount + ExecutionEngineLimits.Default.MaxStorageKeySize :
-                maxLength;
+            _maxLength = maxLength <= 0
+                ? _byteCount + ExecutionEngineLimits.Default.MaxStorageKeySize
+                : maxLength;
             _maxLength += PrefixLength;
             _memoryOwner = MemoryPool<byte>.Shared.Rent(_maxLength);
             data.CopyTo(_memoryOwner.Memory.Span);
@@ -105,8 +105,10 @@ namespace Neo.Platform.Storage
         /// <returns><see langword="true"/> if the objects represent the same key; otherwise, <see langword="false"/>.</returns>
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(obj, this))
+                return true;
+            if (obj is null)
+                return false;
             return Equals(obj as StorageKeyBuilder);
         }
 
@@ -117,9 +119,12 @@ namespace Neo.Platform.Storage
         /// <returns><see langword="true"/> if the keys are equal; otherwise, <see langword="false"/>.</returns>
         public bool Equals([NotNullWhen(true)] StorageKeyBuilder? other)
         {
-            if (ReferenceEquals(other, this)) return true;
-            if (other is null) return false;
-            if (_byteCount != other._byteCount) return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            if (other is null)
+                return false;
+            if (_byteCount != other._byteCount)
+                return false;
             return _memoryOwner.Memory[.._byteCount]
                 .Span
                 .SequenceEqual(other._memoryOwner.Memory[..other._byteCount].Span);
@@ -135,8 +140,10 @@ namespace Neo.Platform.Storage
         /// </returns>
         public int CompareTo(object? obj)
         {
-            if (ReferenceEquals(obj, this)) return 0;
-            if (obj is null) return 1;
+            if (ReferenceEquals(obj, this))
+                return 0;
+            if (obj is null)
+                return 1;
             return CompareTo(obj as StorageKeyBuilder);
         }
 
@@ -150,8 +157,10 @@ namespace Neo.Platform.Storage
         /// </returns>
         public int CompareTo(StorageKeyBuilder? other)
         {
-            if (ReferenceEquals(other, this)) return 0;
-            if (other is null) return 1;
+            if (ReferenceEquals(other, this))
+                return 0;
+            if (other is null)
+                return 1;
 
             if (_byteCount != other._byteCount)
                 return _byteCount.CompareTo(other._byteCount);
@@ -165,16 +174,16 @@ namespace Neo.Platform.Storage
         /// Returns a hash code for the current key bytes.
         /// </summary>
         /// <returns>A hash code for the key content.</returns>
-        public override int GetHashCode() =>
-            _memoryOwner.Memory[.._byteCount]
+        public override int GetHashCode()
+            => _memoryOwner.Memory[.._byteCount]
                 .ToHashCode();
 
         /// <summary>
         /// Returns a lowercase hexadecimal representation of the key bytes.
         /// </summary>
         /// <returns>The key as a hex string.</returns>
-        public override string ToString() =>
-            Convert.ToHexStringLower(_memoryOwner.Memory[.._byteCount].Span);
+        public override string ToString()
+            => Convert.ToHexStringLower(_memoryOwner.Memory[.._byteCount].Span);
 
         /// <summary>
         /// Concatenates the key bytes of two builders into a new builder.
@@ -182,8 +191,8 @@ namespace Neo.Platform.Storage
         /// <param name="a">The left-hand key.</param>
         /// <param name="b">The right-hand key.</param>
         /// <returns>A new builder containing the concatenated bytes.</returns>
-        public static StorageKeyBuilder operator +(StorageKeyBuilder a, StorageKeyBuilder b) =>
-            new
+        public static StorageKeyBuilder operator +(StorageKeyBuilder a, StorageKeyBuilder b)
+            => new
             (
                 [
                     .. a._memoryOwner.Memory[..a._byteCount].Span,
@@ -198,8 +207,8 @@ namespace Neo.Platform.Storage
         /// <param name="left">The left-hand builder.</param>
         /// <param name="right">The right-hand builder.</param>
         /// <returns><see langword="true"/> if the keys are equal; otherwise, <see langword="false"/>.</returns>
-        public static bool operator ==(StorageKeyBuilder left, StorageKeyBuilder right) =>
-            left.Equals(right);
+        public static bool operator ==(StorageKeyBuilder left, StorageKeyBuilder right)
+            => left.Equals(right);
 
         /// <summary>
         /// Determines whether two builders have different key bytes.
@@ -207,8 +216,8 @@ namespace Neo.Platform.Storage
         /// <param name="left">The left-hand builder.</param>
         /// <param name="right">The right-hand builder.</param>
         /// <returns><see langword="true"/> if the keys differ; otherwise, <see langword="false"/>.</returns>
-        public static bool operator !=(StorageKeyBuilder left, StorageKeyBuilder right) =>
-            !(left == right);
+        public static bool operator !=(StorageKeyBuilder left, StorageKeyBuilder right)
+            => !(left == right);
 
         /// <summary>
         /// Creates a new key builder for the specified contract id and prefix.
@@ -216,8 +225,8 @@ namespace Neo.Platform.Storage
         /// <param name="id">The contract id written as a little-endian <see cref="int"/>.</param>
         /// <param name="prefix">An optional prefix byte written after the id.</param>
         /// <returns>A new <see cref="StorageKeyBuilder"/> instance.</returns>
-        public static StorageKeyBuilder Create(int id, byte prefix = 0) =>
-            new(id, prefix);
+        public static StorageKeyBuilder Create(int id, byte prefix = 0)
+            => new(id, prefix);
 
         /// <summary>
         /// Appends a single byte to the key.
@@ -436,8 +445,8 @@ namespace Neo.Platform.Storage
         /// When <see langword="true"/>, writes big-endian; otherwise little-endian.
         /// </param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(BigInteger data, bool isBigEndian = false) =>
-            Append(data.ToByteArray(true, isBigEndian));
+        public StorageKeyBuilder Append(BigInteger data, bool isBigEndian = false)
+            => Append(data.ToByteArray(true, isBigEndian));
 
         /// <summary>
         /// Appends raw bytes to the key.
@@ -475,24 +484,24 @@ namespace Neo.Platform.Storage
         /// <param name="data">The value to append.</param>
         /// <param name="isBigEndian">Controls the byte order of the GUID encoding.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(Guid data, bool isBigEndian = false) =>
-            Append(data.ToByteArray(isBigEndian));
+        public StorageKeyBuilder Append(Guid data, bool isBigEndian = false)
+            => Append(data.ToByteArray(isBigEndian));
 
         /// <summary>
         /// Appends a sequence of bytes to the key.
         /// </summary>
         /// <param name="data">The sequence to append.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(ReadOnlySequence<byte> data) =>
-            Append(data.ToArray());
+        public StorageKeyBuilder Append(ReadOnlySequence<byte> data)
+            => Append(data.ToArray());
 
         /// <summary>
         /// Appends an array segment of bytes to the key.
         /// </summary>
         /// <param name="data">The segment to append.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(ArraySegment<byte> data) =>
-            Append(data.AsSpan());
+        public StorageKeyBuilder Append(ArraySegment<byte> data)
+            => Append(data.AsSpan());
 
         /// <summary>
         /// Appends a <see cref="DateTime"/> as Unix milliseconds (UTC adjusted by <paramref name="offset"/>).
@@ -500,8 +509,8 @@ namespace Neo.Platform.Storage
         /// <param name="stamp">The timestamp to append.</param>
         /// <param name="offset">Optional offset applied when converting to Unix time.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(DateTime stamp, TimeSpan offset = default) =>
-            Append((ulong)CoreUtilities.ToUnixTimeMilliseconds(stamp, offset));
+        public StorageKeyBuilder Append(DateTime stamp, TimeSpan offset = default)
+            => Append((ulong)CoreUtilities.ToUnixTimeMilliseconds(stamp, offset));
 
         /// <summary>
         /// Appends a <see cref="TimeSpan"/> as Unix milliseconds (adjusted by <paramref name="offset"/>).
@@ -509,24 +518,24 @@ namespace Neo.Platform.Storage
         /// <param name="span">The time span to append.</param>
         /// <param name="offset">Optional offset applied when converting to Unix time.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(TimeSpan span, TimeSpan offset = default) =>
-            Append((ulong)CoreUtilities.ToUnixTimeMilliseconds(span, offset));
+        public StorageKeyBuilder Append(TimeSpan span, TimeSpan offset = default)
+            => Append((ulong)CoreUtilities.ToUnixTimeMilliseconds(span, offset));
 
         /// <summary>
         /// Appends a <see cref="DateTimeOffset"/> as Unix milliseconds.
         /// </summary>
         /// <param name="stamp">The timestamp to append.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(DateTimeOffset stamp) =>
-            Append((ulong)stamp.ToUnixTimeMilliseconds());
+        public StorageKeyBuilder Append(DateTimeOffset stamp)
+            => Append((ulong)stamp.ToUnixTimeMilliseconds());
 
         /// <summary>
         /// Appends a <see cref="TimeOnly"/> value as its time-of-day span encoding.
         /// </summary>
         /// <param name="time">The time to append.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(TimeOnly time) =>
-            Append(time.ToTimeSpan());
+        public StorageKeyBuilder Append(TimeOnly time)
+            => Append(time.ToTimeSpan());
 
         /// <summary>
         /// Appends a <see cref="DateOnly"/> combined with an optional <see cref="TimeOnly"/> as Unix milliseconds.
@@ -534,8 +543,8 @@ namespace Neo.Platform.Storage
         /// <param name="date">The date to append.</param>
         /// <param name="time">The time of day to combine with the date. Defaults to midnight.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(DateOnly date, TimeOnly time = default) =>
-            Append(date.ToDateTime(time));
+        public StorageKeyBuilder Append(DateOnly date, TimeOnly time = default)
+            => Append(date.ToDateTime(time));
 
         /// <summary>
         /// Appends a sequence of characters encoded as UTF-8.
@@ -545,8 +554,8 @@ namespace Neo.Platform.Storage
         /// When <see langword="true"/>, uses strict UTF-8 encoding; otherwise standard UTF-8.
         /// </param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(ReadOnlySequence<char> data, bool isStrictUtf8 = true) =>
-            Append(data.ToArray(), isStrictUtf8);
+        public StorageKeyBuilder Append(ReadOnlySequence<char> data, bool isStrictUtf8 = true)
+            => Append(data.ToArray(), isStrictUtf8);
 
         /// <summary>
         /// Appends characters encoded as UTF-8.
@@ -556,8 +565,8 @@ namespace Neo.Platform.Storage
         /// When <see langword="true"/>, uses strict UTF-8 encoding; otherwise standard UTF-8.
         /// </param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(ReadOnlyMemory<char> data, bool isStrictUtf8 = true) =>
-            Append(data.ToArray(), isStrictUtf8);
+        public StorageKeyBuilder Append(ReadOnlyMemory<char> data, bool isStrictUtf8 = true)
+            => Append(data.ToArray(), isStrictUtf8);
 
         /// <summary>
         /// Appends characters encoded as UTF-8.
@@ -567,8 +576,8 @@ namespace Neo.Platform.Storage
         /// When <see langword="true"/>, uses strict UTF-8 encoding; otherwise standard UTF-8.
         /// </param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(ReadOnlySpan<char> data, bool isStrictUtf8 = true) =>
-            Append(data.ToArray(), isStrictUtf8);
+        public StorageKeyBuilder Append(ReadOnlySpan<char> data, bool isStrictUtf8 = true)
+            => Append(data.ToArray(), isStrictUtf8);
 
         /// <summary>
         /// Appends a character array encoded as UTF-8.
@@ -578,10 +587,10 @@ namespace Neo.Platform.Storage
         /// When <see langword="true"/>, uses strict UTF-8 encoding; otherwise standard UTF-8.
         /// </param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(char[] data, bool isStrictUtf8 = true) =>
-            isStrictUtf8 ?
-                Append(CoreUtilities.StrictUtf8Encoding.GetBytes(data)) :
-                Append(Encoding.UTF8.GetBytes(data));
+        public StorageKeyBuilder Append(char[] data, bool isStrictUtf8 = true)
+            => isStrictUtf8
+                ? Append(CoreUtilities.StrictUtf8Encoding.GetBytes(data))
+                : Append(Encoding.UTF8.GetBytes(data));
 
         /// <summary>
         /// Appends a single character encoded as UTF-8.
@@ -591,66 +600,66 @@ namespace Neo.Platform.Storage
         /// When <see langword="true"/>, uses strict UTF-8 encoding; otherwise standard UTF-8.
         /// </param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(char data, bool isStrictUtf8 = true) =>
-            isStrictUtf8 ?
-                Append(CoreUtilities.StrictUtf8Encoding.GetBytes(data.ToString())) :
-                Append(Encoding.UTF8.GetBytes(data.ToString()));
+        public StorageKeyBuilder Append(char data, bool isStrictUtf8 = true)
+            => isStrictUtf8
+                ? Append(CoreUtilities.StrictUtf8Encoding.GetBytes(data.ToString()))
+                : Append(Encoding.UTF8.GetBytes(data.ToString()));
 
         /// <summary>
         /// Appends a signed byte as an unsigned byte.
         /// </summary>
         /// <param name="data">The value to append.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(sbyte data) =>
-            Append((byte)data);
+        public StorageKeyBuilder Append(sbyte data)
+            => Append((byte)data);
 
         /// <summary>
         /// Appends a Boolean as a single byte (<c>1</c> for <see langword="true"/>, <c>0</c> for <see langword="false"/>).
         /// </summary>
         /// <param name="data">The value to append.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(bool data) =>
-            Append(data ? (byte)1 : (byte)0);
+        public StorageKeyBuilder Append(bool data)
+            => Append(data ? (byte)1 : (byte)0);
 
         /// <summary>
         /// Appends a byte array to the key.
         /// </summary>
         /// <param name="data">The bytes to append.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(byte[] data) =>
-            Append(data.AsSpan());
+        public StorageKeyBuilder Append(byte[] data)
+            => Append(data.AsSpan());
 
         /// <summary>
         /// Appends a memory region of bytes to the key.
         /// </summary>
         /// <param name="data">The bytes to append.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(ReadOnlyMemory<byte> data) =>
-            Append(data.Span);
+        public StorageKeyBuilder Append(ReadOnlyMemory<byte> data)
+            => Append(data.Span);
 
         /// <summary>
         /// Appends the key bytes of another builder.
         /// </summary>
         /// <param name="other">The builder whose current bytes are appended.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(StorageKeyBuilder other) =>
-            Append(other._memoryOwner.Memory[..other._byteCount].Span);
+        public StorageKeyBuilder Append(StorageKeyBuilder other)
+            => Append(other._memoryOwner.Memory[..other._byteCount].Span);
 
         /// <summary>
         /// Appends a <see cref="UInt160"/> as its 20-byte representation.
         /// </summary>
         /// <param name="data">The value to append.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(UInt160 data) =>
-            Append(data.ToArray());
+        public StorageKeyBuilder Append(UInt160 data)
+            => Append(data.ToArray());
 
         /// <summary>
         /// Appends a <see cref="UInt256"/> as its 32-byte representation.
         /// </summary>
         /// <param name="data">The value to append.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(UInt256 data) =>
-            Append(data.ToArray());
+        public StorageKeyBuilder Append(UInt256 data)
+            => Append(data.ToArray());
 
         /// <summary>
         /// Appends a string encoded as UTF-8.
@@ -660,10 +669,10 @@ namespace Neo.Platform.Storage
         /// When <see langword="true"/>, uses strict UTF-8 encoding; otherwise standard UTF-8.
         /// </param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(string data, bool isStrictUtf8 = true) =>
-            isStrictUtf8 ?
-                Append(CoreUtilities.StrictUtf8Encoding.GetBytes(data)) :
-                Append(Encoding.UTF8.GetBytes(data));
+        public StorageKeyBuilder Append(string data, bool isStrictUtf8 = true)
+            => isStrictUtf8
+                ? Append(CoreUtilities.StrictUtf8Encoding.GetBytes(data))
+                : Append(Encoding.UTF8.GetBytes(data));
 
         /// <summary>
         /// Appends a prefix byte followed by raw bytes.
@@ -671,8 +680,8 @@ namespace Neo.Platform.Storage
         /// <param name="prefix">The prefix byte.</param>
         /// <param name="data">The bytes to append after the prefix.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(byte prefix, ReadOnlySpan<byte> data) =>
-            Append(prefix).Append(data);
+        public StorageKeyBuilder Append(byte prefix, ReadOnlySpan<byte> data)
+            => Append(prefix).Append(data);
 
         /// <summary>
         /// Appends a prefix byte followed by a <see cref="UInt160"/>.
@@ -680,8 +689,8 @@ namespace Neo.Platform.Storage
         /// <param name="prefix">The prefix byte.</param>
         /// <param name="data">The value to append after the prefix.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(byte prefix, UInt160 data) =>
-            Append(prefix).Append(data);
+        public StorageKeyBuilder Append(byte prefix, UInt160 data)
+            => Append(prefix).Append(data);
 
         /// <summary>
         /// Appends a prefix byte followed by a <see cref="UInt256"/>.
@@ -689,31 +698,31 @@ namespace Neo.Platform.Storage
         /// <param name="prefix">The prefix byte.</param>
         /// <param name="data">The value to append after the prefix.</param>
         /// <returns>This builder for chaining.</returns>
-        public StorageKeyBuilder Append(byte prefix, UInt256 data) =>
-            Append(prefix).Append(data);
+        public StorageKeyBuilder Append(byte prefix, UInt256 data)
+            => Append(prefix).Append(data);
 
         /// <summary>
         /// Copies the current key bytes into a new array.
         /// </summary>
         /// <returns>A new array containing the key bytes written so far.</returns>
-        public byte[] ToArray() =>
-            _memoryOwner.Memory[.._byteCount].ToArray();
+        public byte[] ToArray()
+            => _memoryOwner.Memory[.._byteCount].ToArray();
 
         /// <summary>
         /// Creates a new builder with a copy of the current key bytes.
         /// </summary>
         /// <returns>A cloned <see cref="StorageKeyBuilder"/>.</returns>
-        public StorageKeyBuilder Clone() =>
-            new(_memoryOwner.Memory[.._byteCount].Span, _maxLength);
+        public StorageKeyBuilder Clone()
+            => new(_memoryOwner.Memory[.._byteCount].Span, _maxLength);
 
         /// <summary>
         /// Returns an enumerator that iterates over the key bytes.
         /// </summary>
         /// <returns>An enumerator for the key content.</returns>
-        public IEnumerator<byte> GetEnumerator() =>
-            GetEnumerator();
+        public IEnumerator<byte> GetEnumerator()
+            => GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() =>
-            ToArray().GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+            => ToArray().GetEnumerator();
     }
 }

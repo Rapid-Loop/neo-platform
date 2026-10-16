@@ -44,7 +44,8 @@ namespace Neo.VM.Tests.Middleware
         {
             foreach (var testSuite in s_suite)
             {
-                if (testSuite.Name.StartsWith("TRY_")) continue;
+                if (testSuite.Name.StartsWith("TRY_"))
+                    continue;
 
                 foreach (var jsonTest in testSuite.Tests)
                 {

@@ -44,7 +44,8 @@ namespace Neo.Core.VM.Specs
             // Populate gas costs from attributes
             foreach (var field in typeof(OpCode).GetFields(BindingFlags.Public | BindingFlags.Static))
             {
-                if (field.IsLiteral == false) continue; // Skip non-enum values
+                if (field.IsLiteral == false)
+                    continue; // Skip non-enum values
 
                 var opcode = (OpCode)field.GetValue(null)!;
 
@@ -52,7 +53,8 @@ namespace Neo.Core.VM.Specs
 
                 foreach (var attr in attributes)
                 {
-                    if (attr == null) continue;
+                    if (attr == null)
+                        continue;
 
                     if (s_gasCosts.TryGetValue(attr.HardFork, out var table) == false)
                         // Fallback in case of unexpected HardFork value
@@ -101,7 +103,10 @@ namespace Neo.Core.VM.Specs
             {
                 attr = attributes.FirstOrDefault(s => s.Fork == current);
 
-                if (attr is null) continue; else break;
+                if (attr is null)
+                    continue;
+                else
+                    break;
             }
 
             return attr?.ExecutePrice ?? GetGasCost(OpCode.CALL, fork);
@@ -118,7 +123,8 @@ namespace Neo.Core.VM.Specs
             {
                 if (s_gasCosts.TryGetValue(current, out var table))
                 {
-                    if (table.Count == 0) continue;
+                    if (table.Count == 0)
+                        continue;
 
                     return table;
                 }
